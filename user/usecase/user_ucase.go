@@ -24,6 +24,12 @@ func (us *userUsecase) Register(c context.Context, user *domain.User) (domain.Us
 	ctx, cancel := context.WithTimeout(c, us.contextTimeout)
 	defer cancel()
 
+	// validate data in entity
+	_, errEntity := domain.NewUser(user)
+	if errEntity != nil {
+		return domain.User{}, errEntity
+	}
+
 	res, err := us.userRepo.Register(ctx, user)
 	if err != nil {
 		return domain.User{}, err

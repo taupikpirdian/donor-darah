@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS profiles(
    gender VARCHAR (2) NULL,
    subDistrictId INT NULL,
    villageId INT NULL,
+   address TEXT NULL,
    postalCode VARCHAR (8) NULL,
    updatedAt TIMESTAMP NULL,
    createdAt TIMESTAMP NULL
