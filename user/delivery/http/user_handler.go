@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/bxcodec/go-clean-arch/domain"
+	"github.com/bxcodec/go-clean-arch/user/delivery/http_response"
 	"github.com/go-playground/validator"
 	"github.com/labstack/echo"
 	"github.com/sirupsen/logrus"
@@ -41,21 +42,22 @@ func (a *UserHandler) Register(c echo.Context) (err error) {
 	var user domain.User
 	err = c.Bind(&user)
 	if err != nil {
-		return c.JSON(http.StatusUnprocessableEntity, err.Error())
+		return c.JSON(http.StatusUnprocessableEntity, http_response.Status{Code: 1, Message: err.Error()})
 	}
 
 	var ok bool
 	if ok, err = isRequestValid(&user); !ok {
-		return c.JSON(http.StatusBadRequest, err.Error())
+		return c.JSON(http.StatusBadRequest, http_response.Status{Code: 1, Message: err.Error()})
 	}
 
 	ctx := c.Request().Context()
 	err = a.AUsecase.Register(ctx, &user)
 	if err != nil {
-		return c.JSON(getStatusCode(err), ResponseError{Message: err.Error()})
+		return c.JSON(getStatusCode(err), http_response.Status{Code: 1, Message: err.Error()})
 	}
 
-	return c.JSON(http.StatusCreated, "success register")
+	responseSuccess, _ := http_response.MapResponse(0, "success register")
+	return c.JSON(http.StatusCreated, responseSuccess)
 }
 
 func getStatusCode(err error) int {
