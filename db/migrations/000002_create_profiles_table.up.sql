@@ -1,8 +1,14 @@
 CREATE TABLE IF NOT EXISTS profiles(
    id serial PRIMARY KEY,
-   user_id INT NOT NULL,
-   job_id INT NOT NULL,
-   unit_id INT NOT NULL,
-   updated_at TIMESTAMP NULL,
-   created_at TIMESTAMP NULL
+   userId INT NOT NULL,
+   jobId INT NOT NULL,
+   unitId INT NOT NULL,
+   placeOfBirth VARCHAR (150) NULL,
+   dateOfBirth date NULL,
+   gender VARCHAR (2) NULL,
+   subDistrictId INT NULL,
+   villageId INT NULL,
+   postalCode VARCHAR (8) NULL,
+   updatedAt TIMESTAMP NULL,
+   createdAt TIMESTAMP NULL
 );
