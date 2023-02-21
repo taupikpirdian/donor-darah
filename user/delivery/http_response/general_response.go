@@ -19,12 +19,6 @@ type ResponseItemJson struct {
 	Phone string `json:"phone" validate:"required"`
 }
 
-// ResponseError represent the response error struct
-type ResponseError struct {
-	Code    int    `json:"code"`
-	Message string `json:"message"`
-}
-
 func MapResponse(code int, message string) ([]byte, error) {
 	httpResponse := &CustomReponseSingle{
 		Status: &Status{
