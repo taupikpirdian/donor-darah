@@ -50,12 +50,12 @@ func (a *UserHandler) Register(c echo.Context) (err error) {
 	}
 
 	ctx := c.Request().Context()
-	user, err = a.AUsecase.Register(ctx, &user)
+	err = a.AUsecase.Register(ctx, &user)
 	if err != nil {
 		return c.JSON(getStatusCode(err), ResponseError{Message: err.Error()})
 	}
 
-	return c.JSON(http.StatusCreated, user)
+	return c.JSON(http.StatusCreated, "success register")
 }
 
 func getStatusCode(err error) int {

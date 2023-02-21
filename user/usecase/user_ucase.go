@@ -20,20 +20,25 @@ func NewUserUsecase(a domain.UserRepository, timeout time.Duration) domain.UserU
 	}
 }
 
-func (us *userUsecase) Register(c context.Context, user *domain.User) (domain.User, error) {
+func (us *userUsecase) Register(c context.Context, user *domain.User) error {
 	ctx, cancel := context.WithTimeout(c, us.contextTimeout)
 	defer cancel()
 
 	// validate data in entity
-	_, errEntity := domain.NewUser(user)
+	dataUser, errEntity := domain.NewUser(user)
 	if errEntity != nil {
-		return domain.User{}, errEntity
+		return errEntity
 	}
 
-	res, err := us.userRepo.Register(ctx, user)
+	err := us.userRepo.Register(ctx, dataUser)
 	if err != nil {
-		return domain.User{}, err
+		return err
 	}
 
-	return res, nil
+	errStoreProfile := us.userRepo.StoreProfile(ctx, dataUser)
+	if errStoreProfile != nil {
+		return errStoreProfile
+	}
+
+	return nil
 }

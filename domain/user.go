@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 	"time"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 // User is representing the User data struct
@@ -24,7 +26,7 @@ type User struct {
 	PostalCode           string `json:"postalCode"`
 }
 
-type userData struct {
+type UserData struct {
 	id          int64
 	name        string
 	email       string
@@ -32,10 +34,10 @@ type userData struct {
 	password    string
 	updatedAt   time.Time
 	createdAt   time.Time
-	profileData profileData
+	profileData ProfileData
 }
 
-type profileData struct {
+type ProfileData struct {
 	id            int64
 	userId        int64
 	jobId         int64
@@ -53,15 +55,16 @@ type profileData struct {
 
 // UserUsecase represent the user's usecases
 type UserUsecase interface {
-	Register(ctx context.Context, us *User) (User, error)
+	Register(ctx context.Context, us *User) error
 }
 
 // UserRepository represent the user's repository contract
 type UserRepository interface {
-	Register(ctx context.Context, us *User) (User, error)
+	Register(ctx context.Context, us *UserData) error
+	StoreProfile(ctx context.Context, us *UserData) error
 }
 
-func NewUser(u *User) (*userData, error) {
+func NewUser(u *User) (*UserData, error) {
 	if u.Name == "" {
 		return nil, errors.New("NAME NOT SET")
 	}
@@ -70,14 +73,20 @@ func NewUser(u *User) (*userData, error) {
 		return nil, errors.New("PASSWORD CONFIRMATION NOT SAME")
 	}
 
-	return &userData{
+	// hash password
+	resultHash, errHash := HashPassword(u.Password)
+	if errHash != nil {
+		return nil, errors.New("HASHING PASSWORD FAILED")
+	}
+
+	return &UserData{
 		name:      u.Name,
 		email:     u.Email,
 		phone:     u.Phone,
-		password:  u.Password,
+		password:  resultHash,
 		updatedAt: time.Now(),
 		createdAt: time.Now(),
-		profileData: profileData{
+		profileData: ProfileData{
 			jobId:         u.JobId,
 			unitId:        u.UnitId,
 			placeOfBirth:  u.PlaceOfBirth,
@@ -91,50 +100,78 @@ func NewUser(u *User) (*userData, error) {
 	}, nil
 }
 
-func (cu *userData) GetIdOnUser() int {
+func HashPassword(password string) (string, error) {
+	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return "", err
+	}
+	return string(hash), nil
+}
+
+func (cu *UserData) SetIdNewUser(u *UserData, id int64) {
+	u.id = id
+}
+
+func (cu *UserData) GetIdOnUser() int {
 	return int(cu.id)
 }
 
-func (cu *userData) GetPlaceOfBirthOnProfile() string {
+func (cu *UserData) GetNameOnUser() string {
+	return cu.name
+}
+
+func (cu *UserData) GetPasswordOnUser() string {
+	return cu.password
+}
+
+func (cu *UserData) GetPlaceOfBirthOnProfile() string {
 	return cu.profileData.placeOfBirth
 }
 
-func (cu *userData) GetDateOfBirthOnProfile() time.Time {
+func (cu *UserData) GetDateOfBirthOnProfile() time.Time {
 	return cu.profileData.dateOfBirth
 }
 
-func (cu *userData) GetGenderOnProfile() string {
+func (cu *UserData) GetGenderOnProfile() string {
 	return cu.profileData.gender
 }
 
-func (cu *userData) GetJobIdOnProfile() int64 {
+func (cu *UserData) GetJobIdOnProfile() int64 {
 	return cu.profileData.jobId
 }
 
-func (cu *userData) GetPmiIdOnProfile() int64 {
+func (cu *UserData) GetUnitIdOnProfile() int64 {
 	return cu.profileData.unitId
 }
 
-func (cu *userData) GetPhoneOnUser() string {
+func (cu *UserData) GetPhoneOnUser() string {
 	return cu.phone
 }
 
-func (cu *userData) GetEmailOnUser() string {
+func (cu *UserData) GetEmailOnUser() string {
 	return cu.email
 }
 
-func (cu *userData) GetAddressOnProfile() string {
+func (cu *UserData) GetAddressOnProfile() string {
 	return cu.profileData.address
 }
 
-func (cu *userData) GetSubDistrictIdOnProfile() int64 {
+func (cu *UserData) GetSubDistrictIdOnProfile() int64 {
 	return cu.profileData.subDistrictId
 }
 
-func (cu *userData) GetVillageIdOnProfile() int64 {
+func (cu *UserData) GetVillageIdOnProfile() int64 {
 	return cu.profileData.subDistrictId
 }
 
-func (cu *userData) GetPostalCodeOnProfile() string {
+func (cu *UserData) GetPostalCodeOnProfile() string {
 	return cu.profileData.postalCode
+}
+
+func (cu *UserData) GetUpdateAtOnUser() time.Time {
+	return cu.updatedAt
+}
+
+func (cu *UserData) GetCreatedAtOnUser() time.Time {
+	return cu.createdAt
 }
