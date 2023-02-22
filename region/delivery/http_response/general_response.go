@@ -1,7 +1,6 @@
 package http_response
 
 import (
-	"encoding/json"
 	"time"
 
 	"github.com/bxcodec/go-clean-arch/domain"
@@ -14,7 +13,7 @@ type Status struct {
 
 type CustomReponseSingle struct {
 	Status *Status
-	Data   []*ResponseItemDistrictJson
+	Data   []*domain.DistrictData
 }
 
 type ResponseItemDistrictJson struct {
@@ -25,19 +24,14 @@ type ResponseItemDistrictJson struct {
 	CreatedAt time.Time `json:"createdAt"`
 }
 
-func MapResponseDistrict(code int, message string, dataDistrict []*domain.DistrictData) ([]byte, error) {
+func MapResponseDistrict(code int, message string, dataDistrict []*domain.DistrictData) (*CustomReponseSingle, error) {
 	httpResponse := &CustomReponseSingle{
 		Status: &Status{
 			Code:    code,
 			Message: message,
 		},
-		Data: nil,
+		Data: dataDistrict,
 	}
 
-	respJson, err := json.Marshal(httpResponse)
-	if err != nil {
-		return nil, err
-	}
-
-	return respJson, nil
+	return httpResponse, nil
 }

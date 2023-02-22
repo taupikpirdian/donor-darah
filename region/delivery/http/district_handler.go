@@ -16,19 +16,19 @@ type ResponseError struct {
 }
 
 // UserHandler  represent the httphandler for user
-type DistrictHandler struct {
+type RegionHandler struct {
 	AUsecase domain.RegionUsecase
 }
 
 // NewUserHandler will initialize the users/ resources endpoint
-func NewDistrictHandler(e *echo.Echo, us domain.RegionUsecase) {
-	handler := &DistrictHandler{
+func NewRegionHandler(e *echo.Echo, us domain.RegionUsecase) {
+	handler := &RegionHandler{
 		AUsecase: us,
 	}
 	e.GET("/api/v1/district", handler.DistrictGet)
 }
 
-func isRequestValid(m *domain.District) (bool, error) {
+func isRequestValid(m *domain.DistrictData) (bool, error) {
 	validate := validator.New()
 	err := validate.Struct(m)
 	if err != nil {
@@ -38,25 +38,28 @@ func isRequestValid(m *domain.District) (bool, error) {
 }
 
 // Register will store the user by given request body
-func (a *DistrictHandler) DistrictGet(c echo.Context) (err error) {
-	var district domain.District
+func (a *RegionHandler) DistrictGet(c echo.Context) (err error) {
+	var district domain.DistrictData
 	err = c.Bind(&district)
 	if err != nil {
-		return c.JSON(http.StatusUnprocessableEntity, http_response.Status{Code: 1, Message: err.Error()})
+		responseError, _ := http_response.MapResponseDistrict(1, err.Error(), nil)
+		return c.JSON(http.StatusUnprocessableEntity, responseError)
 	}
 
 	var ok bool
 	if ok, err = isRequestValid(&district); !ok {
-		return c.JSON(http.StatusBadRequest, http_response.Status{Code: 1, Message: err.Error()})
+		responseError2, _ := http_response.MapResponseDistrict(1, err.Error(), nil)
+		return c.JSON(http.StatusBadRequest, responseError2)
 	}
 
 	ctx := c.Request().Context()
 	data, errUc := a.AUsecase.GetDistrict(ctx)
 	if errUc != nil {
-		return c.JSON(getStatusCode(err), http_response.Status{Code: 1, Message: errUc.Error()})
+		responseError3, _ := http_response.MapResponseDistrict(1, domain.ErrBadBody.Error(), nil)
+		return c.JSON(getStatusCode(err), responseError3)
 	}
 
-	responseSuccess, _ := http_response.MapResponseDistrict(0, "berhasil get data", data)
+	responseSuccess, _ := http_response.MapResponseDistrict(0, "success", data)
 	return c.JSON(http.StatusCreated, responseSuccess)
 }
 

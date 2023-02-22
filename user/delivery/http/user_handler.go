@@ -42,21 +42,24 @@ func (a *UserHandler) Register(c echo.Context) (err error) {
 	var user domain.User
 	err = c.Bind(&user)
 	if err != nil {
-		return c.JSON(http.StatusUnprocessableEntity, http_response.Status{Code: 1, Message: err.Error()})
+		responseError, _ := http_response.MapResponse(1, err.Error())
+		return c.JSON(http.StatusUnprocessableEntity, responseError)
 	}
 
 	var ok bool
 	if ok, err = isRequestValid(&user); !ok {
-		return c.JSON(http.StatusBadRequest, http_response.Status{Code: 1, Message: err.Error()})
+		responseErrorRequest, _ := http_response.MapResponse(1, domain.ErrBadParamInput.Error())
+		return c.JSON(http.StatusBadRequest, responseErrorRequest)
 	}
 
 	ctx := c.Request().Context()
 	err = a.AUsecase.Register(ctx, &user)
 	if err != nil {
-		return c.JSON(getStatusCode(err), http_response.Status{Code: 1, Message: err.Error()})
+		responseErrorUsecase, _ := http_response.MapResponse(1, domain.ErrBadBody.Error())
+		return c.JSON(getStatusCode(err), responseErrorUsecase)
 	}
 
-	responseSuccess, _ := http_response.MapResponse(0, "success register")
+	responseSuccess, _ := http_response.MapResponse(0, "success")
 	return c.JSON(http.StatusCreated, responseSuccess)
 }
 
