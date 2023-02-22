@@ -60,7 +60,7 @@ func (a *RegionHandler) DistrictGet(c echo.Context) (err error) {
 	}
 
 	responseSuccess, _ := http_response.MapResponseDistrict(0, "success", data)
-	return c.JSON(http.StatusCreated, responseSuccess)
+	return c.JSON(http.StatusOK, responseSuccess)
 }
 
 func getStatusCode(err error) int {

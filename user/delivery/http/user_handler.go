@@ -26,6 +26,7 @@ func NewUserHandler(e *echo.Echo, us domain.UserUsecase) {
 		AUsecase: us,
 	}
 	e.POST("/api/v1/register", handler.Register)
+	e.GET("/api/v1/job", handler.JobController)
 }
 
 func isRequestValid(m *domain.User) (bool, error) {

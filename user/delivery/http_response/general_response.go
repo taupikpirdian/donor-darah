@@ -1,5 +1,7 @@
 package http_response
 
+import "github.com/bxcodec/go-clean-arch/domain"
+
 type Status struct {
 	Code    int
 	Message string
@@ -7,7 +9,7 @@ type Status struct {
 
 type CustomReponseSingle struct {
 	Status *Status
-	Data   *ResponseItemJson
+	Data   []*domain.Job
 }
 
 type ResponseItemJson struct {
@@ -24,6 +26,18 @@ func MapResponse(code int, message string) (*CustomReponseSingle, error) {
 			Message: message,
 		},
 		Data: nil,
+	}
+
+	return httpResponse, nil
+}
+
+func MapResponseJob(code int, message string, data []*domain.Job) (*CustomReponseSingle, error) {
+	httpResponse := &CustomReponseSingle{
+		Status: &Status{
+			Code:    code,
+			Message: message,
+		},
+		Data: data,
 	}
 
 	return httpResponse, nil
