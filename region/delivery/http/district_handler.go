@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/bxcodec/go-clean-arch/domain"
-	"github.com/bxcodec/go-clean-arch/user/delivery/http_response"
+	"github.com/bxcodec/go-clean-arch/region/delivery/http_response"
 	"github.com/go-playground/validator"
 	"github.com/labstack/echo"
 	"github.com/sirupsen/logrus"
@@ -16,19 +16,19 @@ type ResponseError struct {
 }
 
 // UserHandler  represent the httphandler for user
-type UserHandler struct {
-	AUsecase domain.UserUsecase
+type RegionHandler struct {
+	AUsecase domain.RegionUsecase
 }
 
 // NewUserHandler will initialize the users/ resources endpoint
-func NewUserHandler(e *echo.Echo, us domain.UserUsecase) {
-	handler := &UserHandler{
+func NewRegionHandler(e *echo.Echo, us domain.RegionUsecase) {
+	handler := &RegionHandler{
 		AUsecase: us,
 	}
-	e.POST("/api/v1/register", handler.Register)
+	e.GET("/api/v1/district", handler.DistrictGet)
 }
 
-func isRequestValid(m *domain.User) (bool, error) {
+func isRequestValid(m *domain.DistrictData) (bool, error) {
 	validate := validator.New()
 	err := validate.Struct(m)
 	if err != nil {
@@ -38,28 +38,28 @@ func isRequestValid(m *domain.User) (bool, error) {
 }
 
 // Register will store the user by given request body
-func (a *UserHandler) Register(c echo.Context) (err error) {
-	var user domain.User
-	err = c.Bind(&user)
+func (a *RegionHandler) DistrictGet(c echo.Context) (err error) {
+	var district domain.DistrictData
+	err = c.Bind(&district)
 	if err != nil {
-		responseError, _ := http_response.MapResponse(1, err.Error())
+		responseError, _ := http_response.MapResponseDistrict(1, err.Error(), nil)
 		return c.JSON(http.StatusUnprocessableEntity, responseError)
 	}
 
 	var ok bool
-	if ok, err = isRequestValid(&user); !ok {
-		responseErrorRequest, _ := http_response.MapResponse(1, domain.ErrBadParamInput.Error())
-		return c.JSON(http.StatusBadRequest, responseErrorRequest)
+	if ok, err = isRequestValid(&district); !ok {
+		responseError2, _ := http_response.MapResponseDistrict(1, err.Error(), nil)
+		return c.JSON(http.StatusBadRequest, responseError2)
 	}
 
 	ctx := c.Request().Context()
-	err = a.AUsecase.Register(ctx, &user)
-	if err != nil {
-		responseErrorUsecase, _ := http_response.MapResponse(1, domain.ErrBadBody.Error())
-		return c.JSON(getStatusCode(err), responseErrorUsecase)
+	data, errUc := a.AUsecase.GetDistrict(ctx)
+	if errUc != nil {
+		responseError3, _ := http_response.MapResponseDistrict(1, domain.ErrBadBody.Error(), nil)
+		return c.JSON(getStatusCode(err), responseError3)
 	}
 
-	responseSuccess, _ := http_response.MapResponse(0, "success")
+	responseSuccess, _ := http_response.MapResponseDistrict(0, "success", data)
 	return c.JSON(http.StatusCreated, responseSuccess)
 }
 
