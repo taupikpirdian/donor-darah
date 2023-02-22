@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/bxcodec/go-clean-arch/domain"
-	"github.com/bxcodec/go-clean-arch/user/delivery/http_response"
+	"github.com/bxcodec/go-clean-arch/region/delivery/http_response"
 	"github.com/go-playground/validator"
 	"github.com/labstack/echo"
 	"github.com/sirupsen/logrus"
@@ -16,19 +16,19 @@ type ResponseError struct {
 }
 
 // UserHandler  represent the httphandler for user
-type UserHandler struct {
-	AUsecase domain.UserUsecase
+type DistrictHandler struct {
+	AUsecase domain.RegionUsecase
 }
 
 // NewUserHandler will initialize the users/ resources endpoint
-func NewUserHandler(e *echo.Echo, us domain.UserUsecase) {
-	handler := &UserHandler{
+func NewDistrictHandler(e *echo.Echo, us domain.RegionUsecase) {
+	handler := &DistrictHandler{
 		AUsecase: us,
 	}
-	e.POST("/api/v1/register", handler.Register)
+	e.GET("/api/v1/district", handler.DistrictGet)
 }
 
-func isRequestValid(m *domain.User) (bool, error) {
+func isRequestValid(m *domain.District) (bool, error) {
 	validate := validator.New()
 	err := validate.Struct(m)
 	if err != nil {
@@ -38,25 +38,25 @@ func isRequestValid(m *domain.User) (bool, error) {
 }
 
 // Register will store the user by given request body
-func (a *UserHandler) Register(c echo.Context) (err error) {
-	var user domain.User
-	err = c.Bind(&user)
+func (a *DistrictHandler) DistrictGet(c echo.Context) (err error) {
+	var district domain.District
+	err = c.Bind(&district)
 	if err != nil {
 		return c.JSON(http.StatusUnprocessableEntity, http_response.Status{Code: 1, Message: err.Error()})
 	}
 
 	var ok bool
-	if ok, err = isRequestValid(&user); !ok {
+	if ok, err = isRequestValid(&district); !ok {
 		return c.JSON(http.StatusBadRequest, http_response.Status{Code: 1, Message: err.Error()})
 	}
 
 	ctx := c.Request().Context()
-	err = a.AUsecase.Register(ctx, &user)
-	if err != nil {
-		return c.JSON(getStatusCode(err), http_response.Status{Code: 1, Message: err.Error()})
+	data, errUc := a.AUsecase.GetDistrict(ctx)
+	if errUc != nil {
+		return c.JSON(getStatusCode(err), http_response.Status{Code: 1, Message: errUc.Error()})
 	}
 
-	responseSuccess, _ := http_response.MapResponse(0, "success register")
+	responseSuccess, _ := http_response.MapResponseDistrict(0, "berhasil get data", data)
 	return c.JSON(http.StatusCreated, responseSuccess)
 }
 
