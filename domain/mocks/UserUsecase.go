@@ -14,6 +14,32 @@ type UserUsecase struct {
 	mock.Mock
 }
 
+// GetJob provides a mock function with given fields: ctx
+func (_m *UserUsecase) GetJob(ctx context.Context) ([]*domain.Job, error) {
+	ret := _m.Called(ctx)
+
+	var r0 []*domain.Job
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context) ([]*domain.Job, error)); ok {
+		return rf(ctx)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context) []*domain.Job); ok {
+		r0 = rf(ctx)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]*domain.Job)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context) error); ok {
+		r1 = rf(ctx)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // Register provides a mock function with given fields: ctx, us
 func (_m *UserUsecase) Register(ctx context.Context, us *domain.User) error {
 	ret := _m.Called(ctx, us)

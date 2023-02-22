@@ -53,15 +53,24 @@ type ProfileData struct {
 	createdAt     time.Time
 }
 
+type Job struct {
+	Id        int64     `json:"id"`
+	Name      string    `json:"name"`
+	UpdatedAt time.Time `json:"updatedAt"`
+	CreatedAt time.Time `json:"createdAt"`
+}
+
 // UserUsecase represent the user's usecases
 type UserUsecase interface {
 	Register(ctx context.Context, us *User) error
+	GetJob(ctx context.Context) ([]*Job, error)
 }
 
 // UserRepository represent the user's repository contract
 type UserRepository interface {
 	Register(ctx context.Context, us *UserData) error
 	StoreProfile(ctx context.Context, us *UserData) error
+	GetJob(ctx context.Context) ([]*Job, error)
 }
 
 func NewUser(u *User) (*UserData, error) {

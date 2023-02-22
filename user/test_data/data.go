@@ -1,6 +1,8 @@
 package testdata
 
 import (
+	"time"
+
 	"github.com/bxcodec/faker/v3"
 	"github.com/bxcodec/go-clean-arch/domain"
 )
@@ -45,4 +47,17 @@ func DataUserBodyError() *domain.User {
 		PostalCode:           faker.Word(),
 	}
 	return u
+}
+
+func MultipleJob() []*domain.Job {
+	d := make([]*domain.Job, 0)
+	data := &domain.Job{
+		Id:        1,
+		Name:      faker.Word(),
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+	}
+
+	d = append(d, data)
+	return d
 }
