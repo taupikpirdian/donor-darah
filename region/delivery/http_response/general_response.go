@@ -6,11 +6,6 @@ import (
 	"github.com/bxcodec/go-clean-arch/domain"
 )
 
-type Status struct {
-	Code    int
-	Message string
-}
-
 type CustomReponseSingle struct {
 	Status *Status
 	Data   []*domain.DistrictData

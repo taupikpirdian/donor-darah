@@ -20,3 +20,18 @@ func MultipleDistrict() []*domain.DistrictData {
 	d = append(d, data)
 	return d
 }
+
+func MultipleVillages() []*domain.VillageData {
+	d := make([]*domain.VillageData, 0)
+	data := &domain.VillageData{
+		Id:            1,
+		SubDistrictId: 123311,
+		Code:          faker.Word(),
+		Name:          faker.Word(),
+		CreatedAt:     time.Now(),
+		UpdatedAt:     time.Now(),
+	}
+
+	d = append(d, data)
+	return d
+}
