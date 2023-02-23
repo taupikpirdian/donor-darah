@@ -40,6 +40,32 @@ func (_m *RegionRepository) GetDistrict(ctx context.Context) ([]*domain.District
 	return r0, r1
 }
 
+// GetVillage provides a mock function with given fields: ctx, subDistrictId
+func (_m *RegionRepository) GetVillage(ctx context.Context, subDistrictId string) ([]*domain.VillageData, error) {
+	ret := _m.Called(ctx, subDistrictId)
+
+	var r0 []*domain.VillageData
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, string) ([]*domain.VillageData, error)); ok {
+		return rf(ctx, subDistrictId)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, string) []*domain.VillageData); ok {
+		r0 = rf(ctx, subDistrictId)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]*domain.VillageData)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, string) error); ok {
+		r1 = rf(ctx, subDistrictId)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 type mockConstructorTestingTNewRegionRepository interface {
 	mock.TestingT
 	Cleanup(func())
