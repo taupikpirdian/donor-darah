@@ -6,7 +6,14 @@ import (
 	"github.com/bxcodec/go-clean-arch/domain"
 )
 
-func (us *notificationUsecase) GetListNotification(c context.Context) ([]*domain.NotificationData, error) {
-	// TO DO
-	return nil, nil
+func (not *notificationUsecase) GetListNotification(c context.Context) ([]*domain.NotificationData, error) {
+	ctx, cancel := context.WithTimeout(c, not.contextTimeout)
+	defer cancel()
+
+	data, err := not.notificationRepo.GetListNotification(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return data, nil
 }
