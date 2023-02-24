@@ -27,7 +27,6 @@ func (m *mysqlRegionRepository) fetch(ctx context.Context, query string, args ..
 		err = rows.Scan(
 			&t.Id,
 			&t.Code,
-			&t.Code,
 			&t.Name,
 		)
 

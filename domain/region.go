@@ -15,7 +15,7 @@ type DistrictData struct {
 
 type VillageData struct {
 	Id            int64     `json:"id"`
-	SubDistrictId int64     `json:"sub_district_id"`
+	SubDistrictId int64     `json:"subDistrictId"`
 	Code          string    `json:"code"`
 	Name          string    `json:"name"`
 	UpdatedAt     time.Time `json:"updatedAt"`
