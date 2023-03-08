@@ -7,7 +7,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func (m *mysqlRegionRepository) fetch(ctx context.Context, query string, args ...interface{}) (result []*domain.DistrictData, err error) {
+func (m *mysqlNotificationRepository) fetch(ctx context.Context, query string, args ...interface{}) (result []*domain.NotificationData, err error) {
 	rows, err := m.Conn.QueryContext(ctx, query, args...)
 	if err != nil {
 		logrus.Error(err)
@@ -21,13 +21,16 @@ func (m *mysqlRegionRepository) fetch(ctx context.Context, query string, args ..
 		}
 	}()
 
-	result = make([]*domain.DistrictData, 0)
+	result = make([]*domain.NotificationData, 0)
 	for rows.Next() {
-		t := &domain.DistrictData{}
+		t := &domain.NotificationData{}
 		err = rows.Scan(
 			&t.Id,
-			&t.Code,
-			&t.Name,
+			&t.UserId,
+			&t.Title,
+			&t.Message,
+			&t.CreatedAt,
+			&t.UpdatedAt,
 		)
 
 		if err != nil {
@@ -40,8 +43,8 @@ func (m *mysqlRegionRepository) fetch(ctx context.Context, query string, args ..
 	return result, nil
 }
 
-func (m *mysqlRegionRepository) GetDistrict(ctx context.Context) ([]*domain.DistrictData, error) {
-	query := `SELECT id,code,name FROM sub_districts ORDER BY name `
+func (m *mysqlNotificationRepository) GetListNotification(ctx context.Context) ([]*domain.NotificationData, error) {
+	query := `SELECT id,userId,title,message,createdAt,updatedAt FROM notifications ORDER BY createdAt `
 
 	res, err := m.fetch(ctx, query)
 	if err != nil {

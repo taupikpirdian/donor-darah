@@ -22,6 +22,10 @@ import (
 	_userHttpDelivery "github.com/bxcodec/go-clean-arch/user/delivery/http"
 	_userRepo "github.com/bxcodec/go-clean-arch/user/repository/mysql"
 	_userUcase "github.com/bxcodec/go-clean-arch/user/usecase"
+
+	_notificationHttpDelivery "github.com/bxcodec/go-clean-arch/notification/delivery/http"
+	_notificationRepo "github.com/bxcodec/go-clean-arch/notification/repository/mysql"
+	_notificationUcase "github.com/bxcodec/go-clean-arch/notification/usecase"
 )
 
 func init() {
@@ -76,18 +80,25 @@ func main() {
 	_articleHttpDelivery.NewArticleHandler(e, au)
 
 	/*
-		routes service users
+		service users
 	*/
 	repoUser := _userRepo.NewMysqlUserRepository(dbConn)
 	uCaseUser := _userUcase.NewUserUsecase(repoUser, timeoutContext)
 	_userHttpDelivery.NewUserHandler(e, uCaseUser)
 
 	/*
-		routes service regions
+		service regions
 	*/
 	repoRegion := _regionRepo.NewMysqlRegionRepository(dbConn)
 	uCaseRegion := _regionUcase.NewRegionUsecase(repoRegion, timeoutContext)
 	_regionHttpDelivery.NewRegionHandler(e, uCaseRegion)
+
+	/*
+		service notification
+	*/
+	repoNotification := _notificationRepo.NewMysqlNotificationRepository(dbConn)
+	uCaseNotification := _notificationUcase.NewNotificationUsecase(repoNotification, timeoutContext)
+	_notificationHttpDelivery.NewNotificationHandler(e, uCaseNotification)
 
 	log.Fatal(e.Start(viper.GetString("server.address"))) //nolint
 }
