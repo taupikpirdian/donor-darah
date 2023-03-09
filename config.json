@@ -12,5 +12,8 @@
       "user": "root",
       "pass": "#d4esUqzQpS9XZNv",
       "name": "article"
+  },
+  "jwt": {
+    "key": "socialProjectSalt!@#"
   }
 }

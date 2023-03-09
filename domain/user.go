@@ -5,11 +5,13 @@ import (
 	"errors"
 	"time"
 
+	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
 )
 
 // User is representing the User data struct
 type User struct {
+	Id                   string `json:"id"`
 	Name                 string `json:"name" validate:"required"`
 	Email                string `json:"email" validate:"required"`
 	Phone                string `json:"phone" validate:"required"`
@@ -31,7 +33,7 @@ type UserData struct {
 	name        string
 	email       string
 	phone       string
-	password    string
+	password    []byte
 	updatedAt   time.Time
 	createdAt   time.Time
 	profileData ProfileData
@@ -60,10 +62,26 @@ type Job struct {
 	CreatedAt time.Time `json:"createdAt"`
 }
 
+type JwtCustomClaims struct {
+	Id   int64  `json:"id"`
+	Name string `json:"name"`
+	jwt.RegisteredClaims
+}
+
+type DtoRequestLogin struct {
+	Phone    string `json:"phone" validate:"required"`
+	Password string `json:"password" validate:"required"`
+}
+
+type Auth struct {
+	Token string `json:"token"`
+}
+
 // UserUsecase represent the user's usecases
 type UserUsecase interface {
 	Register(ctx context.Context, us *User) error
 	GetJob(ctx context.Context) ([]*Job, error)
+	Login(ctx context.Context, us *DtoRequestLogin) (*Auth, error)
 }
 
 // UserRepository represent the user's repository contract
@@ -71,6 +89,7 @@ type UserRepository interface {
 	Register(ctx context.Context, us *UserData) error
 	StoreProfile(ctx context.Context, us *UserData) error
 	GetJob(ctx context.Context) ([]*Job, error)
+	FindUser(ctx context.Context, us *UserData) (*User, error)
 }
 
 func NewUser(u *User) (*UserData, error) {
@@ -83,9 +102,9 @@ func NewUser(u *User) (*UserData, error) {
 	}
 
 	// hash password
-	resultHash, errHash := HashPassword(u.Password)
-	if errHash != nil {
-		return nil, errors.New("HASHING PASSWORD FAILED")
+	resultHash, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return nil, errors.New("ERROR HASHING")
 	}
 
 	return &UserData{
@@ -109,6 +128,26 @@ func NewUser(u *User) (*UserData, error) {
 	}, nil
 }
 
+func NewUserLogin(u *DtoRequestLogin) (*UserData, error) {
+	if u.Phone == "" {
+		return nil, errors.New("PHONE IS REQUIRED")
+	}
+
+	return &UserData{
+		phone: u.Phone,
+	}, nil
+}
+
+func SetToken(token string) (*Auth, error) {
+	if token == "" {
+		return nil, errors.New("TOKEN IS REQUIRED")
+	}
+
+	return &Auth{
+		Token: token,
+	}, nil
+}
+
 func HashPassword(password string) (string, error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
@@ -129,7 +168,7 @@ func (cu *UserData) GetNameOnUser() string {
 	return cu.name
 }
 
-func (cu *UserData) GetPasswordOnUser() string {
+func (cu *UserData) GetPasswordOnUser() []byte {
 	return cu.password
 }
 

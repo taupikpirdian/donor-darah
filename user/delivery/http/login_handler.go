@@ -9,7 +9,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func isRequestValid(m *domain.User) (bool, error) {
+func isRequestValidLogin(m *domain.DtoRequestLogin) (bool, error) {
 	validate := validator.New()
 	err := validate.Struct(m)
 	if err != nil {
@@ -18,28 +18,27 @@ func isRequestValid(m *domain.User) (bool, error) {
 	return true, nil
 }
 
-// Register will store the user by given request body
-func (a *UserHandler) Register(c echo.Context) (err error) {
-	var user domain.User
-	err = c.Bind(&user)
+func (a *UserHandler) LoginController(c echo.Context) (err error) {
+	var dto domain.DtoRequestLogin
+	err = c.Bind(&dto)
 	if err != nil {
 		responseError, _ := http_response.MapResponse(1, err.Error())
 		return c.JSON(http.StatusUnprocessableEntity, responseError)
 	}
 
 	var ok bool
-	if ok, err = isRequestValid(&user); !ok {
+	if ok, err = isRequestValidLogin(&dto); !ok {
 		responseErrorRequest, _ := http_response.MapResponse(1, domain.ErrBadParamInput.Error())
 		return c.JSON(http.StatusBadRequest, responseErrorRequest)
 	}
 
 	ctx := c.Request().Context()
-	err = a.AUsecase.Register(ctx, &user)
-	if err != nil {
+	token, errUc := a.AUsecase.Login(ctx, &dto)
+	if errUc != nil {
 		responseErrorUsecase, _ := http_response.MapResponse(1, domain.ErrBadBody.Error())
-		return c.JSON(getStatusCode(err), responseErrorUsecase)
+		return c.JSON(getStatusCode(errUc), responseErrorUsecase)
 	}
 
-	responseSuccess, _ := http_response.MapResponse(0, "success")
-	return c.JSON(http.StatusCreated, responseSuccess)
+	responseSuccess, _ := http_response.MapResponseLogin(0, "success", token)
+	return c.JSON(http.StatusOK, responseSuccess)
 }

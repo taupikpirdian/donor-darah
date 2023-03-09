@@ -16,12 +16,12 @@ type NotificationData struct {
 
 // UserUsecase represent the user's usecases
 type NotificationUsecase interface {
-	GetListNotification(ctx context.Context) ([]*NotificationData, error)
-	GetSingleNotification(ctx context.Context, id int64) (*NotificationData, error)
+	GetListNotification(ctx context.Context, userId int64) ([]*NotificationData, error)
+	GetSingleNotification(ctx context.Context, id int64, userId int64) (*NotificationData, error)
 }
 
 // UserRepository represent the user's repository contract
 type NotificationRepository interface {
-	GetListNotification(ctx context.Context) ([]*NotificationData, error)
-	GetSingleNotification(ctx context.Context, id int64) (*NotificationData, error)
+	GetListNotification(ctx context.Context, userId int64) ([]*NotificationData, error)
+	GetSingleNotification(ctx context.Context, id int64, userId int64) (*NotificationData, error)
 }

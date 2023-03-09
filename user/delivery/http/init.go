@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/bxcodec/go-clean-arch/domain"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 	"github.com/sirupsen/logrus"
 )
 
@@ -25,6 +25,7 @@ func NewUserHandler(e *echo.Echo, us domain.UserUsecase) {
 	}
 	e.POST("/api/v1/register", handler.Register)
 	e.GET("/api/v1/job", handler.JobController)
+	e.POST("/api/v1/login", handler.LoginController)
 }
 
 func getStatusCode(err error) int {

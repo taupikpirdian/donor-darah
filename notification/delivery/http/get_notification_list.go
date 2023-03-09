@@ -5,7 +5,8 @@ import (
 
 	"github.com/bxcodec/go-clean-arch/domain"
 	"github.com/bxcodec/go-clean-arch/notification/delivery/http_response"
-	"github.com/labstack/echo"
+	"github.com/golang-jwt/jwt/v4"
+	"github.com/labstack/echo/v4"
 )
 
 // Register will store the user by given request body
@@ -23,8 +24,13 @@ func (a *NotificationHandler) GetNotificationList(c echo.Context) (err error) {
 		return c.JSON(http.StatusBadRequest, responseError2)
 	}
 
+	// data user by token
+	user := c.Get("user").(*jwt.Token)
+	claims := user.Claims.(*domain.JwtCustomClaims)
+	userId := claims.Id
+
 	ctx := c.Request().Context()
-	data, errUc := a.AUsecase.GetListNotification(ctx)
+	data, errUc := a.AUsecase.GetListNotification(ctx, userId)
 	if errUc != nil {
 		responseError3, _ := http_response.MapResponseNotificationList(1, domain.ErrBadBody.Error(), nil)
 		return c.JSON(getStatusCode(err), responseError3)
