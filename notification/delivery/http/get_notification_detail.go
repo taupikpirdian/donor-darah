@@ -6,6 +6,7 @@ import (
 
 	"github.com/bxcodec/go-clean-arch/domain"
 	"github.com/bxcodec/go-clean-arch/notification/delivery/http_response"
+	"github.com/golang-jwt/jwt/v4"
 	"github.com/labstack/echo/v4"
 )
 
@@ -27,7 +28,12 @@ func (a *NotificationHandler) GetNotificationDetail(c echo.Context) (err error) 
 	ctx := c.Request().Context()
 	id := int64(idP)
 
-	data, errUc := a.AUsecase.GetSingleNotification(ctx, id)
+	// data user by token
+	user := c.Get("user").(*jwt.Token)
+	claims := user.Claims.(*domain.JwtCustomClaims)
+	userId := claims.Id
+
+	data, errUc := a.AUsecase.GetSingleNotification(ctx, id, userId)
 	if errUc != nil {
 		responseError3, _ := http_response.MapResponseNotificationSingle(1, domain.ErrBadBody.Error(), nil)
 		return c.JSON(getStatusCode(err), responseError3)

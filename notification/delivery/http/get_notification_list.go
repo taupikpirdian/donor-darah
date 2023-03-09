@@ -1,7 +1,6 @@
 package http
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/bxcodec/go-clean-arch/domain"
@@ -28,11 +27,10 @@ func (a *NotificationHandler) GetNotificationList(c echo.Context) (err error) {
 	// data user by token
 	user := c.Get("user").(*jwt.Token)
 	claims := user.Claims.(*domain.JwtCustomClaims)
-	fmt.Println(claims)
-	// id := claims.Id
+	userId := claims.Id
 
 	ctx := c.Request().Context()
-	data, errUc := a.AUsecase.GetListNotification(ctx)
+	data, errUc := a.AUsecase.GetListNotification(ctx, userId)
 	if errUc != nil {
 		responseError3, _ := http_response.MapResponseNotificationList(1, domain.ErrBadBody.Error(), nil)
 		return c.JSON(getStatusCode(err), responseError3)
