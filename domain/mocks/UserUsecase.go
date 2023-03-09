@@ -40,6 +40,32 @@ func (_m *UserUsecase) GetJob(ctx context.Context) ([]*domain.Job, error) {
 	return r0, r1
 }
 
+// Login provides a mock function with given fields: ctx, us
+func (_m *UserUsecase) Login(ctx context.Context, us *domain.DtoRequestLogin) (*domain.Auth, error) {
+	ret := _m.Called(ctx, us)
+
+	var r0 *domain.Auth
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, *domain.DtoRequestLogin) (*domain.Auth, error)); ok {
+		return rf(ctx, us)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, *domain.DtoRequestLogin) *domain.Auth); ok {
+		r0 = rf(ctx, us)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*domain.Auth)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, *domain.DtoRequestLogin) error); ok {
+		r1 = rf(ctx, us)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // Register provides a mock function with given fields: ctx, us
 func (_m *UserUsecase) Register(ctx context.Context, us *domain.User) error {
 	ret := _m.Called(ctx, us)
