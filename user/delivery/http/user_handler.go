@@ -6,7 +6,7 @@ import (
 	"github.com/bxcodec/go-clean-arch/domain"
 	"github.com/bxcodec/go-clean-arch/user/delivery/http_response"
 	"github.com/go-playground/validator"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 func isRequestValid(m *domain.User) (bool, error) {

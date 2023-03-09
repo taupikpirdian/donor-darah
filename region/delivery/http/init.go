@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/bxcodec/go-clean-arch/domain"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 	"github.com/sirupsen/logrus"
 )
 

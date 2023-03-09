@@ -6,7 +6,7 @@ import (
 
 	"github.com/bxcodec/go-clean-arch/domain"
 	"github.com/bxcodec/go-clean-arch/notification/delivery/http_response"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 func (a *NotificationHandler) GetNotificationDetail(c echo.Context) (err error) {

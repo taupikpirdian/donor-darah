@@ -7,6 +7,7 @@ import (
 
 	"github.com/bxcodec/go-clean-arch/domain"
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/spf13/viper"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -44,8 +45,9 @@ func (us *userUsecase) Login(c context.Context, dtoUser *domain.DtoRequestLogin)
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	jwtKey := viper.GetString(`jwt.key`)
 	// Generate encoded token and send it as response.
-	sign, errSign := token.SignedString([]byte("secret"))
+	sign, errSign := token.SignedString([]byte(jwtKey))
 	if errSign != nil {
 		return nil, errSign
 	}

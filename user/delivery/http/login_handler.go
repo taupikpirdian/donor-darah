@@ -6,7 +6,7 @@ import (
 	"github.com/bxcodec/go-clean-arch/domain"
 	"github.com/bxcodec/go-clean-arch/user/delivery/http_response"
 	"github.com/go-playground/validator"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 func isRequestValidLogin(m *domain.DtoRequestLogin) (bool, error) {
@@ -42,14 +42,3 @@ func (a *UserHandler) LoginController(c echo.Context) (err error) {
 	responseSuccess, _ := http_response.MapResponseLogin(0, "success", token)
 	return c.JSON(http.StatusOK, responseSuccess)
 }
-
-// func accessible(c echo.Context) error {
-// 	return c.String(http.StatusOK, "Accessible")
-// }
-
-// func restricted(c echo.Context) error {
-// 	user := c.Get("user").(*jwt.Token)
-// 	claims := user.Claims.(*jwtCustomClaims)
-// 	name := claims.Name
-// 	return c.String(http.StatusOK, "Welcome "+name+"!")
-// }
