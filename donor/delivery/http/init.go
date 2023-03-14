@@ -19,11 +19,11 @@ type ResponseError struct {
 }
 
 // UserHandler  represent the httphandler for user
-type NotificationHandler struct {
-	AUsecase domain.NotificationUsecase
+type DonorHandler struct {
+	AUsecase domain.DonorUsecase
 }
 
-func isRequestValid(m *domain.NotificationData) (bool, error) {
+func isRequestValid_Register(m *domain.DonorRegisterDTO) (bool, error) {
 	validate := validator.New()
 	err := validate.Struct(m)
 	if err != nil {
@@ -33,8 +33,8 @@ func isRequestValid(m *domain.NotificationData) (bool, error) {
 }
 
 // NewUserHandler will initialize the users/ resources endpoint
-func NewNotificationHandler(e *echo.Echo, us domain.NotificationUsecase) {
-	handler := &NotificationHandler{
+func NewDonorHandler(e *echo.Echo, us domain.DonorUsecase) {
+	handler := &DonorHandler{
 		AUsecase: us,
 	}
 	jwtKey := viper.GetString(`jwt.key`)
@@ -46,11 +46,10 @@ func NewNotificationHandler(e *echo.Echo, us domain.NotificationUsecase) {
 		},
 		SigningKey: []byte(jwtKey),
 	}
-	r := e.Group("/api/v1/notification/")
+	r := e.Group("/api/v1/donor/")
 	r.Use(echojwt.WithConfig(config))
 	// list routes
-	r.GET("list", handler.GetNotificationList)
-	r.GET("detail/:id", handler.GetNotificationDetail)
+	r.POST("questionnaire", handler.DonorRegister)
 }
 
 func getStatusCode(err error) int {
