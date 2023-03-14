@@ -26,6 +26,10 @@ import (
 	_notificationHttpDelivery "github.com/bxcodec/go-clean-arch/notification/delivery/http"
 	_notificationRepo "github.com/bxcodec/go-clean-arch/notification/repository/mysql"
 	_notificationUcase "github.com/bxcodec/go-clean-arch/notification/usecase"
+
+	_donorHttpDelivery "github.com/bxcodec/go-clean-arch/donor/delivery/http"
+	_donorRepo "github.com/bxcodec/go-clean-arch/donor/repository/mysql"
+	_donorUcase "github.com/bxcodec/go-clean-arch/donor/usecase"
 )
 
 func init() {
@@ -99,6 +103,13 @@ func main() {
 	repoNotification := _notificationRepo.NewMysqlNotificationRepository(dbConn)
 	uCaseNotification := _notificationUcase.NewNotificationUsecase(repoNotification, timeoutContext)
 	_notificationHttpDelivery.NewNotificationHandler(e, uCaseNotification)
+
+	/*
+		service donor
+	*/
+	repoDonor := _donorRepo.NewMysqlDonorRepository(dbConn)
+	uCaseDonor := _donorUcase.NewDonorUsecase(repoDonor, timeoutContext)
+	_donorHttpDelivery.NewDonorHandler(e, uCaseDonor)
 
 	log.Fatal(e.Start(viper.GetString("server.address"))) //nolint
 }
