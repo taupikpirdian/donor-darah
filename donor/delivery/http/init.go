@@ -23,7 +23,7 @@ type DonorHandler struct {
 	AUsecase domain.DonorUsecase
 }
 
-func isRequestValid_Register(m *domain.DonorRegisterDTO) (bool, error) {
+func isRequestValid_Register(m *domain.RequestRegisterDonor) (bool, error) {
 	validate := validator.New()
 	err := validate.Struct(m)
 	if err != nil {

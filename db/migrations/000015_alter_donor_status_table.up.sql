@@ -1,0 +1,1 @@
+ALTER TABLE donor_registers ADD status VARCHAR(200) DEFAULT 'OPEN' AFTER donorProof

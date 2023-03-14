@@ -10,15 +10,15 @@ import (
 )
 
 func (d *DonorHandler) DonorRegister(c echo.Context) (err error) {
-	var donor domain.DonorRegisterDTO
-	err = c.Bind(&donor)
+	var req domain.RequestRegisterDonor
+	err = c.Bind(&req)
 	if err != nil {
 		responseError, _ := http_response.MapResponseDonorRegister(1, err.Error())
 		return c.JSON(http.StatusUnprocessableEntity, responseError)
 	}
 
 	var ok bool
-	if ok, err = isRequestValid_Register(&donor); !ok {
+	if ok, err = isRequestValid_Register(&req); !ok {
 		responseError2, _ := http_response.MapResponseDonorRegister(1, err.Error())
 		return c.JSON(http.StatusBadRequest, responseError2)
 	}
@@ -29,7 +29,7 @@ func (d *DonorHandler) DonorRegister(c echo.Context) (err error) {
 	claims := user.Claims.(*domain.JwtCustomClaims)
 	userId := claims.Id
 
-	errUc := d.AUsecase.DonorRegister(ctx, userId, &domain.DonorRegisterDTO{})
+	errUc := d.AUsecase.DonorRegister(ctx, userId, &req)
 	if errUc != nil {
 		responseError3, _ := http_response.MapResponseDonorRegister(1, domain.ErrBadBody.Error())
 		return c.JSON(getStatusCode(err), responseError3)
