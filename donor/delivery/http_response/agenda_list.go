@@ -4,18 +4,26 @@ import (
 	"github.com/bxcodec/go-clean-arch/domain"
 )
 
+type ResponseAgenda struct {
+	ID       int64  `json:"id"`
+	Name     string `json:"name"`
+	DateTime string `json:"dateTime"`
+	Address  string `json:"address"`
+}
+
 type CustomReponseSingleListAgenda struct {
 	Status *Status
-	Data   []*domain.DonorRegister
+	Data   []*ResponseAgenda
 }
 
 func MapResponseListAgenda(code int, message string, datas []*domain.DonorRegister) (*CustomReponseSingleListAgenda, error) {
+	res := []*ResponseAgenda{}
 	httpResponse := &CustomReponseSingleListAgenda{
 		Status: &Status{
 			Code:    code,
 			Message: message,
 		},
-		Data: datas,
+		Data: res,
 	}
 
 	return httpResponse, nil

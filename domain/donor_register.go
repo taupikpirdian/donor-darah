@@ -28,6 +28,7 @@ type DonorRegister struct {
 	donorProof       string
 	status           string
 	Questioner       []*DonorRegisterQuestioner
+	DonorSchedulle   *DonorSchedulle
 	updatedAt        time.Time
 	createdAt        time.Time
 }
