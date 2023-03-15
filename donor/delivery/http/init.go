@@ -50,7 +50,7 @@ func NewDonorHandler(e *echo.Echo, us domain.DonorUsecase) {
 	r.Use(echojwt.WithConfig(config))
 	// list routes
 	r.POST("questionnaire", handler.DonorRegister)
-	r.POST("agenda", handler.ListAgenda)
+	r.GET("agenda", handler.ListAgenda)
 }
 
 func getStatusCode(err error) int {

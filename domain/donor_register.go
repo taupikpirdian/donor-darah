@@ -19,6 +19,19 @@ type RequestListAnswer struct {
 	Answer       string `json:"answer"`
 }
 
+type DonorRegisterDTO struct {
+	Id               int64
+	Code             string
+	UserId           int64
+	DonorSchedulleId int64
+	IsApprove        bool
+	DonorProof       string
+	Status           string
+	DonorSchedulle   DonorSchedulleDTO
+	UpdatedAt        time.Time
+	CreatedAt        time.Time
+}
+
 type DonorRegister struct {
 	id               int64
 	code             string
@@ -45,13 +58,14 @@ type DonorRegisterQuestioner struct {
 
 type DonorUsecase interface {
 	DonorRegister(ctx context.Context, userId int64, req *RequestRegisterDonor) error
-	ListAgenda(ctx context.Context, userId int64) ([]*DonorRegister, error)
+	ListAgenda(ctx context.Context, userId int64) ([]*DonorRegisterDTO, error)
 }
 
 // UserRepository represent the user's repository contract
 type DonorRepository interface {
 	DonorRegister(ctx context.Context, donor *DonorRegister) (int64, error)
 	DonorRegisterQuestioner(ctx context.Context, donor *DonorRegisterQuestioner, donorRegisterId int64) error
+	ListAgenda(ctx context.Context, userId int64) ([]*DonorRegisterDTO, error)
 }
 
 func NewDonorRegister(userId int64, req RequestRegisterDonor) (*DonorRegister, error) {
