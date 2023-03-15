@@ -44,6 +44,7 @@ type DonorRegisterQuestioner struct {
 
 type DonorUsecase interface {
 	DonorRegister(ctx context.Context, userId int64, req *RequestRegisterDonor) error
+	ListAgenda(ctx context.Context, userId int64) ([]*DonorRegister, error)
 }
 
 // UserRepository represent the user's repository contract
