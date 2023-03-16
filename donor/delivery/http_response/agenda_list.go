@@ -1,7 +1,6 @@
 package http_response
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/bxcodec/go-clean-arch/domain"
@@ -22,7 +21,6 @@ type CustomReponseSingleListAgenda struct {
 }
 
 func MapResponseListAgenda(code int, message string, datas []*domain.DonorRegisterDTO) (*CustomReponseSingleListAgenda, error) {
-	fmt.Println(datas)
 	res := []*ResponseAgenda{}
 	for _, data := range datas {
 		add := &ResponseAgenda{
