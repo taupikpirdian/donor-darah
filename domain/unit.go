@@ -8,3 +8,10 @@ type UnitDTO struct {
 	UpdatedAt time.Time `json:"updatedAt"`
 	CreatedAt time.Time `json:"createdAt"`
 }
+
+type Unit struct {
+	id        int64
+	name      string
+	updatedAt time.Time
+	createdAt time.Time
+}

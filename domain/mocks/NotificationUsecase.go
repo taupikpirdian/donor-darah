@@ -14,25 +14,25 @@ type NotificationUsecase struct {
 	mock.Mock
 }
 
-// GetListNotification provides a mock function with given fields: ctx
-func (_m *NotificationUsecase) GetListNotification(ctx context.Context) ([]*domain.NotificationData, error) {
-	ret := _m.Called(ctx)
+// GetListNotification provides a mock function with given fields: ctx, userId
+func (_m *NotificationUsecase) GetListNotification(ctx context.Context, userId int64) ([]*domain.NotificationData, error) {
+	ret := _m.Called(ctx, userId)
 
 	var r0 []*domain.NotificationData
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context) ([]*domain.NotificationData, error)); ok {
-		return rf(ctx)
+	if rf, ok := ret.Get(0).(func(context.Context, int64) ([]*domain.NotificationData, error)); ok {
+		return rf(ctx, userId)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context) []*domain.NotificationData); ok {
-		r0 = rf(ctx)
+	if rf, ok := ret.Get(0).(func(context.Context, int64) []*domain.NotificationData); ok {
+		r0 = rf(ctx, userId)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]*domain.NotificationData)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(context.Context) error); ok {
-		r1 = rf(ctx)
+	if rf, ok := ret.Get(1).(func(context.Context, int64) error); ok {
+		r1 = rf(ctx, userId)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -40,25 +40,25 @@ func (_m *NotificationUsecase) GetListNotification(ctx context.Context) ([]*doma
 	return r0, r1
 }
 
-// GetSingleNotification provides a mock function with given fields: ctx, id
-func (_m *NotificationUsecase) GetSingleNotification(ctx context.Context, id int64) (*domain.NotificationData, error) {
-	ret := _m.Called(ctx, id)
+// GetSingleNotification provides a mock function with given fields: ctx, id, userId
+func (_m *NotificationUsecase) GetSingleNotification(ctx context.Context, id int64, userId int64) (*domain.NotificationData, error) {
+	ret := _m.Called(ctx, id, userId)
 
 	var r0 *domain.NotificationData
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, int64) (*domain.NotificationData, error)); ok {
-		return rf(ctx, id)
+	if rf, ok := ret.Get(0).(func(context.Context, int64, int64) (*domain.NotificationData, error)); ok {
+		return rf(ctx, id, userId)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, int64) *domain.NotificationData); ok {
-		r0 = rf(ctx, id)
+	if rf, ok := ret.Get(0).(func(context.Context, int64, int64) *domain.NotificationData); ok {
+		r0 = rf(ctx, id, userId)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*domain.NotificationData)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(context.Context, int64) error); ok {
-		r1 = rf(ctx, id)
+	if rf, ok := ret.Get(1).(func(context.Context, int64, int64) error); ok {
+		r1 = rf(ctx, id, userId)
 	} else {
 		r1 = ret.Error(1)
 	}

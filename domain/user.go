@@ -82,6 +82,7 @@ type UserUsecase interface {
 	Register(ctx context.Context, us *User) error
 	GetJob(ctx context.Context) ([]*Job, error)
 	Login(ctx context.Context, us *DtoRequestLogin) (*Auth, error)
+	GetUnit(ctx context.Context) ([]*UnitDTO, error)
 }
 
 // UserRepository represent the user's repository contract
@@ -90,6 +91,7 @@ type UserRepository interface {
 	StoreProfile(ctx context.Context, us *UserData) error
 	GetJob(ctx context.Context) ([]*Job, error)
 	FindUser(ctx context.Context, us *UserData) (*User, error)
+	GetUnit(ctx context.Context) ([]*UnitDTO, error)
 }
 
 func NewUser(u *User) (*UserData, error) {
