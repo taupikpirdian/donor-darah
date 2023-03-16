@@ -28,6 +28,8 @@ type DonorRegisterDTO struct {
 	DonorProof       string
 	Status           string
 	DonorSchedulle   DonorSchedulleDTO
+	User             User
+	Unit             UnitDTO
 	UpdatedAt        time.Time
 	CreatedAt        time.Time
 }
@@ -59,6 +61,7 @@ type DonorRegisterQuestioner struct {
 type DonorUsecase interface {
 	DonorRegister(ctx context.Context, userId int64, req *RequestRegisterDonor) error
 	ListAgenda(ctx context.Context, userId int64) ([]*DonorRegisterDTO, error)
+	SingleAgenda(ctx context.Context, id int64) (*DonorRegisterDTO, error)
 }
 
 // UserRepository represent the user's repository contract
@@ -66,6 +69,7 @@ type DonorRepository interface {
 	DonorRegister(ctx context.Context, donor *DonorRegister) (int64, error)
 	DonorRegisterQuestioner(ctx context.Context, donor *DonorRegisterQuestioner, donorRegisterId int64) error
 	ListAgenda(ctx context.Context, userId int64) ([]*DonorRegisterDTO, error)
+	SingleAgenda(ctx context.Context, id int64) (*DonorRegisterDTO, error)
 }
 
 func NewDonorRegister(userId int64, req RequestRegisterDonor) (*DonorRegister, error) {
