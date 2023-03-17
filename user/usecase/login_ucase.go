@@ -30,6 +30,7 @@ func (us *userUsecase) Login(c context.Context, dtoUser *domain.DtoRequestLogin)
 	if errCompare != nil {
 		return nil, errCompare
 	}
+
 	// Set custom claims
 	idConv, errConv := strconv.ParseInt(dataUserDb.Id, 10, 64)
 	if errConv != nil {

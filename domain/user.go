@@ -83,6 +83,7 @@ type UserUsecase interface {
 	GetJob(ctx context.Context) ([]*Job, error)
 	Login(ctx context.Context, us *DtoRequestLogin) (*Auth, error)
 	GetUnit(ctx context.Context) ([]*UnitDTO, error)
+	ChangePassword(ctx context.Context, us *User, userID int64) error
 }
 
 // UserRepository represent the user's repository contract
@@ -92,6 +93,7 @@ type UserRepository interface {
 	GetJob(ctx context.Context) ([]*Job, error)
 	FindUser(ctx context.Context, us *UserData) (*User, error)
 	GetUnit(ctx context.Context) ([]*UnitDTO, error)
+	ChangePassword(ctx context.Context, us *UserData) error
 }
 
 func NewUser(u *User) (*UserData, error) {
@@ -224,4 +226,31 @@ func (cu *UserData) GetUpdateAtOnUser() time.Time {
 
 func (cu *UserData) GetCreatedAtOnUser() time.Time {
 	return cu.createdAt
+}
+func NewUserp(u *User) (*UserData, error) {
+	// hash password
+	resultHash, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return nil, errors.New("ERROR HASHING")
+	}
+
+	return &UserData{
+		name:      u.Name,
+		email:     u.Email,
+		phone:     u.Phone,
+		password:  resultHash,
+		updatedAt: time.Now(),
+		createdAt: time.Now(),
+		profileData: ProfileData{
+			jobId:         u.JobId,
+			unitId:        u.UnitId,
+			placeOfBirth:  u.PlaceOfBirth,
+			dateOfBirth:   time.Now(),
+			gender:        u.Gender,
+			subDistrictId: u.SubDistrictId,
+			villageId:     u.VillageId,
+			address:       u.Address,
+			postalCode:    u.PostalCode,
+		},
+	}, nil
 }

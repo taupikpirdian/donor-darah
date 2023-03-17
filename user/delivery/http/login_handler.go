@@ -1,6 +1,7 @@
 package http
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/bxcodec/go-clean-arch/domain"
@@ -34,6 +35,7 @@ func (a *UserHandler) LoginController(c echo.Context) (err error) {
 
 	ctx := c.Request().Context()
 	token, errUc := a.AUsecase.Login(ctx, &dto)
+	fmt.Println(errUc)
 	if errUc != nil {
 		responseErrorUsecase, _ := http_response.MapResponse(1, domain.ErrBadBody.Error())
 		return c.JSON(getStatusCode(errUc), responseErrorUsecase)
