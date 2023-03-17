@@ -18,7 +18,6 @@ func (dus *donorUsecase) UploadBukti(c context.Context, id int64, file *multipar
 	defer src.Close()
 
 	// Destination
-	// newFilename := "new_filename.jpg"
 	path := "donor/upload/" + file.Filename
 	dst, err := os.Create(path)
 	if err != nil {
