@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"math/rand"
+	"mime/multipart"
 	"strconv"
 	"time"
 )
@@ -58,12 +59,18 @@ type DonorRegisterQuestioner struct {
 	createdAt       time.Time
 }
 
+type UploadedFile struct {
+	FileHeader *multipart.FileHeader `json:"fileHeader" form:"file"`
+}
+
 type DonorUsecase interface {
 	DonorRegister(ctx context.Context, userId int64, req *RequestRegisterDonor) error
 	ListAgenda(ctx context.Context, userId int64) ([]*DonorRegisterDTO, error)
 	SingleAgenda(ctx context.Context, id int64) (*DonorRegisterDTO, error)
 	ListSchedulle(ctx context.Context, unitId int64) ([]*DonorSchedulleDTO, error)
 	ListRiwayat(ctx context.Context, userId int64) ([]*DonorRegisterDTO, error)
+	UploadBukti(ctx context.Context, id int64, file *multipart.FileHeader) error
+	UploadBuktiView(ctx context.Context, id int64) (*DonorRegisterDTO, error)
 }
 
 // UserRepository represent the user's repository contract
@@ -74,6 +81,8 @@ type DonorRepository interface {
 	SingleAgenda(ctx context.Context, id int64) (*DonorRegisterDTO, error)
 	ListSchedulle(ctx context.Context, unitId int64) ([]*DonorSchedulleDTO, error)
 	ListRiwayat(ctx context.Context, userId int64) ([]*DonorRegisterDTO, error)
+	UploadBukti(ctx context.Context, id int64, path string) error
+	UploadBuktiView(ctx context.Context, id int64) (*DonorRegisterDTO, error)
 }
 
 func NewDonorRegister(userId int64, req RequestRegisterDonor) (*DonorRegister, error) {
