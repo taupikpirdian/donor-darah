@@ -17,8 +17,13 @@ func (d *DonorHandler) UploadBukti(c echo.Context) (err error) {
 	}
 	id := int64(idP)
 	ctx := c.Request().Context()
+	// Source
+	file, err := c.FormFile("file")
+	if err != nil {
+		return err
+	}
 
-	errUc := d.AUsecase.UploadBukti(ctx, id)
+	errUc := d.AUsecase.UploadBukti(ctx, id, file)
 	if errUc != nil {
 		responseError3, _ := http_response.MapResponseBuktiDonor(1, domain.ErrBadBody.Error(), nil)
 		return c.JSON(getStatusCode(err), responseError3)
