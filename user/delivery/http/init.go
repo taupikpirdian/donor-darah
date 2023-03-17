@@ -4,8 +4,11 @@ import (
 	"net/http"
 
 	"github.com/bxcodec/go-clean-arch/domain"
+	"github.com/golang-jwt/jwt/v4"
+	echojwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
 	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 )
 
 // ResponseError represent the response error struct
@@ -23,11 +26,24 @@ func NewUserHandler(e *echo.Echo, us domain.UserUsecase) {
 	handler := &UserHandler{
 		AUsecase: us,
 	}
+	jwtKey := viper.GetString(`jwt.key`)
+
+	// Configure middleware with the custom claims type
+	config := echojwt.Config{
+		NewClaimsFunc: func(c echo.Context) jwt.Claims {
+			return new(domain.JwtCustomClaims)
+		},
+		SigningKey: []byte(jwtKey),
+	}
+	r := e.Group("/api/v1/")
+	r.Use(echojwt.WithConfig(config))
+
 	e.POST("/api/v1/register", handler.Register)
 	e.GET("/api/v1/job", handler.JobController)
 	e.POST("/api/v1/login", handler.LoginController)
 	e.GET("/api/v1/unit", handler.UnitController)
-	e.POST("/api/v1/change-password", handler.ChangePasswordController)
+	// route must auth
+	r.POST("change-password", handler.ChangePasswordController)
 }
 
 func getStatusCode(err error) int {

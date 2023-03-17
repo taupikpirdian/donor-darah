@@ -92,6 +92,7 @@ type UserRepository interface {
 	StoreProfile(ctx context.Context, us *UserData) error
 	GetJob(ctx context.Context) ([]*Job, error)
 	FindUser(ctx context.Context, us *UserData) (*User, error)
+	FindUserById(ctx context.Context, us *UserData) (*User, error)
 	GetUnit(ctx context.Context) ([]*UnitDTO, error)
 	ChangePassword(ctx context.Context, us *UserData) error
 }
@@ -139,6 +140,18 @@ func NewUserLogin(u *DtoRequestLogin) (*UserData, error) {
 
 	return &UserData{
 		phone: u.Phone,
+	}, nil
+}
+
+func NewUser2(userId int64, password string) (*UserData, error) {
+	resultHash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return nil, errors.New("ERROR HASHING")
+	}
+
+	return &UserData{
+		id:       userId,
+		password: resultHash,
 	}, nil
 }
 
@@ -226,31 +239,4 @@ func (cu *UserData) GetUpdateAtOnUser() time.Time {
 
 func (cu *UserData) GetCreatedAtOnUser() time.Time {
 	return cu.createdAt
-}
-func NewUserp(u *User) (*UserData, error) {
-	// hash password
-	resultHash, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
-	if err != nil {
-		return nil, errors.New("ERROR HASHING")
-	}
-
-	return &UserData{
-		name:      u.Name,
-		email:     u.Email,
-		phone:     u.Phone,
-		password:  resultHash,
-		updatedAt: time.Now(),
-		createdAt: time.Now(),
-		profileData: ProfileData{
-			jobId:         u.JobId,
-			unitId:        u.UnitId,
-			placeOfBirth:  u.PlaceOfBirth,
-			dateOfBirth:   time.Now(),
-			gender:        u.Gender,
-			subDistrictId: u.SubDistrictId,
-			villageId:     u.VillageId,
-			address:       u.Address,
-			postalCode:    u.PostalCode,
-		},
-	}, nil
 }

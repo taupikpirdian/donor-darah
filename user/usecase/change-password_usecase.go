@@ -12,17 +12,19 @@ func (us *userUsecase) ChangePassword(c context.Context, user *domain.User, user
 	ctx, cancel := context.WithTimeout(c, us.contextTimeout)
 	defer cancel()
 
-	dp, err := domain.NewUserp(&domain.User{Id: string(userId)})
+	dp, err := domain.NewUser2(userId, user.Password)
 	if err != nil {
 		return err
 	}
-	dataUserDb, errUser := us.userRepo.FindUser(ctx, dp)
+
+	dataUserDb, errUser := us.userRepo.FindUserById(ctx, dp)
+	fmt.Println(user)
+	fmt.Println(dataUserDb)
 	if errUser != nil {
 		return errUser
 	}
 
-	fmt.Println(dataUserDb)
-	// err := us.userRepo.ChangePassword(ctx,dataUserDb)
+	// err := us.userRepo.ChangePassword(ctx, dataUserDb)
 	// if err != nil {
 	// 	return err
 	// }

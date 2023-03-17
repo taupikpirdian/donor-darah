@@ -7,7 +7,6 @@ import (
 	"github.com/bxcodec/go-clean-arch/user/delivery/http_response"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/labstack/echo/v4"
-
 )
 
 func (a *UserHandler) ChangePasswordController(c echo.Context) (err error) {
