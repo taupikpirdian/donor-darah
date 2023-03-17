@@ -64,6 +64,7 @@ type DonorUsecase interface {
 	SingleAgenda(ctx context.Context, id int64) (*DonorRegisterDTO, error)
 	ListSchedulle(ctx context.Context, unitId int64) ([]*DonorSchedulleDTO, error)
 	ListRiwayat(ctx context.Context, userId int64) ([]*DonorRegisterDTO, error)
+	UploadBukti(ctx context.Context, id int64) error
 }
 
 // UserRepository represent the user's repository contract
@@ -74,6 +75,7 @@ type DonorRepository interface {
 	SingleAgenda(ctx context.Context, id int64) (*DonorRegisterDTO, error)
 	ListSchedulle(ctx context.Context, unitId int64) ([]*DonorSchedulleDTO, error)
 	ListRiwayat(ctx context.Context, userId int64) ([]*DonorRegisterDTO, error)
+	UploadBukti(ctx context.Context, id int64) error
 }
 
 func NewDonorRegister(userId int64, req RequestRegisterDonor) (*DonorRegister, error) {

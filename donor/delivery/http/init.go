@@ -54,6 +54,7 @@ func NewDonorHandler(e *echo.Echo, us domain.DonorUsecase) {
 	r.GET("agenda/:id", handler.SingleAgenda)
 	r.GET("schedule/list/:unitId", handler.ListSchedulle)
 	r.GET("riwayat", handler.ListRiwayat)
+	r.POST("upload/:donorRegisterId", handler.UploadBukti)
 }
 
 func getStatusCode(err error) int {
