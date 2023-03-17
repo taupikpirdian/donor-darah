@@ -4,28 +4,10 @@ import (
 	"net/http"
 
 	"github.com/bxcodec/go-clean-arch/domain"
+	"github.com/bxcodec/go-clean-arch/user/delivery/http_response"
 	"github.com/go-playground/validator"
-	"github.com/labstack/echo"
-	"github.com/sirupsen/logrus"
+	"github.com/labstack/echo/v4"
 )
-
-// ResponseError represent the response error struct
-type ResponseError struct {
-	Message string `json:"message"`
-}
-
-// UserHandler  represent the httphandler for user
-type UserHandler struct {
-	AUsecase domain.UserUsecase
-}
-
-// NewUserHandler will initialize the users/ resources endpoint
-func NewUserHandler(e *echo.Echo, us domain.UserUsecase) {
-	handler := &UserHandler{
-		AUsecase: us,
-	}
-	e.POST("/register", handler.Register)
-}
 
 func isRequestValid(m *domain.User) (bool, error) {
 	validate := validator.New()
@@ -41,37 +23,23 @@ func (a *UserHandler) Register(c echo.Context) (err error) {
 	var user domain.User
 	err = c.Bind(&user)
 	if err != nil {
-		return c.JSON(http.StatusUnprocessableEntity, err.Error())
+		responseError, _ := http_response.MapResponse(1, err.Error())
+		return c.JSON(http.StatusUnprocessableEntity, responseError)
 	}
 
 	var ok bool
 	if ok, err = isRequestValid(&user); !ok {
-		return c.JSON(http.StatusBadRequest, err.Error())
+		responseErrorRequest, _ := http_response.MapResponse(1, domain.ErrBadParamInput.Error())
+		return c.JSON(http.StatusBadRequest, responseErrorRequest)
 	}
 
 	ctx := c.Request().Context()
-	user, err = a.AUsecase.Register(ctx, &user)
+	err = a.AUsecase.Register(ctx, &user)
 	if err != nil {
-		return c.JSON(getStatusCode(err), ResponseError{Message: err.Error()})
+		responseErrorUsecase, _ := http_response.MapResponse(1, domain.ErrBadBody.Error())
+		return c.JSON(getStatusCode(err), responseErrorUsecase)
 	}
 
-	return c.JSON(http.StatusCreated, user)
-}
-
-func getStatusCode(err error) int {
-	if err == nil {
-		return http.StatusOK
-	}
-
-	logrus.Error(err)
-	switch err {
-	case domain.ErrInternalServerError:
-		return http.StatusInternalServerError
-	case domain.ErrNotFound:
-		return http.StatusNotFound
-	case domain.ErrConflict:
-		return http.StatusConflict
-	default:
-		return http.StatusInternalServerError
-	}
+	responseSuccess, _ := http_response.MapResponse(0, "success")
+	return c.JSON(http.StatusCreated, responseSuccess)
 }

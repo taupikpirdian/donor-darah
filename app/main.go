@@ -8,7 +8,7 @@ import (
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 	"github.com/spf13/viper"
 
 	_articleHttpDelivery "github.com/bxcodec/go-clean-arch/article/delivery/http"
@@ -16,9 +16,20 @@ import (
 	_articleRepo "github.com/bxcodec/go-clean-arch/article/repository/mysql"
 	_articleUcase "github.com/bxcodec/go-clean-arch/article/usecase"
 	_authorRepo "github.com/bxcodec/go-clean-arch/author/repository/mysql"
+	_regionHttpDelivery "github.com/bxcodec/go-clean-arch/region/delivery/http"
+	_regionRepo "github.com/bxcodec/go-clean-arch/region/repository/mysql"
+	_regionUcase "github.com/bxcodec/go-clean-arch/region/usecase"
 	_userHttpDelivery "github.com/bxcodec/go-clean-arch/user/delivery/http"
 	_userRepo "github.com/bxcodec/go-clean-arch/user/repository/mysql"
 	_userUcase "github.com/bxcodec/go-clean-arch/user/usecase"
+
+	_notificationHttpDelivery "github.com/bxcodec/go-clean-arch/notification/delivery/http"
+	_notificationRepo "github.com/bxcodec/go-clean-arch/notification/repository/mysql"
+	_notificationUcase "github.com/bxcodec/go-clean-arch/notification/usecase"
+
+	_donorHttpDelivery "github.com/bxcodec/go-clean-arch/donor/delivery/http"
+	_donorRepo "github.com/bxcodec/go-clean-arch/donor/repository/mysql"
+	_donorUcase "github.com/bxcodec/go-clean-arch/donor/usecase"
 )
 
 func init() {
@@ -73,11 +84,32 @@ func main() {
 	_articleHttpDelivery.NewArticleHandler(e, au)
 
 	/*
-		users
+		service users
 	*/
 	repoUser := _userRepo.NewMysqlUserRepository(dbConn)
 	uCaseUser := _userUcase.NewUserUsecase(repoUser, timeoutContext)
 	_userHttpDelivery.NewUserHandler(e, uCaseUser)
+
+	/*
+		service regions
+	*/
+	repoRegion := _regionRepo.NewMysqlRegionRepository(dbConn)
+	uCaseRegion := _regionUcase.NewRegionUsecase(repoRegion, timeoutContext)
+	_regionHttpDelivery.NewRegionHandler(e, uCaseRegion)
+
+	/*
+		service notification
+	*/
+	repoNotification := _notificationRepo.NewMysqlNotificationRepository(dbConn)
+	uCaseNotification := _notificationUcase.NewNotificationUsecase(repoNotification, timeoutContext)
+	_notificationHttpDelivery.NewNotificationHandler(e, uCaseNotification)
+
+	/*
+		service donor
+	*/
+	repoDonor := _donorRepo.NewMysqlDonorRepository(dbConn)
+	uCaseDonor := _donorUcase.NewDonorUsecase(repoDonor, timeoutContext)
+	_donorHttpDelivery.NewDonorHandler(e, uCaseDonor)
 
 	log.Fatal(e.Start(viper.GetString("server.address"))) //nolint
 }

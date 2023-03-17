@@ -1,0 +1,1 @@
+ALTER TABLE donor_registers RENAME COLUMN donorProff TO donorProof
