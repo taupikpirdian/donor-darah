@@ -54,6 +54,32 @@ func (_m *UserRepository) FindUser(ctx context.Context, us *domain.UserData) (*d
 	return r0, r1
 }
 
+// FindUserById provides a mock function with given fields: ctx, us
+func (_m *UserRepository) FindUserById(ctx context.Context, us *domain.UserData) (*domain.User, error) {
+	ret := _m.Called(ctx, us)
+
+	var r0 *domain.User
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, *domain.UserData) (*domain.User, error)); ok {
+		return rf(ctx, us)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, *domain.UserData) *domain.User); ok {
+		r0 = rf(ctx, us)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*domain.User)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, *domain.UserData) error); ok {
+		r1 = rf(ctx, us)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // GetJob provides a mock function with given fields: ctx
 func (_m *UserRepository) GetJob(ctx context.Context) ([]*domain.Job, error) {
 	ret := _m.Called(ctx)

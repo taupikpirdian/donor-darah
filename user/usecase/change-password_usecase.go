@@ -2,7 +2,6 @@ package usecase
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/bxcodec/go-clean-arch/domain"
 )
@@ -17,17 +16,15 @@ func (us *userUsecase) ChangePassword(c context.Context, user *domain.User, user
 		return err
 	}
 
-	dataUserDb, errUser := us.userRepo.FindUserById(ctx, dp)
-	fmt.Println(user)
-	fmt.Println(dataUserDb)
+	_, errUser := us.userRepo.FindUserById(ctx, dp)
 	if errUser != nil {
 		return errUser
 	}
 
-	// err := us.userRepo.ChangePassword(ctx, dataUserDb)
-	// if err != nil {
-	// 	return err
-	// }
+	err = us.userRepo.ChangePassword(ctx, dp)
+	if err != nil {
+		return err
+	}
 
 	return nil
 

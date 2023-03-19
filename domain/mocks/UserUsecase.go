@@ -14,13 +14,13 @@ type UserUsecase struct {
 	mock.Mock
 }
 
-// ChangePassword provides a mock function with given fields: ctx, us
-func (_m *UserUsecase) ChangePassword(ctx context.Context, us *domain.UserData) error {
-	ret := _m.Called(ctx, us)
+// ChangePassword provides a mock function with given fields: ctx, us, userID
+func (_m *UserUsecase) ChangePassword(ctx context.Context, us *domain.User, userID int64) error {
+	ret := _m.Called(ctx, us, userID)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, *domain.UserData) error); ok {
-		r0 = rf(ctx, us)
+	if rf, ok := ret.Get(0).(func(context.Context, *domain.User, int64) error); ok {
+		r0 = rf(ctx, us, userID)
 	} else {
 		r0 = ret.Error(0)
 	}

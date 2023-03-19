@@ -26,6 +26,11 @@ func (a *UserHandler) ChangePasswordController(c echo.Context) (err error) {
 	userId := claims.Id
 
 	err = a.AUsecase.ChangePassword(ctx, &user, userId)
+	if err != nil {
+		responseErrorUsecase, _ := http_response.MapResponse(1, domain.ErrBadBody.Error())
+		return c.JSON(getStatusCode(err), responseErrorUsecase)
+	}
 
-	return
+	responseSuccess, _ := http_response.MapResponse(0, "success")
+	return c.JSON(http.StatusCreated, responseSuccess)
 }
