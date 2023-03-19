@@ -20,6 +20,11 @@
 - go mod vendor
 - go run app/main.go
 
+## How Push
+- git add (pilih file yang mau diadd)
+- git commit -m "message commit"
+- git push origin development
+
 ## Use migration
 ### Create Migration
 - migrate create -ext sql -dir db/migrations -seq create_users_table
