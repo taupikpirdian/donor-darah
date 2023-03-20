@@ -1,0 +1,1 @@
+ALTER TABLE profiles ADD code VARCHAR(200) NULL AFTER id
