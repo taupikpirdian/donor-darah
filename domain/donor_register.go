@@ -72,6 +72,7 @@ type DonorUsecase interface {
 	UploadBukti(ctx context.Context, id int64, file *multipart.FileHeader) error
 	UploadBuktiView(ctx context.Context, id int64) (*DonorRegisterDTO, error)
 	CancelDonor(ctx context.Context, id int64) error
+	Reschedule(ctx context.Context, id int64, dto *DonorSchedulleDTO) error
 }
 
 // UserRepository represent the user's repository contract
@@ -85,6 +86,8 @@ type DonorRepository interface {
 	UploadBukti(ctx context.Context, id int64, path string) error
 	UploadBuktiView(ctx context.Context, id int64) (*DonorRegisterDTO, error)
 	CancelDonor(ctx context.Context, id int64) error
+	FindSchedule(ctx context.Context, dto *DonorSchedulleDTO) (*DonorSchedulleDTO, error)
+	Reschedule(ctx context.Context, id int64, dto *DonorSchedulle) error
 }
 
 func NewDonorRegister(userId int64, req RequestRegisterDonor) (*DonorRegister, error) {

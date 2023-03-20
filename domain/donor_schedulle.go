@@ -1,6 +1,8 @@
 package domain
 
-import "time"
+import (
+	"time"
+)
 
 type DonorSchedulle struct {
 	id            int64
@@ -26,4 +28,23 @@ type DonorSchedulleDTO struct {
 	TypeSchedulle string
 	UpdatedAt     time.Time
 	CreatedAt     time.Time
+}
+
+func NewDonorSchedule(req DonorSchedulleDTO) (*DonorSchedulle, error) {
+
+	schedule := &DonorSchedulle{
+		id:        req.Id,
+		unitId:    req.UnitId,
+		placeName: req.PlaceName,
+		address:   req.Address,
+		date:      req.Date,
+		updatedAt: time.Now(),
+		createdAt: time.Now(),
+	}
+
+	return schedule, nil
+}
+
+func (drs *DonorSchedulle) GetId_DonorSchedule() int64 {
+	return drs.id
 }
