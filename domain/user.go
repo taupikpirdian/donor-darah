@@ -43,6 +43,7 @@ type UserData struct {
 
 type ProfileData struct {
 	id            int64
+	code          string
 	userId        int64
 	jobId         int64
 	unitId        int64
@@ -123,6 +124,9 @@ func NewUser(u *User) (*UserData, error) {
 		return nil, errors.New("ERROR HASHING")
 	}
 
+	currentTime := time.Now()
+	codeTime := "DN-" + currentTime.Format("20060102150405") + generateCodeString()
+
 	return &UserData{
 		name:      u.Name,
 		email:     u.Email,
@@ -131,6 +135,7 @@ func NewUser(u *User) (*UserData, error) {
 		updatedAt: time.Now(),
 		createdAt: time.Now(),
 		profileData: ProfileData{
+			code:          codeTime,
 			jobId:         u.JobId,
 			unitId:        u.UnitId,
 			placeOfBirth:  u.PlaceOfBirth,
@@ -244,6 +249,10 @@ func (cu *UserData) GetDateOfBirthOnProfile() time.Time {
 	return cu.profileData.dateOfBirth
 }
 
+func (cu *UserData) GetCodeOnProfile() string {
+	return cu.profileData.code
+}
+
 func (cu *UserData) GetGenderOnProfile() string {
 	return cu.profileData.gender
 }
@@ -286,4 +295,15 @@ func (cu *UserData) GetUpdateAtOnUser() time.Time {
 
 func (cu *UserData) GetCreatedAtOnUser() time.Time {
 	return cu.createdAt
+}
+
+func generateCodeString() string {
+	rand.Seed(time.Now().UnixNano()) // Initialize the random number generator with the current time
+	const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	randomString := make([]byte, 3)
+	for i := range randomString {
+		randomString[i] = letters[rand.Intn(len(letters))] // Generate a random character from the set of letters
+	}
+
+	return string(randomString)
 }
