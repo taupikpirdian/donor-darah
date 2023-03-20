@@ -3,6 +3,7 @@ package domain
 import (
 	"context"
 	"errors"
+	"math/rand"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
@@ -37,6 +38,7 @@ type UserData struct {
 	updatedAt   time.Time
 	createdAt   time.Time
 	profileData ProfileData
+	profile     Profile
 }
 
 type ProfileData struct {
@@ -53,6 +55,15 @@ type ProfileData struct {
 	postalCode    string
 	updatedAt     time.Time
 	createdAt     time.Time
+}
+type Profile struct {
+	Id         int64     `json:"id"`
+	Name       string    `json:"name"`
+	MemberCode string    `json:"memberCode"`
+	UrlImage   string    `json:"urlImage"`
+	TotalDonor int64     `json:"totalDonor"`
+	LastDonor  time.Time `json:"lastDonor"`
+	NextDonor  time.Time `json:"nextDonor"`
 }
 
 type Job struct {
@@ -131,6 +142,42 @@ func NewUser(u *User) (*UserData, error) {
 			postalCode:    u.PostalCode,
 		},
 	}, nil
+}
+func NewProfile(u *Profile) (*UserData, error) {
+	if u.Name == "" {
+		return nil, errors.New("NAME NOT SET")
+	}
+
+	rand.Seed(time.Now().UnixNano()) // Set seed with current time
+
+	length := 16 // Set length of random string
+
+	// Characters to use in the random string
+	chars := "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	digits := "0123456789"
+	// Generate random string
+	result := make([]byte, length)
+
+	for i := range result {
+		if i < 3 {
+			result[i] = chars[rand.Intn(len(chars))]
+		} else {
+			result[i] = digits[rand.Intn(len(digits))]
+		}
+	}
+
+	return &UserData{
+		id:   u.Id,
+		name: u.Name,
+		profile: Profile{
+			MemberCode: string(result),
+			UrlImage:   u.UrlImage,
+			TotalDonor: u.TotalDonor,
+			NextDonor:  u.NextDonor,
+			LastDonor:  u.LastDonor,
+		},
+	}, nil
+
 }
 
 func NewUserLogin(u *DtoRequestLogin) (*UserData, error) {
