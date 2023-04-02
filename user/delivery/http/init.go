@@ -42,6 +42,7 @@ func NewUserHandler(e *echo.Echo, us domain.UserUsecase) {
 	e.GET("/api/v1/job", handler.JobController)
 	e.POST("/api/v1/login", handler.LoginController)
 	e.GET("/api/v1/unit", handler.UnitController)
+	e.POST("/api/v1/forgot-password", handler.ForgotPasswordController)
 	// route must auth
 	r.POST("change-password", handler.ChangePasswordController)
 }

@@ -14,6 +14,20 @@ type DonorRepository struct {
 	mock.Mock
 }
 
+// CancelDonor provides a mock function with given fields: ctx, id
+func (_m *DonorRepository) CancelDonor(ctx context.Context, id int64) error {
+	ret := _m.Called(ctx, id)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, int64) error); ok {
+		r0 = rf(ctx, id)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // DonorRegister provides a mock function with given fields: ctx, donor
 func (_m *DonorRepository) DonorRegister(ctx context.Context, donor *domain.DonorRegister) (int64, error) {
 	ret := _m.Called(ctx, donor)
@@ -50,6 +64,32 @@ func (_m *DonorRepository) DonorRegisterQuestioner(ctx context.Context, donor *d
 	}
 
 	return r0
+}
+
+// FindSchedule provides a mock function with given fields: ctx, dto
+func (_m *DonorRepository) FindSchedule(ctx context.Context, dto *domain.DonorSchedulleDTO) (*domain.DonorSchedulleDTO, error) {
+	ret := _m.Called(ctx, dto)
+
+	var r0 *domain.DonorSchedulleDTO
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, *domain.DonorSchedulleDTO) (*domain.DonorSchedulleDTO, error)); ok {
+		return rf(ctx, dto)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, *domain.DonorSchedulleDTO) *domain.DonorSchedulleDTO); ok {
+		r0 = rf(ctx, dto)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*domain.DonorSchedulleDTO)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, *domain.DonorSchedulleDTO) error); ok {
+		r1 = rf(ctx, dto)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
 }
 
 // ListAgenda provides a mock function with given fields: ctx, userId
@@ -128,6 +168,20 @@ func (_m *DonorRepository) ListSchedulle(ctx context.Context, unitId int64) ([]*
 	}
 
 	return r0, r1
+}
+
+// Reschedule provides a mock function with given fields: ctx, id, dto
+func (_m *DonorRepository) Reschedule(ctx context.Context, id int64, dto *domain.DonorSchedulle) error {
+	ret := _m.Called(ctx, id, dto)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, int64, *domain.DonorSchedulle) error); ok {
+		r0 = rf(ctx, id, dto)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
 }
 
 // SingleAgenda provides a mock function with given fields: ctx, id

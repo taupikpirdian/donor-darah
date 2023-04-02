@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"math/rand"
+	"strconv"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
@@ -86,6 +87,7 @@ type UserUsecase interface {
 	Login(ctx context.Context, us *DtoRequestLogin) (*Auth, error)
 	GetUnit(ctx context.Context) ([]*UnitDTO, error)
 	ChangePassword(ctx context.Context, us *User, userID int64) error
+	ForgotPassword(ctx context.Context, us *User) error
 }
 
 // UserRepository represent the user's repository contract
@@ -95,6 +97,7 @@ type UserRepository interface {
 	GetJob(ctx context.Context) ([]*Job, error)
 	FindUser(ctx context.Context, us *UserData) (*User, error)
 	FindUserById(ctx context.Context, us *UserData) (*User, error)
+	FindUserByEmail(ctx context.Context, email string) (*UserData, error)
 	GetUnit(ctx context.Context) ([]*UnitDTO, error)
 	ChangePassword(ctx context.Context, us *UserData) error
 }
@@ -161,6 +164,27 @@ func NewUser2(userId int64, password string) (*UserData, error) {
 	}, nil
 }
 
+func NewUser3(u *User) (*UserData, error) {
+	if u.Name == "" {
+		return nil, errors.New("NAME NOT SET")
+	}
+
+	idInt, err := strconv.ParseInt(u.Id, 10, 64)
+	if err != nil {
+		return nil, err
+	}
+
+	return &UserData{
+		id:        idInt,
+		name:      u.Name,
+		email:     u.Email,
+		phone:     u.Phone,
+		password:  []byte(u.Password),
+		updatedAt: time.Now(),
+		createdAt: time.Now(),
+	}, nil
+}
+
 func SetToken(token string) (*Auth, error) {
 	if token == "" {
 		return nil, errors.New("TOKEN IS REQUIRED")
@@ -181,6 +205,11 @@ func HashPassword(password string) (string, error) {
 
 func (cu *UserData) SetIdNewUser(u *UserData, id int64) {
 	u.id = id
+}
+
+func (cu *UserData) SetPasswordNew(u *UserData, password string) {
+	resultHash, _ := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	u.password = resultHash
 }
 
 func (cu *UserData) GetIdOnUser() int {
@@ -255,6 +284,17 @@ func generateCodeString() string {
 	rand.Seed(time.Now().UnixNano()) // Initialize the random number generator with the current time
 	const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	randomString := make([]byte, 3)
+	for i := range randomString {
+		randomString[i] = letters[rand.Intn(len(letters))] // Generate a random character from the set of letters
+	}
+
+	return string(randomString)
+}
+
+func GenerateCodeStringLen(n int) string {
+	rand.Seed(time.Now().UnixNano()) // Initialize the random number generator with the current time
+	const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	randomString := make([]byte, n)
 	for i := range randomString {
 		randomString[i] = letters[rand.Intn(len(letters))] // Generate a random character from the set of letters
 	}

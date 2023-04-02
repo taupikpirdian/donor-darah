@@ -28,6 +28,20 @@ func (_m *UserUsecase) ChangePassword(ctx context.Context, us *domain.User, user
 	return r0
 }
 
+// ForgotPassword provides a mock function with given fields: ctx, us
+func (_m *UserUsecase) ForgotPassword(ctx context.Context, us *domain.User) error {
+	ret := _m.Called(ctx, us)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, *domain.User) error); ok {
+		r0 = rf(ctx, us)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // GetJob provides a mock function with given fields: ctx
 func (_m *UserUsecase) GetJob(ctx context.Context) ([]*domain.Job, error) {
 	ret := _m.Called(ctx)

@@ -54,6 +54,32 @@ func (_m *UserRepository) FindUser(ctx context.Context, us *domain.UserData) (*d
 	return r0, r1
 }
 
+// FindUserByEmail provides a mock function with given fields: ctx, email
+func (_m *UserRepository) FindUserByEmail(ctx context.Context, email string) (*domain.UserData, error) {
+	ret := _m.Called(ctx, email)
+
+	var r0 *domain.UserData
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, string) (*domain.UserData, error)); ok {
+		return rf(ctx, email)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, string) *domain.UserData); ok {
+		r0 = rf(ctx, email)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*domain.UserData)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, string) error); ok {
+		r1 = rf(ctx, email)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // FindUserById provides a mock function with given fields: ctx, us
 func (_m *UserRepository) FindUserById(ctx context.Context, us *domain.UserData) (*domain.User, error) {
 	ret := _m.Called(ctx, us)
