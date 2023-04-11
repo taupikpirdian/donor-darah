@@ -1,4 +1,4 @@
-package usecase
+package usecase_test
 
 import (
 	"context"
@@ -9,6 +9,7 @@ import (
 	"github.com/bxcodec/go-clean-arch/domain"
 	"github.com/bxcodec/go-clean-arch/domain/mocks"
 	testdata "github.com/bxcodec/go-clean-arch/user/test_data"
+	"github.com/bxcodec/go-clean-arch/user/usecase"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -155,11 +156,7 @@ func Test_userUsecase_ForgotPassword(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			us := &userUsecase{
-				userRepo:       tt.fields.userRepo,
-				serviceMail:    tt.fields.serviceMail,
-				contextTimeout: tt.fields.contextTimeout,
-			}
+			us := usecase.NewUserUsecase(tt.fields.userRepo, tt.fields.serviceMail, tt.fields.contextTimeout)
 			if err := us.ForgotPassword(tt.args.c, tt.args.user); (err != nil) != tt.wantErr {
 				t.Errorf("userUsecase.ForgotPassword() error = %v, wantErr %v", err, tt.wantErr)
 			}

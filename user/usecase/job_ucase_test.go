@@ -1,4 +1,4 @@
-package usecase
+package usecase_test
 
 import (
 	"context"
@@ -10,12 +10,14 @@ import (
 	"github.com/bxcodec/go-clean-arch/domain"
 	"github.com/bxcodec/go-clean-arch/domain/mocks"
 	testdata "github.com/bxcodec/go-clean-arch/user/test_data"
+	"github.com/bxcodec/go-clean-arch/user/usecase"
 	"github.com/stretchr/testify/mock"
 )
 
 func Test_userUsecase_GetJob(t *testing.T) {
 	type fields struct {
 		userRepo       domain.UserRepository
+		serviceMail    domain.MailService
 		contextTimeout time.Duration
 	}
 	type args struct {
@@ -55,6 +57,7 @@ func Test_userUsecase_GetJob(t *testing.T) {
 			name: "Error Repo",
 			fields: fields{
 				userRepo:       repoUJobError,
+				serviceMail:    nil,
 				contextTimeout: 0,
 			},
 			args: args{
@@ -67,6 +70,7 @@ func Test_userUsecase_GetJob(t *testing.T) {
 			name: "Success",
 			fields: fields{
 				userRepo:       repoUJob,
+				serviceMail:    nil,
 				contextTimeout: 0,
 			},
 			args: args{
@@ -78,10 +82,7 @@ func Test_userUsecase_GetJob(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			us := &userUsecase{
-				userRepo:       tt.fields.userRepo,
-				contextTimeout: tt.fields.contextTimeout,
-			}
+			us := usecase.NewUserUsecase(tt.fields.userRepo, tt.fields.serviceMail, tt.fields.contextTimeout)
 			got, err := us.GetJob(tt.args.c)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("userUsecase.GetJob() error = %v, wantErr %v", err, tt.wantErr)
