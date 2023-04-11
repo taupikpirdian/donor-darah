@@ -119,6 +119,7 @@ func NewUser(u *User) (*UserData, error) {
 
 	currentTime := time.Now()
 	codeTime := "DN-" + currentTime.Format("20060102150405") + generateCodeString()
+	date, _ := time.Parse("2006-01-02", u.DateOfBirth)
 
 	return &UserData{
 		name:      u.Name,
@@ -132,7 +133,7 @@ func NewUser(u *User) (*UserData, error) {
 			jobId:         u.JobId,
 			unitId:        u.UnitId,
 			placeOfBirth:  u.PlaceOfBirth,
-			dateOfBirth:   time.Now(),
+			dateOfBirth:   date,
 			gender:        u.Gender,
 			subDistrictId: u.SubDistrictId,
 			villageId:     u.VillageId,
@@ -300,4 +301,53 @@ func GenerateCodeStringLen(n int) string {
 	}
 
 	return string(randomString)
+}
+
+func (cu *UserData) SetName(name string) {
+	cu.name = name
+}
+
+func (cu *UserData) SetEmail(email string) {
+	cu.email = email
+}
+
+func (cu *UserData) SetPhone(phone string) {
+	cu.phone = phone
+}
+
+func (cu *UserData) SetJobId(jobId int64) {
+	cu.profileData.jobId = jobId
+}
+
+func (cu *UserData) SetUnitId(unitId int64) {
+	cu.profileData.unitId = unitId
+}
+
+func (cu *UserData) SetPlaceOfBirth(place string) {
+	cu.profileData.placeOfBirth = place
+}
+
+func (cu *UserData) SetDateOfBirth(date string) {
+	dateFormat, _ := time.Parse("2006-01-02", date)
+	cu.profileData.dateOfBirth = dateFormat
+}
+
+func (cu *UserData) SetGender(gender string) {
+	cu.profileData.gender = gender
+}
+
+func (cu *UserData) SetSubDistrictId(subDistrictId int64) {
+	cu.profileData.subDistrictId = subDistrictId
+}
+
+func (cu *UserData) SetVillageId(villageId int64) {
+	cu.profileData.villageId = villageId
+}
+
+func (cu *UserData) SetAddress(address string) {
+	cu.profileData.address = address
+}
+
+func (cu *UserData) SetPostalCode(postalCode string) {
+	cu.profileData.postalCode = postalCode
 }

@@ -61,3 +61,23 @@ func MultipleJob() []*domain.Job {
 	d = append(d, data)
 	return d
 }
+
+func DataUser() *domain.User {
+	u := &domain.User{
+		Name:                 "Taupik Pirdian",
+		Email:                "pirdiantaupik@gmail.com",
+		Phone:                "085846132417",
+		Password:             "aaa123",
+		PasswordConfirmation: "aaa123",
+		JobId:                1,
+		UnitId:               1,
+		PlaceOfBirth:         "Bandung",
+		DateOfBirth:          "1995-02-10",
+		Gender:               "1",
+		SubDistrictId:        1,
+		VillageId:            1,
+		Address:              "Kopo",
+		PostalCode:           "40226",
+	}
+	return u
+}
