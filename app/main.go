@@ -30,6 +30,8 @@ import (
 	_donorHttpDelivery "github.com/bxcodec/go-clean-arch/donor/delivery/http"
 	_donorRepo "github.com/bxcodec/go-clean-arch/donor/repository/mysql"
 	_donorUcase "github.com/bxcodec/go-clean-arch/donor/usecase"
+
+	_serviceMailUser "github.com/bxcodec/go-clean-arch/user/service/mail"
 )
 
 func init() {
@@ -87,7 +89,8 @@ func main() {
 		service users
 	*/
 	repoUser := _userRepo.NewMysqlUserRepository(dbConn)
-	uCaseUser := _userUcase.NewUserUsecase(repoUser, timeoutContext)
+	serviceMail := _serviceMailUser.NewMailService()
+	uCaseUser := _userUcase.NewUserUsecase(repoUser, serviceMail, timeoutContext)
 	_userHttpDelivery.NewUserHandler(e, uCaseUser)
 
 	/*

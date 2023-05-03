@@ -16,6 +16,20 @@ type DonorUsecase struct {
 	mock.Mock
 }
 
+// CancelDonor provides a mock function with given fields: ctx, id
+func (_m *DonorUsecase) CancelDonor(ctx context.Context, id int64) error {
+	ret := _m.Called(ctx, id)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, int64) error); ok {
+		r0 = rf(ctx, id)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // DonorRegister provides a mock function with given fields: ctx, userId, req
 func (_m *DonorUsecase) DonorRegister(ctx context.Context, userId int64, req *domain.RequestRegisterDonor) error {
 	ret := _m.Called(ctx, userId, req)
@@ -106,6 +120,20 @@ func (_m *DonorUsecase) ListSchedulle(ctx context.Context, unitId int64) ([]*dom
 	}
 
 	return r0, r1
+}
+
+// Reschedule provides a mock function with given fields: ctx, id, dto
+func (_m *DonorUsecase) Reschedule(ctx context.Context, id int64, dto *domain.DonorSchedulleDTO) error {
+	ret := _m.Called(ctx, id, dto)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, int64, *domain.DonorSchedulleDTO) error); ok {
+		r0 = rf(ctx, id, dto)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
 }
 
 // SingleAgenda provides a mock function with given fields: ctx, id

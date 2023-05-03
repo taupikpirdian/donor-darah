@@ -48,3 +48,7 @@ example down:
 ### Run Mockery
 - cd domain
 - mockery --all --case=camel
+
+## Setup Email SMTP Gmail for Sender
+### Get Password Aplication
+- visiting https://myaccount.google.com/apppasswords should allow you to set up application specific passwords

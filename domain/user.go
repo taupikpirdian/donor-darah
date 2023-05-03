@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"math/rand"
+	"strconv"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
@@ -96,6 +97,7 @@ type UserUsecase interface {
 	Login(ctx context.Context, us *DtoRequestLogin) (*Auth, error)
 	GetUnit(ctx context.Context) ([]*UnitDTO, error)
 	ChangePassword(ctx context.Context, us *User, userID int64) error
+	ForgotPassword(ctx context.Context, us *User) error
 }
 
 // UserRepository represent the user's repository contract
@@ -105,6 +107,7 @@ type UserRepository interface {
 	GetJob(ctx context.Context) ([]*Job, error)
 	FindUser(ctx context.Context, us *UserData) (*User, error)
 	FindUserById(ctx context.Context, us *UserData) (*User, error)
+	FindUserByEmail(ctx context.Context, email string) (*UserData, error)
 	GetUnit(ctx context.Context) ([]*UnitDTO, error)
 	ChangePassword(ctx context.Context, us *UserData) error
 }
@@ -126,6 +129,7 @@ func NewUser(u *User) (*UserData, error) {
 
 	currentTime := time.Now()
 	codeTime := "DN-" + currentTime.Format("20060102150405") + generateCodeString()
+	date, _ := time.Parse("2006-01-02", u.DateOfBirth)
 
 	return &UserData{
 		name:      u.Name,
@@ -139,7 +143,7 @@ func NewUser(u *User) (*UserData, error) {
 			jobId:         u.JobId,
 			unitId:        u.UnitId,
 			placeOfBirth:  u.PlaceOfBirth,
-			dateOfBirth:   time.Now(),
+			dateOfBirth:   date,
 			gender:        u.Gender,
 			subDistrictId: u.SubDistrictId,
 			villageId:     u.VillageId,
@@ -207,6 +211,27 @@ func NewUser2(userId int64, password string) (*UserData, error) {
 	}, nil
 }
 
+func NewUser3(u *User) (*UserData, error) {
+	if u.Name == "" {
+		return nil, errors.New("NAME NOT SET")
+	}
+
+	idInt, err := strconv.ParseInt(u.Id, 10, 64)
+	if err != nil {
+		return nil, err
+	}
+
+	return &UserData{
+		id:        idInt,
+		name:      u.Name,
+		email:     u.Email,
+		phone:     u.Phone,
+		password:  []byte(u.Password),
+		updatedAt: time.Now(),
+		createdAt: time.Now(),
+	}, nil
+}
+
 func SetToken(token string) (*Auth, error) {
 	if token == "" {
 		return nil, errors.New("TOKEN IS REQUIRED")
@@ -227,6 +252,11 @@ func HashPassword(password string) (string, error) {
 
 func (cu *UserData) SetIdNewUser(u *UserData, id int64) {
 	u.id = id
+}
+
+func (cu *UserData) SetPasswordNew(u *UserData, password string) {
+	resultHash, _ := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	u.password = resultHash
 }
 
 func (cu *UserData) GetIdOnUser() int {
@@ -306,4 +336,64 @@ func generateCodeString() string {
 	}
 
 	return string(randomString)
+}
+
+func GenerateCodeStringLen(n int) string {
+	rand.Seed(time.Now().UnixNano()) // Initialize the random number generator with the current time
+	const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	randomString := make([]byte, n)
+	for i := range randomString {
+		randomString[i] = letters[rand.Intn(len(letters))] // Generate a random character from the set of letters
+	}
+
+	return string(randomString)
+}
+
+func (cu *UserData) SetName(name string) {
+	cu.name = name
+}
+
+func (cu *UserData) SetEmail(email string) {
+	cu.email = email
+}
+
+func (cu *UserData) SetPhone(phone string) {
+	cu.phone = phone
+}
+
+func (cu *UserData) SetJobId(jobId int64) {
+	cu.profileData.jobId = jobId
+}
+
+func (cu *UserData) SetUnitId(unitId int64) {
+	cu.profileData.unitId = unitId
+}
+
+func (cu *UserData) SetPlaceOfBirth(place string) {
+	cu.profileData.placeOfBirth = place
+}
+
+func (cu *UserData) SetDateOfBirth(date string) {
+	dateFormat, _ := time.Parse("2006-01-02", date)
+	cu.profileData.dateOfBirth = dateFormat
+}
+
+func (cu *UserData) SetGender(gender string) {
+	cu.profileData.gender = gender
+}
+
+func (cu *UserData) SetSubDistrictId(subDistrictId int64) {
+	cu.profileData.subDistrictId = subDistrictId
+}
+
+func (cu *UserData) SetVillageId(villageId int64) {
+	cu.profileData.villageId = villageId
+}
+
+func (cu *UserData) SetAddress(address string) {
+	cu.profileData.address = address
+}
+
+func (cu *UserData) SetPostalCode(postalCode string) {
+	cu.profileData.postalCode = postalCode
 }
