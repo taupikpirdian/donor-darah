@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"net/url"
+	"os"
 	"time"
 )
 
@@ -13,11 +14,11 @@ func InitMysqlDB() (*sql.DB, error) {
 		dbConn   *sql.DB
 	)
 
-	dbHost := "localhost"
-	dbPort := "3306"
-	dbUser := "kolaborasisalt_kolaborasisalt"
-	dbPass := "Ky4F-E*Yb^XT"
-	dbName := "kolaborasisalt_donor_darah"
+	dbHost := os.Getenv("HOST")
+	dbPort := os.Getenv("PORT")
+	dbUser := os.Getenv("USER_NAME")
+	dbPass := os.Getenv("PASS")
+	dbName := os.Getenv("NAME")
 
 	connection := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", dbUser, dbPass, dbHost, dbPort, dbName)
 	val := url.Values{}

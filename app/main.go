@@ -2,9 +2,11 @@ package main
 
 import (
 	"log"
+	"os"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 
 	_articleHttpDelivery "github.com/bxcodec/go-clean-arch/article/delivery/http"
@@ -32,6 +34,7 @@ import (
 )
 
 func main() {
+	err := godotenv.Load("../.env")
 	dbConn, err := conf.InitMysqlDB()
 
 	if err != nil {
@@ -88,5 +91,5 @@ func main() {
 	uCaseDonor := _donorUcase.NewDonorUsecase(repoDonor, timeoutContext)
 	_donorHttpDelivery.NewDonorHandler(e, uCaseDonor)
 
-	log.Fatal(e.Start(":9090")) //nolint
+	log.Fatal(e.Start(os.Getenv("ADDRESS")))
 }
