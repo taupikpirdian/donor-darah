@@ -104,6 +104,7 @@ type UserUsecase interface {
 	ChangePassword(ctx context.Context, us *User, userID int64) error
 	ForgotPassword(ctx context.Context, us *User) error
 	ListUser(ctx context.Context) ([]*User, error)
+	CreatetUser(ctx context.Context, us *User) error
 }
 
 // UserRepository represent the user's repository contract
@@ -140,6 +141,7 @@ func NewUser(u *User) (*UserData, error) {
 
 	return &UserData{
 		name:      u.Name,
+		role:      u.Role,
 		email:     u.Email,
 		phone:     u.Phone,
 		password:  resultHash,
@@ -275,6 +277,10 @@ func (cu *UserData) SetPasswordNew(u *UserData, password string) {
 
 func (cu *UserData) GetIdOnUser() int {
 	return int(cu.id)
+}
+
+func (cu *UserData) GetRoleOnUser() string {
+	return cu.role
 }
 
 func (cu *UserData) GetNameOnUser() string {

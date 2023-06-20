@@ -49,6 +49,7 @@ func NewUserHandler(e *echo.Echo, us domain.UserUsecase) {
 	g := e.Group("/api/v1/admin/")
 	g.Use(echojwt.WithConfig(config))
 	g.GET("user/list", handler.AdminUserListController)
+	g.POST("user/create", handler.AdminUserCreateController)
 }
 
 func getStatusCode(err error) int {

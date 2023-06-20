@@ -7,13 +7,20 @@ import (
 )
 
 func (m *mysqlUserRepository) Register(ctx context.Context, u *domain.UserData) error {
+	var role string
+	if u.GetRoleOnUser() == "" {
+		role = "member"
+	} else {
+		role = u.GetRoleOnUser()
+	}
+
 	query := `INSERT  users SET name=? , email=? , phone=? , password=? , updatedAt=? , createdAt=?, role=?`
 	stmt, err := m.Conn.PrepareContext(ctx, query)
 	if err != nil {
 		return err
 	}
 
-	res, err := stmt.ExecContext(ctx, u.GetNameOnUser(), u.GetEmailOnUser(), u.GetPhoneOnUser(), u.GetPasswordOnUser(), u.GetUpdateAtOnUser(), u.GetCreatedAtOnUser(), "member")
+	res, err := stmt.ExecContext(ctx, u.GetNameOnUser(), u.GetEmailOnUser(), u.GetPhoneOnUser(), u.GetPasswordOnUser(), u.GetUpdateAtOnUser(), u.GetCreatedAtOnUser(), role)
 	if err != nil {
 		return err
 	}
