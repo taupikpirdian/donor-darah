@@ -40,6 +40,7 @@ func (us *userUsecase) Login(c context.Context, dtoUser *domain.DtoRequestLogin)
 	claims := &domain.JwtCustomClaims{
 		Id:   idConv,
 		Name: dataUserDb.Name,
+		Role: dataUserDb.Role,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 72)),
 		},

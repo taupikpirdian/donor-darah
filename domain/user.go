@@ -13,22 +13,23 @@ import (
 
 // User is representing the User data struct
 type User struct {
-	Id                   string `json:"id"`
-	Name                 string `json:"name" validate:"required"`
-	Email                string `json:"email" validate:"required"`
-	Phone                string `json:"phone" validate:"required"`
-	Password             string `json:"password" validate:"required"`
-	PasswordConfirmation string `json:"passwordConfirmation" validate:"required"`
-	JobId                int64  `json:"jobId"`
-	UnitId               int64  `json:"unitId"`
-	PlaceOfBirth         string `json:"placeOfBirth"`
-	DateOfBirth          string `json:"dateOfBirth"`
-	Gender               string `json:"gender"`
-	SubDistrictId        int64  `json:"subDistrictId"`
-	VillageId            int64  `json:"villageId"`
-	Address              string `json:"address"`
-	PostalCode           string `json:"postalCode"`
-	Role                 string `json:"role"`
+	Id                   string    `json:"id"`
+	Name                 string    `json:"name" validate:"required"`
+	Email                string    `json:"email" validate:"required"`
+	Phone                string    `json:"phone" validate:"required"`
+	Password             string    `json:"password" validate:"required"`
+	PasswordConfirmation string    `json:"passwordConfirmation" validate:"required"`
+	JobId                int64     `json:"jobId"`
+	UnitId               int64     `json:"unitId"`
+	PlaceOfBirth         string    `json:"placeOfBirth"`
+	DateOfBirth          string    `json:"dateOfBirth"`
+	Gender               string    `json:"gender"`
+	SubDistrictId        int64     `json:"subDistrictId"`
+	VillageId            int64     `json:"villageId"`
+	Address              string    `json:"address"`
+	PostalCode           string    `json:"postalCode"`
+	Role                 string    `json:"role"`
+	CreatedAt            time.Time `json:"created_at"`
 }
 
 type UserData struct {
@@ -36,6 +37,7 @@ type UserData struct {
 	name        string
 	email       string
 	phone       string
+	role        string
 	password    []byte
 	updatedAt   time.Time
 	createdAt   time.Time
@@ -79,6 +81,7 @@ type Job struct {
 type JwtCustomClaims struct {
 	Id   int64  `json:"id"`
 	Name string `json:"name"`
+	Role string `json:"role"`
 	jwt.RegisteredClaims
 }
 
@@ -100,6 +103,7 @@ type UserUsecase interface {
 	GetUnit(ctx context.Context) ([]*UnitDTO, error)
 	ChangePassword(ctx context.Context, us *User, userID int64) error
 	ForgotPassword(ctx context.Context, us *User) error
+	ListUser(ctx context.Context) ([]*User, error)
 }
 
 // UserRepository represent the user's repository contract
@@ -112,6 +116,7 @@ type UserRepository interface {
 	FindUserByEmail(ctx context.Context, email string) (*UserData, error)
 	GetUnit(ctx context.Context) ([]*UnitDTO, error)
 	ChangePassword(ctx context.Context, us *UserData) error
+	GetListUser(ctx context.Context) ([]*User, error)
 }
 
 func NewUser(u *User) (*UserData, error) {

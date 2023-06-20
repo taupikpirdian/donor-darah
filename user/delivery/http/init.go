@@ -45,6 +45,10 @@ func NewUserHandler(e *echo.Echo, us domain.UserUsecase) {
 	e.POST("/api/v1/forgot-password", handler.ForgotPasswordController)
 	// route must auth
 	r.POST("change-password", handler.ChangePasswordController)
+
+	g := e.Group("/api/v1/admin/")
+	g.Use(echojwt.WithConfig(config))
+	g.GET("user/list", handler.AdminUserListController)
 }
 
 func getStatusCode(err error) int {
