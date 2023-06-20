@@ -34,24 +34,20 @@ import (
 	_serviceMailUser "github.com/bxcodec/go-clean-arch/user/service/mail"
 )
 
-func init() {
-	viper.SetConfigFile(`config.json`)
-	err := viper.ReadInConfig()
-	if err != nil {
-		panic(err)
-	}
-
-	if viper.GetBool(`debug`) {
-		log.Println("Service RUN on DEBUG mode")
-	}
-}
-
 func main() {
+	// local
+	// dbHost := "localhost"
+	// dbPort := "3306"
+	// dbUser := "root"
+	// dbPass := "d4esUqz@QpS9XZNv"
+	// dbName := "article"
+
+	// server
 	dbHost := "localhost"
 	dbPort := "3306"
-	dbUser := "root"
-	dbPass := "d4esUqz@QpS9XZNv"
-	dbName := "article"
+	dbUser := "kolaborasisalt_kolaborasisalt"
+	dbPass := "Ky4F-E*Yb^XT"
+	dbName := "kolaborasisalt_donor_darah"
 
 	connection := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", dbUser, dbPass, dbHost, dbPort, dbName)
 	val := url.Values{}
