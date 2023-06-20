@@ -28,6 +28,34 @@ func (_m *UserRepository) ChangePassword(ctx context.Context, us *domain.UserDat
 	return r0
 }
 
+// DeleteUser provides a mock function with given fields: ctx, id
+func (_m *UserRepository) DeleteUser(ctx context.Context, id string) error {
+	ret := _m.Called(ctx, id)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, string) error); ok {
+		r0 = rf(ctx, id)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// DeleteUserProfil provides a mock function with given fields: ctx, id
+func (_m *UserRepository) DeleteUserProfil(ctx context.Context, id string) error {
+	ret := _m.Called(ctx, id)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, string) error); ok {
+		r0 = rf(ctx, id)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // FindUser provides a mock function with given fields: ctx, us
 func (_m *UserRepository) FindUser(ctx context.Context, us *domain.UserData) (*domain.User, error) {
 	ret := _m.Called(ctx, us)

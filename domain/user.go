@@ -105,6 +105,7 @@ type UserUsecase interface {
 	ForgotPassword(ctx context.Context, us *User) error
 	ListUser(ctx context.Context) ([]*User, error)
 	CreatetUser(ctx context.Context, us *User) error
+	DeleteUser(ctx context.Context, id string) error
 }
 
 // UserRepository represent the user's repository contract
@@ -118,6 +119,8 @@ type UserRepository interface {
 	GetUnit(ctx context.Context) ([]*UnitDTO, error)
 	ChangePassword(ctx context.Context, us *UserData) error
 	GetListUser(ctx context.Context) ([]*User, error)
+	DeleteUser(ctx context.Context, id string) error
+	DeleteUserProfil(ctx context.Context, id string) error
 }
 
 func NewUser(u *User) (*UserData, error) {

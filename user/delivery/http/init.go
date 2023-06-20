@@ -50,6 +50,7 @@ func NewUserHandler(e *echo.Echo, us domain.UserUsecase) {
 	g.Use(echojwt.WithConfig(config))
 	g.GET("user/list", handler.AdminUserListController)
 	g.POST("user/create", handler.AdminUserCreateController)
+	g.DELETE("user/delete/:id", handler.AdminUserDeleteController)
 }
 
 func getStatusCode(err error) int {
