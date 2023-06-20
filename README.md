@@ -31,7 +31,7 @@
 ### Run Migration
 - migrate -database YOUR_DATABASE_URL -path PATH_TO_YOUR_MIGRATIONS up
 example up:
-- migrate -database "mysql://root:#d4esUqzQpS9XZNv@tcp(localhost:3306)/article" -path db/migrations up
+- migrate -database "mysql://root:d4esUqz@QpS9XZNv@tcp(localhost:3306)/article" -path db/migrations up
 example down:
 - migrate -database "mysql://root:#d4esUqzQpS9XZNv@tcp(localhost:3306)/article" -path db/migrations down
 ### Detail YOUR_DATABASE_URL

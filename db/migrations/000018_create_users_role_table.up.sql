@@ -1,0 +1,1 @@
+ALTER TABLE users ADD role VARCHAR(200) NULL DEFAULT 'admin' AFTER id

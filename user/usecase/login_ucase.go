@@ -53,7 +53,7 @@ func (us *userUsecase) Login(c context.Context, dtoUser *domain.DtoRequestLogin)
 		return nil, errSign
 	}
 
-	t, err = domain.SetToken(sign)
+	t, err = domain.SetToken(sign, dataUserDb)
 	if err != nil {
 		return nil, err
 	}

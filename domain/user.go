@@ -28,6 +28,7 @@ type User struct {
 	VillageId            int64  `json:"villageId"`
 	Address              string `json:"address"`
 	PostalCode           string `json:"postalCode"`
+	Role                 string `json:"role"`
 }
 
 type UserData struct {
@@ -88,6 +89,7 @@ type DtoRequestLogin struct {
 
 type Auth struct {
 	Token string `json:"token"`
+	User  User   `json:"user"`
 }
 
 // UserUsecase represent the user's usecases
@@ -232,13 +234,20 @@ func NewUser3(u *User) (*UserData, error) {
 	}, nil
 }
 
-func SetToken(token string) (*Auth, error) {
+func SetToken(token string, dataUserDb *User) (*Auth, error) {
 	if token == "" {
 		return nil, errors.New("TOKEN IS REQUIRED")
 	}
 
 	return &Auth{
 		Token: token,
+		User: User{
+			Id:    dataUserDb.Id,
+			Name:  dataUserDb.Name,
+			Email: dataUserDb.Email,
+			Phone: dataUserDb.Phone,
+			Role:  dataUserDb.Role,
+		},
 	}, nil
 }
 

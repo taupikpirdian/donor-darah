@@ -7,13 +7,13 @@ import (
 )
 
 func (m *mysqlUserRepository) Register(ctx context.Context, u *domain.UserData) error {
-	query := `INSERT  users SET name=? , email=? , phone=? , password=? , updatedAt=? , createdAt=?`
+	query := `INSERT  users SET name=? , email=? , phone=? , password=? , updatedAt=? , createdAt=?, role=?`
 	stmt, err := m.Conn.PrepareContext(ctx, query)
 	if err != nil {
 		return err
 	}
 
-	res, err := stmt.ExecContext(ctx, u.GetNameOnUser(), u.GetEmailOnUser(), u.GetPhoneOnUser(), u.GetPasswordOnUser(), u.GetUpdateAtOnUser(), u.GetCreatedAtOnUser())
+	res, err := stmt.ExecContext(ctx, u.GetNameOnUser(), u.GetEmailOnUser(), u.GetPhoneOnUser(), u.GetPasswordOnUser(), u.GetUpdateAtOnUser(), u.GetCreatedAtOnUser(), "member")
 	if err != nil {
 		return err
 	}

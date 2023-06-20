@@ -47,11 +47,11 @@ func init() {
 }
 
 func main() {
-	dbHost := viper.GetString(`database.host`)
-	dbPort := viper.GetString(`database.port`)
-	dbUser := viper.GetString(`database.user`)
-	dbPass := viper.GetString(`database.pass`)
-	dbName := viper.GetString(`database.name`)
+	dbHost := "localhost"
+	dbPort := "3306"
+	dbUser := "root"
+	dbPass := "d4esUqz@QpS9XZNv"
+	dbName := "article"
 
 	connection := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", dbUser, dbPass, dbHost, dbPort, dbName)
 	val := url.Values{}
@@ -114,5 +114,5 @@ func main() {
 	uCaseDonor := _donorUcase.NewDonorUsecase(repoDonor, timeoutContext)
 	_donorHttpDelivery.NewDonorHandler(e, uCaseDonor)
 
-	log.Fatal(e.Start(viper.GetString("server.address"))) //nolint
+	log.Fatal(e.Start(":9090")) //nolint
 }

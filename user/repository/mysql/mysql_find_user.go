@@ -30,6 +30,7 @@ func (m *mysqlUserRepository) fetchUser(ctx context.Context, query string, args 
 			&t.Email,
 			&t.Phone,
 			&t.Password,
+			&t.Role,
 		)
 
 		if err != nil {
@@ -44,7 +45,7 @@ func (m *mysqlUserRepository) fetchUser(ctx context.Context, query string, args 
 
 func (m *mysqlUserRepository) FindUser(ctx context.Context, us *domain.UserData) (res *domain.User, err error) {
 
-	query := `SELECT id,name,email,phone,password FROM users WHERE phone = ? `
+	query := `SELECT id,name,email,phone,password,role FROM users WHERE phone = ? `
 
 	list, err := m.fetchUser(ctx, query, us.GetPhoneOnUser())
 	if err != nil {
