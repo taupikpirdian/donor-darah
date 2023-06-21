@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"fmt"
 	"strconv"
 	"time"
 
@@ -21,10 +22,11 @@ func (us *userUsecase) Login(c context.Context, dtoUser *domain.DtoRequestLogin)
 	}
 
 	dataUserDb, errUser := us.userRepo.FindUser(ctx, dataUser)
+	fmt.Println(dataUserDb)
+
 	if errUser != nil {
 		return nil, errUser
 	}
-
 	// compare the user-entered password with the stored hashed password
 	errCompare := bcrypt.CompareHashAndPassword([]byte(dataUserDb.Password), []byte(dtoUser.Password))
 	if errCompare != nil {

@@ -9,7 +9,6 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/labstack/echo/v4"
-	"github.com/spf13/viper"
 
 	_articleHttpDelivery "github.com/bxcodec/go-clean-arch/article/delivery/http"
 	_articleHttpDeliveryMiddleware "github.com/bxcodec/go-clean-arch/article/delivery/http/middleware"
@@ -35,6 +34,8 @@ import (
 )
 
 func main() {
+	contextTimeOut := 5
+
 	// local
 	// dbHost := "localhost"
 	// dbPort := "3306"
@@ -77,7 +78,7 @@ func main() {
 	authorRepo := _authorRepo.NewMysqlAuthorRepository(dbConn)
 	ar := _articleRepo.NewMysqlArticleRepository(dbConn)
 
-	timeoutContext := time.Duration(viper.GetInt("context.timeout")) * time.Second
+	timeoutContext := time.Duration(contextTimeOut) * time.Second
 	au := _articleUcase.NewArticleUsecase(ar, authorRepo, timeoutContext)
 	_articleHttpDelivery.NewArticleHandler(e, au)
 
