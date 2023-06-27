@@ -37,20 +37,6 @@ import (
 )
 
 func goDotEnvVariable(key string) string {
-	// local
-	// dbHost := "localhost"
-	// dbPort := "3306"
-	// dbUser := "root"
-	// dbPass := "d4esUqz@QpS9XZNv"
-	// dbName := "article"
-
-	// server
-	// dbHost := "localhost"
-	// dbPort := "3306"
-	// dbUser := "kolaborasisalt_kolaborasisalt"
-	// dbPass := "Ky4F-E*Yb^XT"
-	// dbName := "kolaborasisalt_donor_darah"
-
 	// load .env file
 	err := godotenv.Load(".env")
 
@@ -64,6 +50,9 @@ func goDotEnvVariable(key string) string {
 func main() {
 	// godotenv package
 	PATH_UPLOAD := goDotEnvVariable("PATH_IMAGE_UPLOAD")
+	ADDRESS := goDotEnvVariable("ADDRESS")
+	contextTimeOut := 5
+
 	cfg := cfg.Config{
 		PATH_UPLOAD: PATH_UPLOAD,
 	}
@@ -74,7 +63,6 @@ func main() {
 	DB_PASS := goDotEnvVariable("DB_PASS")
 	DB_NAME := goDotEnvVariable("DB_NAME")
 
-	contextTimeOut := 5
 	dbHost := DB_HOST
 	dbPort := DB_PORT
 	dbUser := DB_USER
@@ -142,5 +130,5 @@ func main() {
 	uCaseDonor := _donorUcase.NewDonorUsecase(repoDonor, timeoutContext, cfg)
 	_donorHttpDelivery.NewDonorHandler(e, uCaseDonor)
 
-	log.Fatal(e.Start(":9090")) //nolint
+	log.Fatal(e.Start(ADDRESS)) //nolint
 }

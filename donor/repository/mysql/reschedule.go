@@ -24,7 +24,7 @@ func (m *mysqlDonorRepository) Reschedule(ctx context.Context, id int64, dataNew
 		return
 	}
 	if affect != 1 {
-		err = fmt.Errorf("weird  Behavior. Total Affected: %d", affect)
+		err = fmt.Errorf("Tidak ada perubahan jadwal")
 		return
 	}
 

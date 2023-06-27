@@ -1,6 +1,9 @@
 package http
 
 import (
+	"bytes"
+	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -10,15 +13,23 @@ import (
 )
 
 func (d *DonorHandler) RescheduleDonor(c echo.Context) (err error) {
+	var (
+		buf    bytes.Buffer
+		logger = log.New(&buf, "logger: ", log.Lshortfile)
+	)
 	var schedule domain.DonorSchedulleDTO
 	err = c.Bind(&schedule)
 	if err != nil {
+		logger.Print(err)
+		fmt.Print(&buf)
 		responseError, _ := http_response.MapResponseBuktiDonor(1, err.Error(), nil)
 		return c.JSON(http.StatusUnprocessableEntity, responseError)
 	}
 
 	idP, errAToi := strconv.Atoi(c.Param("scheduleId"))
 	if errAToi != nil {
+		logger.Print(errAToi)
+		fmt.Print(&buf)
 		responseErrorConv, _ := http_response.MapResponseBuktiDonor(1, err.Error(), nil)
 		return c.JSON(getStatusCode(errAToi), responseErrorConv)
 	}
@@ -27,7 +38,9 @@ func (d *DonorHandler) RescheduleDonor(c echo.Context) (err error) {
 
 	errUc := d.AUsecase.Reschedule(ctx, id, &schedule)
 	if errUc != nil {
-		responseError3, _ := http_response.MapResponseBuktiDonor(1, domain.ErrBadBody.Error(), nil)
+		logger.Print(errUc)
+		fmt.Print(&buf)
+		responseError3, _ := http_response.MapResponseBuktiDonor(1, errUc.Error(), nil)
 		return c.JSON(getStatusCode(err), responseError3)
 	}
 

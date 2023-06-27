@@ -95,6 +95,13 @@ type Auth struct {
 	User  User   `json:"user"`
 }
 
+type Card struct {
+	Id          int64     `json:"id"`
+	Name        string    `json:"name"`
+	MemberCode  string    `json:"memberCode"`
+	DateOfBirth time.Time `json:"dateOfBirth"`
+}
+
 // UserUsecase represent the user's usecases
 type UserUsecase interface {
 	Register(ctx context.Context, us *User) error
