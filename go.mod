@@ -12,6 +12,7 @@ require (
 	github.com/go-sql-driver/mysql v1.3.0
 	github.com/golang-jwt/jwt/v4 v4.4.3
 	github.com/hashicorp/hcl v0.0.0-20180404174102-ef8a98b0bbce // indirect
+	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/kr/pretty v0.3.1 // indirect
 	github.com/labstack/echo-jwt/v4 v4.1.0
 	github.com/labstack/echo/v4 v4.9.0
@@ -37,5 +38,5 @@ require (
 	gopkg.in/gemnasium/logrus-airbrake-hook.v2 v2.1.2 // indirect
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 	gopkg.in/go-playground/validator.v9 v9.15.0
-	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df // indirect
+	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
 )

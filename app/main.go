@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"log"
 	"net/url"
+	"os"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 
 	_articleHttpDelivery "github.com/bxcodec/go-clean-arch/article/delivery/http"
@@ -15,6 +17,7 @@ import (
 	_articleRepo "github.com/bxcodec/go-clean-arch/article/repository/mysql"
 	_articleUcase "github.com/bxcodec/go-clean-arch/article/usecase"
 	_authorRepo "github.com/bxcodec/go-clean-arch/author/repository/mysql"
+	"github.com/bxcodec/go-clean-arch/cfg"
 	_regionHttpDelivery "github.com/bxcodec/go-clean-arch/region/delivery/http"
 	_regionRepo "github.com/bxcodec/go-clean-arch/region/repository/mysql"
 	_regionUcase "github.com/bxcodec/go-clean-arch/region/usecase"
@@ -33,9 +36,7 @@ import (
 	_serviceMailUser "github.com/bxcodec/go-clean-arch/user/service/mail"
 )
 
-func main() {
-	contextTimeOut := 5
-
+func goDotEnvVariable(key string) string {
 	// local
 	// dbHost := "localhost"
 	// dbPort := "3306"
@@ -44,11 +45,41 @@ func main() {
 	// dbName := "article"
 
 	// server
-	dbHost := "localhost"
-	dbPort := "3306"
-	dbUser := "kolaborasisalt_kolaborasisalt"
-	dbPass := "Ky4F-E*Yb^XT"
-	dbName := "kolaborasisalt_donor_darah"
+	// dbHost := "localhost"
+	// dbPort := "3306"
+	// dbUser := "kolaborasisalt_kolaborasisalt"
+	// dbPass := "Ky4F-E*Yb^XT"
+	// dbName := "kolaborasisalt_donor_darah"
+
+	// load .env file
+	err := godotenv.Load(".env")
+
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
+
+	return os.Getenv(key)
+}
+
+func main() {
+	// godotenv package
+	PATH_UPLOAD := goDotEnvVariable("PATH_IMAGE_UPLOAD")
+	cfg := cfg.Config{
+		PATH_UPLOAD: PATH_UPLOAD,
+	}
+
+	DB_HOST := goDotEnvVariable("DB_HOST")
+	DB_PORT := goDotEnvVariable("DB_PORT")
+	DB_USER := goDotEnvVariable("DB_USER")
+	DB_PASS := goDotEnvVariable("DB_PASS")
+	DB_NAME := goDotEnvVariable("DB_NAME")
+
+	contextTimeOut := 5
+	dbHost := DB_HOST
+	dbPort := DB_PORT
+	dbUser := DB_USER
+	dbPass := DB_PASS
+	dbName := DB_NAME
 
 	connection := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", dbUser, dbPass, dbHost, dbPort, dbName)
 	val := url.Values{}
@@ -108,7 +139,7 @@ func main() {
 		service donor
 	*/
 	repoDonor := _donorRepo.NewMysqlDonorRepository(dbConn)
-	uCaseDonor := _donorUcase.NewDonorUsecase(repoDonor, timeoutContext)
+	uCaseDonor := _donorUcase.NewDonorUsecase(repoDonor, timeoutContext, cfg)
 	_donorHttpDelivery.NewDonorHandler(e, uCaseDonor)
 
 	log.Fatal(e.Start(":9090")) //nolint

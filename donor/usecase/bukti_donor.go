@@ -2,9 +2,13 @@ package usecase
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"mime/multipart"
 	"os"
+	"path/filepath"
+	"strings"
+	"time"
 )
 
 func (dus *donorUsecase) UploadBukti(c context.Context, id int64, file *multipart.FileHeader) error {
@@ -18,7 +22,12 @@ func (dus *donorUsecase) UploadBukti(c context.Context, id int64, file *multipar
 	defer src.Close()
 
 	// Destination
-	path := "donor/upload/" + file.Filename
+	fileExt := filepath.Ext(file.Filename)
+	originalFileName := strings.TrimSuffix(filepath.Base(file.Filename), filepath.Ext(file.Filename))
+	now := time.Now()
+	filename := strings.ReplaceAll(strings.ToLower(originalFileName), " ", "-") + "-" + fmt.Sprintf("%v", now.Unix()) + fileExt
+
+	path := dus.cfg.PATH_UPLOAD + filename
 	dst, err := os.Create(path)
 	if err != nil {
 		return err

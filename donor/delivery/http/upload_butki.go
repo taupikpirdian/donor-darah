@@ -1,6 +1,9 @@
 package http
 
 import (
+	"bytes"
+	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -10,6 +13,11 @@ import (
 )
 
 func (d *DonorHandler) UploadBukti(c echo.Context) (err error) {
+	var (
+		buf    bytes.Buffer
+		logger = log.New(&buf, "logger: ", log.Lshortfile)
+	)
+
 	idP, err := strconv.Atoi(c.Param("donorRegisterId"))
 	if err != nil {
 		responseErrorConv, _ := http_response.MapResponseBuktiDonor(1, err.Error(), nil)
@@ -20,11 +28,16 @@ func (d *DonorHandler) UploadBukti(c echo.Context) (err error) {
 	// Source
 	file, err := c.FormFile("file")
 	if err != nil {
+		logger.Print(err)
+		fmt.Print(&buf)
 		return err
 	}
 
 	errUc := d.AUsecase.UploadBukti(ctx, id, file)
+
 	if errUc != nil {
+		logger.Print(errUc)
+		fmt.Print(&buf)
 		responseError3, _ := http_response.MapResponseBuktiDonor(1, domain.ErrBadBody.Error(), nil)
 		return c.JSON(getStatusCode(err), responseError3)
 	}
