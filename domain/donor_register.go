@@ -98,6 +98,7 @@ type DonorUsecase interface {
 	SchedulleStore(ctx context.Context, req *http_request.SchedulleStore) error
 	SchedulleDelete(ctx context.Context, id int64) error
 	StockUpdateDonor(ctx context.Context, req *http_request.BodyBloodStock) error
+	StockDelete(ctx context.Context, id int64) error
 }
 
 // UserRepository represent the user's repository contract
@@ -126,6 +127,8 @@ type DonorRepository interface {
 	FindDonorRegister(ctx context.Context, id int64) ([]*DonorRegisterDTO, error)
 	StockUpdateDonor(ctx context.Context, req *http_request.BodyBloodStock) error
 	UpdateStockDetail(ctx context.Context, stockId int64, data *http_request.BodyBloodStockDetail) error
+	StockDelete(ctx context.Context, id int64) error
+	StockDeleteDetail(ctx context.Context, stockId int64) error
 }
 
 func NewDonorRegister(userId int64, req RequestRegisterDonor) (*DonorRegister, error) {
