@@ -23,18 +23,26 @@ type RequestListAnswer struct {
 }
 
 type DonorRegisterDTO struct {
-	Id               int64
-	Code             string
-	UserId           int64
-	DonorSchedulleId int64
-	IsApprove        bool
-	DonorProof       string
-	Status           string
-	DonorSchedulle   DonorSchedulleDTO
-	User             User
-	Unit             UnitDTO
-	UpdatedAt        time.Time
-	CreatedAt        time.Time
+	Id                         int64
+	Code                       string
+	UserId                     int64
+	DonorSchedulleId           int64
+	IsApprove                  bool
+	StatusApprove              string
+	DonorProof                 string
+	Status                     string
+	DonorSchedulle             DonorSchedulleDTO
+	User                       User
+	Unit                       UnitDTO
+	DonorRegisterQuestionerDTO []*DonorRegisterQuestionerDTO
+	UpdatedAt                  time.Time
+	CreatedAt                  time.Time
+}
+
+type DonorRegisterQuestionerDTO struct {
+	Id           int64
+	CodeQuestion string
+	Answer       string
 }
 
 type DonorRegister struct {
@@ -99,6 +107,7 @@ type DonorUsecase interface {
 	SchedulleDelete(ctx context.Context, id int64) error
 	StockUpdateDonor(ctx context.Context, req *http_request.BodyBloodStock) error
 	StockDelete(ctx context.Context, id int64) error
+	ListDonorRegister(ctx context.Context) ([]*DonorRegisterDTO, error)
 }
 
 // UserRepository represent the user's repository contract
@@ -129,6 +138,8 @@ type DonorRepository interface {
 	UpdateStockDetail(ctx context.Context, stockId int64, data *http_request.BodyBloodStockDetail) error
 	StockDelete(ctx context.Context, id int64) error
 	StockDeleteDetail(ctx context.Context, stockId int64) error
+	ListDonorRegister(ctx context.Context) ([]*DonorRegisterDTO, error)
+	ListAnswer(ctx context.Context, registerId int64) ([]*DonorRegisterQuestionerDTO, error)
 }
 
 func NewDonorRegister(userId int64, req RequestRegisterDonor) (*DonorRegister, error) {

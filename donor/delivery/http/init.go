@@ -69,6 +69,7 @@ func NewDonorHandler(e *echo.Echo, us domain.DonorUsecase) {
 	g.DELETE("stock/:id", handler.DeleteStock)
 	g.POST("schedulle", handler.SchedulleStore)
 	g.DELETE("schedulle/:id", handler.SchedulleDelete)
+	g.GET("register", handler.DonorRegisterList)
 }
 
 func getStatusCode(err error) int {
