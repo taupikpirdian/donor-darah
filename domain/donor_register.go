@@ -7,6 +7,8 @@ import (
 	"mime/multipart"
 	"strconv"
 	"time"
+
+	"github.com/bxcodec/go-clean-arch/donor/delivery/http_request"
 )
 
 type RequestRegisterDonor struct {
@@ -74,6 +76,7 @@ type DonorUsecase interface {
 	CancelDonor(ctx context.Context, id int64) error
 	Reschedule(ctx context.Context, id int64, dto *DonorSchedulleDTO) error
 	Card(ctx context.Context, userId int64) (*Card, error)
+	StoreStock(ctx context.Context, unitId int64, req *http_request.BodyBloodStock) error
 }
 
 // UserRepository represent the user's repository contract
@@ -93,6 +96,8 @@ type DonorRepository interface {
 	ListRiwayatByStatus(ctx context.Context, userId int64, status string) ([]*DonorRegisterDTO, error)
 	NextDonorByStatus(ctx context.Context, userId int64, status string) (*DonorRegisterDTO, error)
 	LastDonorByStatus(ctx context.Context, userId int64, status string) (*DonorRegisterDTO, error)
+	StoreStock(ctx context.Context, unitId int64, title string) (int64, error)
+	StoreStockDetail(ctx context.Context, stockId int64, data *http_request.BodyBloodStockDetail) error
 }
 
 func NewDonorRegister(userId int64, req RequestRegisterDonor) (*DonorRegister, error) {

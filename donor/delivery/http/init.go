@@ -59,6 +59,10 @@ func NewDonorHandler(e *echo.Echo, us domain.DonorUsecase) {
 	r.PUT("cancel/:scheduleId", handler.CancelDonor)
 	r.POST("reschedule/:scheduleId", handler.RescheduleDonor)
 	r.GET("card", handler.Card)
+
+	g := e.Group("/api/v1/admin/donor/")
+	g.Use(echojwt.WithConfig(config))
+	g.POST("stock/:unitId", handler.StockDonor)
 }
 
 func getStatusCode(err error) int {
