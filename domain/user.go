@@ -2,6 +2,7 @@ package domain
 
 import (
 	"context"
+	"database/sql"
 	"errors"
 	"math/rand"
 	"strconv"
@@ -62,13 +63,14 @@ type ProfileData struct {
 	createdAt     time.Time
 }
 type Profile struct {
-	Id         int64     `json:"id"`
-	Name       string    `json:"name"`
-	MemberCode string    `json:"memberCode"`
-	UrlImage   string    `json:"urlImage"`
-	TotalDonor int64     `json:"totalDonor"`
-	LastDonor  time.Time `json:"lastDonor"`
-	NextDonor  time.Time `json:"nextDonor"`
+	Id             int64          `json:"id"`
+	Name           string         `json:"name"`
+	MemberCode     string         `json:"memberCode"`
+	UrlImage       string         `json:"urlImage"`
+	UrlImageFromDB sql.NullString `json:"urlImageFromDb"`
+	TotalDonor     int64          `json:"totalDonor"`
+	LastDonor      time.Time      `json:"lastDonor"`
+	NextDonor      time.Time      `json:"nextDonor"`
 }
 
 type Job struct {
@@ -113,6 +115,7 @@ type UserUsecase interface {
 	ListUser(ctx context.Context) ([]*User, error)
 	CreatetUser(ctx context.Context, us *User) error
 	DeleteUser(ctx context.Context, id string) error
+	GetProfile(ctx context.Context, userId int64) (*Profile, error)
 }
 
 // UserRepository represent the user's repository contract
@@ -128,6 +131,7 @@ type UserRepository interface {
 	GetListUser(ctx context.Context) ([]*User, error)
 	DeleteUser(ctx context.Context, id string) error
 	DeleteUserProfil(ctx context.Context, id string) error
+	GetProfile(ctx context.Context, userId int64) (*Profile, error)
 }
 
 func NewUser(u *User) (*UserData, error) {
@@ -171,6 +175,7 @@ func NewUser(u *User) (*UserData, error) {
 		},
 	}, nil
 }
+
 func NewProfile(u *Profile) (*UserData, error) {
 	if u.Name == "" {
 		return nil, errors.New("NAME NOT SET")
@@ -205,7 +210,18 @@ func NewProfile(u *Profile) (*UserData, error) {
 			LastDonor:  u.LastDonor,
 		},
 	}, nil
+}
 
+func NewProfileV2(u *Profile, len int, nextDonor time.Time, latsDonor time.Time) *Profile {
+	return &Profile{
+		Id:         u.Id,
+		MemberCode: u.MemberCode,
+		Name:       u.Name,
+		UrlImage:   u.UrlImageFromDB.String,
+		TotalDonor: int64(len),
+		LastDonor:  latsDonor,
+		NextDonor:  nextDonor,
+	}
 }
 
 func NewUserLogin(u *DtoRequestLogin) (*UserData, error) {

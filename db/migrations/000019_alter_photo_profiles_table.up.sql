@@ -1,0 +1,1 @@
+ALTER TABLE profiles ADD urlImage VARCHAR(200) AFTER dateOfBirth

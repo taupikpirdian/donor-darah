@@ -18,6 +18,7 @@ func Test_userUsecase_Register(t *testing.T) {
 		userRepo       domain.UserRepository
 		serviceMail    domain.MailService
 		contextTimeout time.Duration
+		donorRepo      domain.DonorRepository
 	}
 	type args struct {
 		c    context.Context
@@ -87,6 +88,7 @@ func Test_userUsecase_Register(t *testing.T) {
 				userRepo:       repoUser,
 				serviceMail:    nil,
 				contextTimeout: 0,
+				donorRepo:      nil,
 			},
 			args: args{
 				c:    ctx,
@@ -100,6 +102,7 @@ func Test_userUsecase_Register(t *testing.T) {
 				userRepo:       repoUser_ErrorRegister,
 				serviceMail:    nil,
 				contextTimeout: 0,
+				donorRepo:      nil,
 			},
 			args: args{
 				c:    ctx,
@@ -113,6 +116,7 @@ func Test_userUsecase_Register(t *testing.T) {
 				userRepo:       repoUser_ErrorProfile,
 				serviceMail:    nil,
 				contextTimeout: 0,
+				donorRepo:      nil,
 			},
 			args: args{
 				c:    ctx,
@@ -126,6 +130,7 @@ func Test_userUsecase_Register(t *testing.T) {
 				userRepo:       repoUser_Success,
 				serviceMail:    nil,
 				contextTimeout: 0,
+				donorRepo:      nil,
 			},
 			args: args{
 				c:    ctx,
@@ -136,7 +141,7 @@ func Test_userUsecase_Register(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			us := usecase.NewUserUsecase(tt.fields.userRepo, tt.fields.serviceMail, tt.fields.contextTimeout)
+			us := usecase.NewUserUsecase(tt.fields.userRepo, tt.fields.serviceMail, tt.fields.contextTimeout, tt.fields.donorRepo)
 			if err := us.Register(tt.args.c, tt.args.user); (err != nil) != tt.wantErr {
 				t.Errorf("userUsecase.Register() error = %v, wantErr %v", err, tt.wantErr)
 			}

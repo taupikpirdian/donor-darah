@@ -19,6 +19,7 @@ func Test_userUsecase_GetJob(t *testing.T) {
 		userRepo       domain.UserRepository
 		serviceMail    domain.MailService
 		contextTimeout time.Duration
+		donorRepo      domain.DonorRepository
 	}
 	type args struct {
 		c context.Context
@@ -59,6 +60,7 @@ func Test_userUsecase_GetJob(t *testing.T) {
 				userRepo:       repoUJobError,
 				serviceMail:    nil,
 				contextTimeout: 0,
+				donorRepo:      nil,
 			},
 			args: args{
 				c: ctx,
@@ -72,6 +74,7 @@ func Test_userUsecase_GetJob(t *testing.T) {
 				userRepo:       repoUJob,
 				serviceMail:    nil,
 				contextTimeout: 0,
+				donorRepo:      nil,
 			},
 			args: args{
 				c: ctx,
@@ -82,7 +85,7 @@ func Test_userUsecase_GetJob(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			us := usecase.NewUserUsecase(tt.fields.userRepo, tt.fields.serviceMail, tt.fields.contextTimeout)
+			us := usecase.NewUserUsecase(tt.fields.userRepo, tt.fields.serviceMail, tt.fields.contextTimeout, tt.fields.donorRepo)
 			got, err := us.GetJob(tt.args.c)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("userUsecase.GetJob() error = %v, wantErr %v", err, tt.wantErr)

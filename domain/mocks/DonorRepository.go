@@ -92,6 +92,58 @@ func (_m *DonorRepository) FindSchedule(ctx context.Context, dto *domain.DonorSc
 	return r0, r1
 }
 
+// GetCard provides a mock function with given fields: ctx, userId
+func (_m *DonorRepository) GetCard(ctx context.Context, userId int64) (*domain.Card, error) {
+	ret := _m.Called(ctx, userId)
+
+	var r0 *domain.Card
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, int64) (*domain.Card, error)); ok {
+		return rf(ctx, userId)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, int64) *domain.Card); ok {
+		r0 = rf(ctx, userId)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*domain.Card)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, int64) error); ok {
+		r1 = rf(ctx, userId)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// LastDonorByStatus provides a mock function with given fields: ctx, userId, status
+func (_m *DonorRepository) LastDonorByStatus(ctx context.Context, userId int64, status string) (*domain.DonorRegisterDTO, error) {
+	ret := _m.Called(ctx, userId, status)
+
+	var r0 *domain.DonorRegisterDTO
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, int64, string) (*domain.DonorRegisterDTO, error)); ok {
+		return rf(ctx, userId, status)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, int64, string) *domain.DonorRegisterDTO); ok {
+		r0 = rf(ctx, userId, status)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*domain.DonorRegisterDTO)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, int64, string) error); ok {
+		r1 = rf(ctx, userId, status)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // ListAgenda provides a mock function with given fields: ctx, userId
 func (_m *DonorRepository) ListAgenda(ctx context.Context, userId int64) ([]*domain.DonorRegisterDTO, error) {
 	ret := _m.Called(ctx, userId)
@@ -144,6 +196,32 @@ func (_m *DonorRepository) ListRiwayat(ctx context.Context, userId int64) ([]*do
 	return r0, r1
 }
 
+// ListRiwayatByStatus provides a mock function with given fields: ctx, userId, status
+func (_m *DonorRepository) ListRiwayatByStatus(ctx context.Context, userId int64, status string) ([]*domain.DonorRegisterDTO, error) {
+	ret := _m.Called(ctx, userId, status)
+
+	var r0 []*domain.DonorRegisterDTO
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, int64, string) ([]*domain.DonorRegisterDTO, error)); ok {
+		return rf(ctx, userId, status)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, int64, string) []*domain.DonorRegisterDTO); ok {
+		r0 = rf(ctx, userId, status)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]*domain.DonorRegisterDTO)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, int64, string) error); ok {
+		r1 = rf(ctx, userId, status)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // ListSchedulle provides a mock function with given fields: ctx, unitId
 func (_m *DonorRepository) ListSchedulle(ctx context.Context, unitId int64) ([]*domain.DonorSchedulleDTO, error) {
 	ret := _m.Called(ctx, unitId)
@@ -163,6 +241,32 @@ func (_m *DonorRepository) ListSchedulle(ctx context.Context, unitId int64) ([]*
 
 	if rf, ok := ret.Get(1).(func(context.Context, int64) error); ok {
 		r1 = rf(ctx, unitId)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// NextDonorByStatus provides a mock function with given fields: ctx, userId, status
+func (_m *DonorRepository) NextDonorByStatus(ctx context.Context, userId int64, status string) (*domain.DonorRegisterDTO, error) {
+	ret := _m.Called(ctx, userId, status)
+
+	var r0 *domain.DonorRegisterDTO
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, int64, string) (*domain.DonorRegisterDTO, error)); ok {
+		return rf(ctx, userId, status)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, int64, string) *domain.DonorRegisterDTO); ok {
+		r0 = rf(ctx, userId, status)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*domain.DonorRegisterDTO)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, int64, string) error); ok {
+		r1 = rf(ctx, userId, status)
 	} else {
 		r1 = ret.Error(1)
 	}

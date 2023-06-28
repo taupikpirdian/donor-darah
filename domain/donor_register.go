@@ -90,6 +90,9 @@ type DonorRepository interface {
 	FindSchedule(ctx context.Context, dto *DonorSchedulleDTO) (*DonorSchedulleDTO, error)
 	Reschedule(ctx context.Context, id int64, dto *DonorSchedulle) error
 	GetCard(ctx context.Context, userId int64) (*Card, error)
+	ListRiwayatByStatus(ctx context.Context, userId int64, status string) ([]*DonorRegisterDTO, error)
+	NextDonorByStatus(ctx context.Context, userId int64, status string) (*DonorRegisterDTO, error)
+	LastDonorByStatus(ctx context.Context, userId int64, status string) (*DonorRegisterDTO, error)
 }
 
 func NewDonorRegister(userId int64, req RequestRegisterDonor) (*DonorRegister, error) {

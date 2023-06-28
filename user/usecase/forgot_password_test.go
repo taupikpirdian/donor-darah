@@ -18,6 +18,7 @@ func Test_userUsecase_ForgotPassword(t *testing.T) {
 		userRepo       domain.UserRepository
 		serviceMail    domain.MailService
 		contextTimeout time.Duration
+		donorRepo      domain.DonorRepository
 	}
 	type args struct {
 		c    context.Context
@@ -107,6 +108,7 @@ func Test_userUsecase_ForgotPassword(t *testing.T) {
 				userRepo:       repoUser_ErrorFindUser,
 				serviceMail:    nil,
 				contextTimeout: 0,
+				donorRepo:      nil,
 			},
 			args: args{
 				c:    ctx,
@@ -133,6 +135,7 @@ func Test_userUsecase_ForgotPassword(t *testing.T) {
 				userRepo:       repoUser_Success,
 				serviceMail:    serviceMail,
 				contextTimeout: 0,
+				donorRepo:      nil,
 			},
 			args: args{
 				c:    ctx,
@@ -146,6 +149,7 @@ func Test_userUsecase_ForgotPassword(t *testing.T) {
 				userRepo:       repoUser_ErrorSendEmail,
 				serviceMail:    serviceMail_ErrorSendEmail,
 				contextTimeout: 0,
+				donorRepo:      nil,
 			},
 			args: args{
 				c:    ctx,
@@ -156,7 +160,7 @@ func Test_userUsecase_ForgotPassword(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			us := usecase.NewUserUsecase(tt.fields.userRepo, tt.fields.serviceMail, tt.fields.contextTimeout)
+			us := usecase.NewUserUsecase(tt.fields.userRepo, tt.fields.serviceMail, tt.fields.contextTimeout, tt.fields.donorRepo)
 			if err := us.ForgotPassword(tt.args.c, tt.args.user); (err != nil) != tt.wantErr {
 				t.Errorf("userUsecase.ForgotPassword() error = %v, wantErr %v", err, tt.wantErr)
 			}

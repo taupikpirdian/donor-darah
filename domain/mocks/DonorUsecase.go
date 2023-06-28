@@ -30,6 +30,32 @@ func (_m *DonorUsecase) CancelDonor(ctx context.Context, id int64) error {
 	return r0
 }
 
+// Card provides a mock function with given fields: ctx, userId
+func (_m *DonorUsecase) Card(ctx context.Context, userId int64) (*domain.Card, error) {
+	ret := _m.Called(ctx, userId)
+
+	var r0 *domain.Card
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, int64) (*domain.Card, error)); ok {
+		return rf(ctx, userId)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, int64) *domain.Card); ok {
+		r0 = rf(ctx, userId)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*domain.Card)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, int64) error); ok {
+		r1 = rf(ctx, userId)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // DonorRegister provides a mock function with given fields: ctx, userId, req
 func (_m *DonorUsecase) DonorRegister(ctx context.Context, userId int64, req *domain.RequestRegisterDonor) error {
 	ret := _m.Called(ctx, userId, req)

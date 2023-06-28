@@ -186,6 +186,32 @@ func (_m *UserRepository) GetListUser(ctx context.Context) ([]*domain.User, erro
 	return r0, r1
 }
 
+// GetProfile provides a mock function with given fields: ctx, userId
+func (_m *UserRepository) GetProfile(ctx context.Context, userId int64) (*domain.Profile, error) {
+	ret := _m.Called(ctx, userId)
+
+	var r0 *domain.Profile
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, int64) (*domain.Profile, error)); ok {
+		return rf(ctx, userId)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, int64) *domain.Profile); ok {
+		r0 = rf(ctx, userId)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*domain.Profile)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, int64) error); ok {
+		r1 = rf(ctx, userId)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // GetUnit provides a mock function with given fields: ctx
 func (_m *UserRepository) GetUnit(ctx context.Context) ([]*domain.UnitDTO, error) {
 	ret := _m.Called(ctx)

@@ -102,14 +102,6 @@ func main() {
 	_articleHttpDelivery.NewArticleHandler(e, au)
 
 	/*
-		service users
-	*/
-	repoUser := _userRepo.NewMysqlUserRepository(dbConn)
-	serviceMail := _serviceMailUser.NewMailService()
-	uCaseUser := _userUcase.NewUserUsecase(repoUser, serviceMail, timeoutContext)
-	_userHttpDelivery.NewUserHandler(e, uCaseUser)
-
-	/*
 		service regions
 	*/
 	repoRegion := _regionRepo.NewMysqlRegionRepository(dbConn)
@@ -129,6 +121,14 @@ func main() {
 	repoDonor := _donorRepo.NewMysqlDonorRepository(dbConn)
 	uCaseDonor := _donorUcase.NewDonorUsecase(repoDonor, timeoutContext, cfg)
 	_donorHttpDelivery.NewDonorHandler(e, uCaseDonor)
+
+	/*
+		service users
+	*/
+	repoUser := _userRepo.NewMysqlUserRepository(dbConn)
+	serviceMail := _serviceMailUser.NewMailService()
+	uCaseUser := _userUcase.NewUserUsecase(repoUser, serviceMail, timeoutContext, repoDonor)
+	_userHttpDelivery.NewUserHandler(e, uCaseUser)
 
 	log.Fatal(e.Start(ADDRESS)) //nolint
 }
