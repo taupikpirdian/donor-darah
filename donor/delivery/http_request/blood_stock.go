@@ -5,6 +5,7 @@ import (
 )
 
 type BodyBloodStock struct {
+	Id                   int64                   `json:"id"`
 	Title                string                  `json:"title" validate:"required"`
 	BodyBloodStockDetail []*BodyBloodStockDetail `json:"detail_stock" validate:"required"`
 	CreatedAt            time.Time
@@ -12,6 +13,7 @@ type BodyBloodStock struct {
 }
 
 type BodyBloodStockDetail struct {
+	Id        int64  `json:"id"`
 	Title     string `json:"title" validate:"required"`
 	Stock     int64  `json:"stock" validate:"required"`
 	CreatedAt time.Time
