@@ -127,7 +127,7 @@ func main() {
 	*/
 	repoUser := _userRepo.NewMysqlUserRepository(dbConn)
 	serviceMail := _serviceMailUser.NewMailService()
-	uCaseUser := _userUcase.NewUserUsecase(repoUser, serviceMail, timeoutContext, repoDonor)
+	uCaseUser := _userUcase.NewUserUsecase(repoUser, serviceMail, timeoutContext, repoDonor, cfg)
 	_userHttpDelivery.NewUserHandler(e, uCaseUser)
 
 	log.Fatal(e.Start(ADDRESS)) //nolint

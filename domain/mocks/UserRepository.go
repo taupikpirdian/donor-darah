@@ -6,6 +6,8 @@ import (
 	context "context"
 
 	domain "github.com/bxcodec/go-clean-arch/domain"
+	http_request "github.com/bxcodec/go-clean-arch/user/delivery/http_request"
+
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -259,6 +261,34 @@ func (_m *UserRepository) StoreProfile(ctx context.Context, us *domain.UserData)
 	var r0 error
 	if rf, ok := ret.Get(0).(func(context.Context, *domain.UserData) error); ok {
 		r0 = rf(ctx, us)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// UpdateProfile provides a mock function with given fields: ctx, userId, req
+func (_m *UserRepository) UpdateProfile(ctx context.Context, userId int64, req *http_request.BodyUpdateProfile) error {
+	ret := _m.Called(ctx, userId, req)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, int64, *http_request.BodyUpdateProfile) error); ok {
+		r0 = rf(ctx, userId, req)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// UpdateUser provides a mock function with given fields: ctx, userId, req
+func (_m *UserRepository) UpdateUser(ctx context.Context, userId int64, req *http_request.BodyUpdateProfile) error {
+	ret := _m.Called(ctx, userId, req)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, int64, *http_request.BodyUpdateProfile) error); ok {
+		r0 = rf(ctx, userId, req)
 	} else {
 		r0 = ret.Error(0)
 	}

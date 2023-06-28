@@ -6,6 +6,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/bxcodec/go-clean-arch/cfg"
 	"github.com/bxcodec/go-clean-arch/domain"
 	"github.com/bxcodec/go-clean-arch/domain/mocks"
 	testdata "github.com/bxcodec/go-clean-arch/user/test_data"
@@ -19,6 +20,7 @@ func Test_userUsecase_Register(t *testing.T) {
 		serviceMail    domain.MailService
 		contextTimeout time.Duration
 		donorRepo      domain.DonorRepository
+		cfg            cfg.Config
 	}
 	type args struct {
 		c    context.Context
@@ -89,6 +91,7 @@ func Test_userUsecase_Register(t *testing.T) {
 				serviceMail:    nil,
 				contextTimeout: 0,
 				donorRepo:      nil,
+				cfg:            cfg.Config{},
 			},
 			args: args{
 				c:    ctx,
@@ -103,6 +106,7 @@ func Test_userUsecase_Register(t *testing.T) {
 				serviceMail:    nil,
 				contextTimeout: 0,
 				donorRepo:      nil,
+				cfg:            cfg.Config{},
 			},
 			args: args{
 				c:    ctx,
@@ -117,6 +121,7 @@ func Test_userUsecase_Register(t *testing.T) {
 				serviceMail:    nil,
 				contextTimeout: 0,
 				donorRepo:      nil,
+				cfg:            cfg.Config{},
 			},
 			args: args{
 				c:    ctx,
@@ -131,6 +136,7 @@ func Test_userUsecase_Register(t *testing.T) {
 				serviceMail:    nil,
 				contextTimeout: 0,
 				donorRepo:      nil,
+				cfg:            cfg.Config{},
 			},
 			args: args{
 				c:    ctx,
@@ -141,7 +147,7 @@ func Test_userUsecase_Register(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			us := usecase.NewUserUsecase(tt.fields.userRepo, tt.fields.serviceMail, tt.fields.contextTimeout, tt.fields.donorRepo)
+			us := usecase.NewUserUsecase(tt.fields.userRepo, tt.fields.serviceMail, tt.fields.contextTimeout, tt.fields.donorRepo, tt.fields.cfg)
 			if err := us.Register(tt.args.c, tt.args.user); (err != nil) != tt.wantErr {
 				t.Errorf("userUsecase.Register() error = %v, wantErr %v", err, tt.wantErr)
 			}

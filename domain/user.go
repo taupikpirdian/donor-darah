@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/bxcodec/go-clean-arch/user/delivery/http_request"
 	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -116,6 +117,7 @@ type UserUsecase interface {
 	CreatetUser(ctx context.Context, us *User) error
 	DeleteUser(ctx context.Context, id string) error
 	GetProfile(ctx context.Context, userId int64) (*Profile, error)
+	UpdateProfile(ctx context.Context, userId int64, req *http_request.BodyUpdateProfile) error
 }
 
 // UserRepository represent the user's repository contract
@@ -132,6 +134,8 @@ type UserRepository interface {
 	DeleteUser(ctx context.Context, id string) error
 	DeleteUserProfil(ctx context.Context, id string) error
 	GetProfile(ctx context.Context, userId int64) (*Profile, error)
+	UpdateProfile(ctx context.Context, userId int64, req *http_request.BodyUpdateProfile) error
+	UpdateUser(ctx context.Context, userId int64, req *http_request.BodyUpdateProfile) error
 }
 
 func NewUser(u *User) (*UserData, error) {

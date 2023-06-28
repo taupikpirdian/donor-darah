@@ -46,6 +46,7 @@ func NewUserHandler(e *echo.Echo, us domain.UserUsecase) {
 	// route must auth
 	r.POST("change-password", handler.ChangePasswordController)
 	r.GET("profile", handler.ProfileController)
+	r.POST("profile/update", handler.ProfileUpdateController)
 
 	g := e.Group("/api/v1/admin/")
 	g.Use(echojwt.WithConfig(config))
