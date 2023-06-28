@@ -62,8 +62,17 @@ type DonorRegisterQuestioner struct {
 }
 
 type DonorStock struct {
+	Id               int64
+	Title            string
+	DonorDetailStock DonorDetailStock
+	UpdatedAt        time.Time
+	CreatedAt        time.Time
+}
+
+type DonorDetailStock struct {
 	Id        int64
 	Title     string
+	Stock     int64
 	UpdatedAt time.Time
 	CreatedAt time.Time
 }
@@ -85,6 +94,7 @@ type DonorUsecase interface {
 	Card(ctx context.Context, userId int64) (*Card, error)
 	StoreStock(ctx context.Context, unitId int64, req *http_request.BodyBloodStock) error
 	ListStock(ctx context.Context, unitId int64) ([]*DonorStock, error)
+	ListDetailStock(ctx context.Context, stockId int64) ([]*DonorDetailStock, error)
 }
 
 // UserRepository represent the user's repository contract
@@ -107,6 +117,7 @@ type DonorRepository interface {
 	StoreStock(ctx context.Context, unitId int64, title string) (int64, error)
 	StoreStockDetail(ctx context.Context, stockId int64, data *http_request.BodyBloodStockDetail) error
 	ListStock(ctx context.Context, unitId int64) ([]*DonorStock, error)
+	ListDetailStock(ctx context.Context, stockId int64) ([]*DonorDetailStock, error)
 }
 
 func NewDonorRegister(userId int64, req RequestRegisterDonor) (*DonorRegister, error) {
