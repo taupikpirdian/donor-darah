@@ -66,6 +66,7 @@ func NewDonorHandler(e *echo.Echo, us domain.DonorUsecase) {
 	g.Use(echojwt.WithConfig(config))
 	g.POST("stock/:unitId", handler.StockDonor)
 	g.POST("schedulle", handler.SchedulleStore)
+	g.DELETE("schedulle/:id", handler.SchedulleDelete)
 }
 
 func getStatusCode(err error) int {
