@@ -61,6 +61,13 @@ type DonorRegisterQuestioner struct {
 	createdAt       time.Time
 }
 
+type DonorStock struct {
+	Id        int64
+	Title     string
+	UpdatedAt time.Time
+	CreatedAt time.Time
+}
+
 type UploadedFile struct {
 	FileHeader *multipart.FileHeader `json:"fileHeader" form:"file"`
 }
@@ -77,6 +84,7 @@ type DonorUsecase interface {
 	Reschedule(ctx context.Context, id int64, dto *DonorSchedulleDTO) error
 	Card(ctx context.Context, userId int64) (*Card, error)
 	StoreStock(ctx context.Context, unitId int64, req *http_request.BodyBloodStock) error
+	ListStock(ctx context.Context, unitId int64) ([]*DonorStock, error)
 }
 
 // UserRepository represent the user's repository contract
@@ -98,6 +106,7 @@ type DonorRepository interface {
 	LastDonorByStatus(ctx context.Context, userId int64, status string) (*DonorRegisterDTO, error)
 	StoreStock(ctx context.Context, unitId int64, title string) (int64, error)
 	StoreStockDetail(ctx context.Context, stockId int64, data *http_request.BodyBloodStockDetail) error
+	ListStock(ctx context.Context, unitId int64) ([]*DonorStock, error)
 }
 
 func NewDonorRegister(userId int64, req RequestRegisterDonor) (*DonorRegister, error) {

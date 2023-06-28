@@ -59,6 +59,7 @@ func NewDonorHandler(e *echo.Echo, us domain.DonorUsecase) {
 	r.PUT("cancel/:scheduleId", handler.CancelDonor)
 	r.POST("reschedule/:scheduleId", handler.RescheduleDonor)
 	r.GET("card", handler.Card)
+	r.GET("stock/:unitId", handler.ListStockDonor)
 
 	g := e.Group("/api/v1/admin/donor/")
 	g.Use(echojwt.WithConfig(config))
