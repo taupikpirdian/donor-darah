@@ -50,6 +50,7 @@ func (m *mysqlUserRepository) GetProfile(ctx context.Context, userId int64) (res
 	where userId = ?`
 
 	list, err := m.fetchProfile(ctx, query, userId)
+
 	if err != nil {
 		return nil, err
 	}

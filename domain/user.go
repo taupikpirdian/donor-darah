@@ -66,7 +66,7 @@ type ProfileData struct {
 type Profile struct {
 	Id             int64          `json:"id"`
 	Name           string         `json:"name"`
-	MemberCode     string         `json:"memberCode"`
+	MemberCode     sql.NullString `json:"memberCode"`
 	UrlImage       string         `json:"urlImage"`
 	UrlImageFromDB sql.NullString `json:"urlImageFromDb"`
 	TotalDonor     int64          `json:"totalDonor"`
@@ -207,7 +207,7 @@ func NewProfile(u *Profile) (*UserData, error) {
 		id:   u.Id,
 		name: u.Name,
 		profile: Profile{
-			MemberCode: string(result),
+			MemberCode: sql.NullString{String: string(result), Valid: true},
 			UrlImage:   u.UrlImage,
 			TotalDonor: u.TotalDonor,
 			NextDonor:  u.NextDonor,

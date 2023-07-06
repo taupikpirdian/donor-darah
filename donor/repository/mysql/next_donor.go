@@ -15,6 +15,7 @@ func (m *mysqlDonorRepository) NextDonorByStatus(ctx context.Context, userId int
 	ORDER BY donor_schedulle.date`
 
 	list, err := m.fetchRiwayat(ctx, query, userId, status)
+
 	if err != nil {
 		return nil, err
 	}
@@ -22,7 +23,7 @@ func (m *mysqlDonorRepository) NextDonorByStatus(ctx context.Context, userId int
 	if len(list) > 0 {
 		res = list[0]
 	} else {
-		return res, domain.ErrNotFound
+		return nil, nil
 	}
 
 	return

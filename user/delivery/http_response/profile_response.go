@@ -35,7 +35,7 @@ func MapResponseProfile(code int, message string, data *domain.Profile) (*Custom
 		},
 		Data: &ResponseProfileJson{
 			Id:         data.Id,
-			MemberCode: data.MemberCode,
+			MemberCode: data.MemberCode.String,
 			Name:       data.Name,
 			UrlImage:   data.UrlImage,
 			TotalDonor: int(data.TotalDonor),

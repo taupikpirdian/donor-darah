@@ -21,14 +21,17 @@ func (us *userUsecase) GetProfile(c context.Context, userId int64) (*domain.Prof
 	if err != nil {
 		return nil, err
 	}
+
 	dataDonorRegis, errDr := us.donorRepo.ListRiwayatByStatus(ctx, userId, "DONE")
 	if errDr != nil {
 		return nil, errDr
 	}
+
 	dataNextRegis, errNr := us.donorRepo.NextDonorByStatus(ctx, userId, "OPEN")
 	if errNr != nil {
 		return nil, errNr
 	}
+
 	var nextDateDonor time.Time
 	if dataNextRegis != nil {
 		nextDateDonor = dataNextRegis.DonorSchedulle.Date
