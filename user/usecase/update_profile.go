@@ -30,6 +30,7 @@ func (us *userUsecase) UpdateProfile(c context.Context, userId int64, req *http_
 	filename := strings.ReplaceAll(strings.ToLower(originalFileName), " ", "-") + "-" + fmt.Sprintf("%v", now.Unix()) + fileExt
 
 	path := us.cfg.PATH_UPLOAD + filename
+	pathMeta := us.cfg.PATH_UPLOAD_META + filename
 	dst, err := os.Create(path)
 	if err != nil {
 		return err
@@ -40,7 +41,7 @@ func (us *userUsecase) UpdateProfile(c context.Context, userId int64, req *http_
 		return err
 	}
 
-	req.Path = path
+	req.Path = pathMeta
 	errUpdateProfile := us.userRepo.UpdateProfile(ctx, userId, req)
 	if errUpdateProfile != nil {
 		return errUpdateProfile

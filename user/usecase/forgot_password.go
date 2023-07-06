@@ -13,6 +13,7 @@ func (us *userUsecase) ForgotPassword(c context.Context, user *domain.User) erro
 
 	fUser, errUser := us.userRepo.FindUserByEmail(ctx, user.Email)
 	if errUser != nil {
+		us.cfg.LOGGER.ErrorLogger.Println(errUser.Error())
 		return errUser
 	}
 
@@ -22,6 +23,7 @@ func (us *userUsecase) ForgotPassword(c context.Context, user *domain.User) erro
 
 	err := us.userRepo.ChangePassword(ctx, fUser)
 	if err != nil {
+		us.cfg.LOGGER.ErrorLogger.Println(err.Error())
 		return err
 	}
 
@@ -35,8 +37,10 @@ func (us *userUsecase) ForgotPassword(c context.Context, user *domain.User) erro
 
 	errMail := us.serviceMail.SendEmail(mailer)
 	if errMail != nil {
+		us.cfg.LOGGER.ErrorLogger.Println(errMail.Error())
 		return errMail
 	}
 
+	us.cfg.LOGGER.InfoLogger.Println("Usecase - ForgotPassword")
 	return nil
 }

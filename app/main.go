@@ -37,6 +37,32 @@ import (
 	_serviceMailUser "github.com/bxcodec/go-clean-arch/user/service/mail"
 )
 
+var (
+	WarningLogger *log.Logger
+	InfoLogger    *log.Logger
+	ErrorLogger   *log.Logger
+)
+
+func init() {
+	// for logs
+	PATH_LOGS := goDotEnvVariable("PATH_LOGS")
+	logsPath := PATH_LOGS + "logs.txt"
+	// make a file
+	f, err := os.Create(logsPath)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer f.Close()
+
+	file, err := os.OpenFile(logsPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	if err != nil {
+		log.Fatal(err)
+	}
+	InfoLogger = log.New(file, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
+	WarningLogger = log.New(file, "WARNING: ", log.Ldate|log.Ltime|log.Lshortfile)
+	ErrorLogger = log.New(file, "ERROR: ", log.Ldate|log.Ltime|log.Lshortfile)
+}
+
 func goDotEnvVariable(key string) string {
 	// load .env file
 	err := godotenv.Load(".env")
@@ -51,6 +77,7 @@ func goDotEnvVariable(key string) string {
 func main() {
 	// godotenv package
 	PATH_UPLOAD := goDotEnvVariable("PATH_IMAGE_UPLOAD")
+	PATH_UPLOAD_META := goDotEnvVariable("PATH_IMAGE_UPLOAD_META")
 	CONFIG_SMTP_HOST := goDotEnvVariable("CONFIG_SMTP_HOST")
 	CONFIG_SMTP_PORT := goDotEnvVariable("CONFIG_SMTP_PORT")
 	CONFIG_SENDER_NAME := goDotEnvVariable("CONFIG_SENDER_NAME")
@@ -63,14 +90,21 @@ func main() {
 	if errPortConvert != nil {
 		panic(errPortConvert)
 	}
+	loggerCustom := cfg.Logger{
+		InfoLogger:    InfoLogger,
+		WarningLogger: WarningLogger,
+		ErrorLogger:   ErrorLogger,
+	}
 
 	cfg := cfg.Config{
 		PATH_UPLOAD:          PATH_UPLOAD,
+		PATH_UPLOAD_META:     PATH_UPLOAD_META,
 		CONFIG_SMTP_HOST:     CONFIG_SMTP_HOST,
 		CONFIG_SMTP_PORT:     portMail,
 		CONFIG_SENDER_NAME:   CONFIG_SENDER_NAME,
 		CONFIG_AUTH_EMAIL:    CONFIG_AUTH_EMAIL,
 		CONFIG_AUTH_PASSWORD: CONFIG_AUTH_PASSWORD,
+		LOGGER:               loggerCustom,
 	}
 
 	DB_HOST := goDotEnvVariable("DB_HOST")
@@ -114,21 +148,21 @@ func main() {
 	ar := _articleRepo.NewMysqlArticleRepository(dbConn)
 
 	timeoutContext := time.Duration(contextTimeOut) * time.Second
-	au := _articleUcase.NewArticleUsecase(ar, authorRepo, timeoutContext)
+	au := _articleUcase.NewArticleUsecase(ar, authorRepo, timeoutContext, cfg)
 	_articleHttpDelivery.NewArticleHandler(e, au)
 
 	/*
 		service regions
 	*/
 	repoRegion := _regionRepo.NewMysqlRegionRepository(dbConn)
-	uCaseRegion := _regionUcase.NewRegionUsecase(repoRegion, timeoutContext)
+	uCaseRegion := _regionUcase.NewRegionUsecase(repoRegion, timeoutContext, cfg)
 	_regionHttpDelivery.NewRegionHandler(e, uCaseRegion)
 
 	/*
 		service notification
 	*/
 	repoNotification := _notificationRepo.NewMysqlNotificationRepository(dbConn)
-	uCaseNotification := _notificationUcase.NewNotificationUsecase(repoNotification, timeoutContext)
+	uCaseNotification := _notificationUcase.NewNotificationUsecase(repoNotification, timeoutContext, cfg)
 	_notificationHttpDelivery.NewNotificationHandler(e, uCaseNotification)
 
 	/*
@@ -146,5 +180,6 @@ func main() {
 	uCaseUser := _userUcase.NewUserUsecase(repoUser, serviceMail, timeoutContext, repoDonor, cfg)
 	_userHttpDelivery.NewUserHandler(e, uCaseUser)
 
+	cfg.LOGGER.InfoLogger.Println("Starting the application..." + ADDRESS)
 	log.Fatal(e.Start(ADDRESS)) //nolint
 }

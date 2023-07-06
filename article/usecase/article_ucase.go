@@ -7,6 +7,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"golang.org/x/sync/errgroup"
 
+	"github.com/bxcodec/go-clean-arch/cfg"
 	"github.com/bxcodec/go-clean-arch/domain"
 )
 
@@ -14,14 +15,16 @@ type articleUsecase struct {
 	articleRepo    domain.ArticleRepository
 	authorRepo     domain.AuthorRepository
 	contextTimeout time.Duration
+	cfg            cfg.Config
 }
 
 // NewArticleUsecase will create new an articleUsecase object representation of domain.ArticleUsecase interface
-func NewArticleUsecase(a domain.ArticleRepository, ar domain.AuthorRepository, timeout time.Duration) domain.ArticleUsecase {
+func NewArticleUsecase(a domain.ArticleRepository, ar domain.AuthorRepository, timeout time.Duration, cfg cfg.Config) domain.ArticleUsecase {
 	return &articleUsecase{
 		articleRepo:    a,
 		authorRepo:     ar,
 		contextTimeout: timeout,
+		cfg:            cfg,
 	}
 }
 
