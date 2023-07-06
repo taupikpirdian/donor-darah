@@ -8,7 +8,7 @@ import (
 )
 
 func (m *mysqlUserRepository) FindUserByEmail(ctx context.Context, email string) (res *domain.UserData, err error) {
-	query := `SELECT id,name,email,phone,password FROM users WHERE email = ? `
+	query := `SELECT id,name,email,phone,password,role,createdAt FROM users WHERE email = ? `
 	list, err := m.fetchUser(ctx, query, email)
 	if err != nil {
 		return nil, err

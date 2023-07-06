@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/url"
 	"os"
+	"strconv"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -50,11 +51,26 @@ func goDotEnvVariable(key string) string {
 func main() {
 	// godotenv package
 	PATH_UPLOAD := goDotEnvVariable("PATH_IMAGE_UPLOAD")
+	CONFIG_SMTP_HOST := goDotEnvVariable("CONFIG_SMTP_HOST")
+	CONFIG_SMTP_PORT := goDotEnvVariable("CONFIG_SMTP_PORT")
+	CONFIG_SENDER_NAME := goDotEnvVariable("CONFIG_SENDER_NAME")
+	CONFIG_AUTH_EMAIL := goDotEnvVariable("CONFIG_AUTH_EMAIL")
+	CONFIG_AUTH_PASSWORD := goDotEnvVariable("CONFIG_AUTH_PASSWORD")
 	ADDRESS := goDotEnvVariable("ADDRESS")
 	contextTimeOut := 5
 
+	portMail, errPortConvert := strconv.Atoi(CONFIG_SMTP_PORT)
+	if errPortConvert != nil {
+		panic(errPortConvert)
+	}
+
 	cfg := cfg.Config{
-		PATH_UPLOAD: PATH_UPLOAD,
+		PATH_UPLOAD:          PATH_UPLOAD,
+		CONFIG_SMTP_HOST:     CONFIG_SMTP_HOST,
+		CONFIG_SMTP_PORT:     portMail,
+		CONFIG_SENDER_NAME:   CONFIG_SENDER_NAME,
+		CONFIG_AUTH_EMAIL:    CONFIG_AUTH_EMAIL,
+		CONFIG_AUTH_PASSWORD: CONFIG_AUTH_PASSWORD,
 	}
 
 	DB_HOST := goDotEnvVariable("DB_HOST")
@@ -126,7 +142,7 @@ func main() {
 		service users
 	*/
 	repoUser := _userRepo.NewMysqlUserRepository(dbConn)
-	serviceMail := _serviceMailUser.NewMailService()
+	serviceMail := _serviceMailUser.NewMailService(cfg)
 	uCaseUser := _userUcase.NewUserUsecase(repoUser, serviceMail, timeoutContext, repoDonor, cfg)
 	_userHttpDelivery.NewUserHandler(e, uCaseUser)
 
