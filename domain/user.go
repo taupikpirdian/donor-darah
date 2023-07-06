@@ -217,15 +217,30 @@ func NewProfile(u *Profile) (*UserData, error) {
 }
 
 func NewProfileV2(u *Profile, len int, nextDonor time.Time, latsDonor time.Time) *Profile {
-	return &Profile{
-		Id:         u.Id,
-		MemberCode: u.MemberCode,
-		Name:       u.Name,
-		UrlImage:   u.UrlImageFromDB.String,
-		TotalDonor: int64(len),
-		LastDonor:  latsDonor,
-		NextDonor:  nextDonor,
+	var profile = &Profile{}
+	if u != nil {
+		profile = &Profile{
+			Id:         u.Id,
+			MemberCode: u.MemberCode,
+			Name:       u.Name,
+			UrlImage:   u.UrlImageFromDB.String,
+			TotalDonor: int64(len),
+			LastDonor:  latsDonor,
+			NextDonor:  nextDonor,
+		}
+	} else {
+		profile = &Profile{
+			Id:         u.Id,
+			MemberCode: sql.NullString{},
+			Name:       u.Name,
+			UrlImage:   "",
+			TotalDonor: int64(len),
+			LastDonor:  latsDonor,
+			NextDonor:  nextDonor,
+		}
 	}
+
+	return profile
 }
 
 func NewUserLogin(u *DtoRequestLogin) (*UserData, error) {

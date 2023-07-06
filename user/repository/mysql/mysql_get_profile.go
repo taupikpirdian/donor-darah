@@ -44,10 +44,10 @@ func (m *mysqlUserRepository) fetchProfile(ctx context.Context, query string, ar
 }
 
 func (m *mysqlUserRepository) GetProfile(ctx context.Context, userId int64) (res *domain.Profile, err error) {
-	query := `SELECT profiles.id, users.name, profiles.code, profiles.urlImage
-	FROM profiles
-	JOIN users ON users.id = profiles.userId 
-	where userId = ?`
+	query := `SELECT users.id, users.name, profiles.code, profiles.urlImage
+	FROM users
+	LEFT JOIN profiles ON users.id = profiles.userId 
+	where users.id = ?`
 
 	list, err := m.fetchProfile(ctx, query, userId)
 
@@ -58,7 +58,7 @@ func (m *mysqlUserRepository) GetProfile(ctx context.Context, userId int64) (res
 	if len(list) > 0 {
 		res = list[0]
 	} else {
-		return res, domain.ErrNotFound
+		return res, nil
 	}
 
 	return
