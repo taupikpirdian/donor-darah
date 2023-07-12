@@ -20,11 +20,13 @@ func (a *UserHandler) ProfileController(c echo.Context) (err error) {
 
 	data, err := a.AUsecase.GetProfile(ctx, userId)
 	if err != nil {
+		a.cfg.LOGGER.ErrorLogger.Println(err)
 		logrus.Error(err)
 		responseErrorUsecase, _ := http_response.MapResponseProfile(1, domain.ErrBadBody.Error(), nil)
 		return c.JSON(getStatusCode(err), responseErrorUsecase)
 	}
 
+	a.cfg.LOGGER.InfoLogger.Println(data)
 	responseSuccess, _ := http_response.MapResponseProfile(0, "success", data)
 	return c.JSON(http.StatusOK, responseSuccess)
 }

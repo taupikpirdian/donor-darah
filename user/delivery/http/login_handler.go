@@ -7,7 +7,6 @@ import (
 	"github.com/bxcodec/go-clean-arch/user/delivery/http_response"
 	"github.com/go-playground/validator"
 	"github.com/labstack/echo/v4"
-
 )
 
 func isRequestValidLogin(m *domain.DtoRequestLogin) (bool, error) {
@@ -36,10 +35,12 @@ func (a *UserHandler) LoginController(c echo.Context) (err error) {
 	ctx := c.Request().Context()
 	token, errUc := a.AUsecase.Login(ctx, &dto)
 	if errUc != nil {
+		a.cfg.LOGGER.ErrorLogger.Println(errUc)
 		responseErrorUsecase, _ := http_response.MapResponse(1, domain.ErrBadBody.Error())
 		return c.JSON(getStatusCode(errUc), responseErrorUsecase)
 	}
 
+	a.cfg.LOGGER.InfoLogger.Println(token)
 	responseSuccess, _ := http_response.MapResponseLogin(0, "success", token)
 	return c.JSON(http.StatusOK, responseSuccess)
 }

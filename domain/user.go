@@ -155,7 +155,10 @@ func NewUser(u *User) (*UserData, error) {
 
 	currentTime := time.Now()
 	codeTime := "DN-" + currentTime.Format("20060102150405") + generateCodeString()
-	date, _ := time.Parse("2006-01-02", u.DateOfBirth)
+	date, err := time.Parse("2006-01-02", u.DateOfBirth)
+	if err != nil {
+		return nil, errors.New("FORMAT DATE INCORRECT")
+	}
 
 	return &UserData{
 		name:      u.Name,

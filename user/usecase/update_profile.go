@@ -51,8 +51,5 @@ func (us *userUsecase) UpdateProfile(c context.Context, userId int64, req *http_
 	if errUpdateUser != nil {
 		return errUpdateUser
 	}
-
-	fmt.Println(errUpdateUser)
-
 	return nil
 }

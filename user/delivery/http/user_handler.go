@@ -36,10 +36,12 @@ func (a *UserHandler) Register(c echo.Context) (err error) {
 	ctx := c.Request().Context()
 	err = a.AUsecase.Register(ctx, &user)
 	if err != nil {
-		responseErrorUsecase, _ := http_response.MapResponse(1, domain.ErrBadBody.Error())
+		a.cfg.LOGGER.ErrorLogger.Println(err)
+		responseErrorUsecase, _ := http_response.MapResponse(1, err.Error())
 		return c.JSON(getStatusCode(err), responseErrorUsecase)
 	}
 
+	a.cfg.LOGGER.InfoLogger.Println("Success Register")
 	responseSuccess, _ := http_response.MapResponse(0, "success")
 	return c.JSON(http.StatusCreated, responseSuccess)
 }

@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/url"
 	"os"
@@ -46,7 +47,15 @@ var (
 func init() {
 	// for logs
 	PATH_LOGS := goDotEnvVariable("PATH_LOGS")
-	logsPath := PATH_LOGS + "logs.txt"
+	t := time.Now()
+	timeString := t.Format("2006-01-02")
+
+	files, _ := ioutil.ReadDir(PATH_LOGS)
+	countFile := len(files)
+	s2 := strconv.Itoa(countFile)
+	name := timeString + "_" + s2 + "_" + "logs.txt"
+
+	logsPath := PATH_LOGS + name
 	// make a file
 	f, err := os.Create(logsPath)
 	if err != nil {
@@ -178,7 +187,7 @@ func main() {
 	repoUser := _userRepo.NewMysqlUserRepository(dbConn)
 	serviceMail := _serviceMailUser.NewMailService(cfg)
 	uCaseUser := _userUcase.NewUserUsecase(repoUser, serviceMail, timeoutContext, repoDonor, cfg)
-	_userHttpDelivery.NewUserHandler(e, uCaseUser)
+	_userHttpDelivery.NewUserHandler(e, uCaseUser, cfg)
 
 	cfg.LOGGER.InfoLogger.Println("Starting the application..." + ADDRESS)
 	log.Fatal(e.Start(ADDRESS)) //nolint

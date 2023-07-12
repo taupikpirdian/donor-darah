@@ -30,10 +30,12 @@ func (a *UserHandler) AdminUserCreateController(c echo.Context) (err error) {
 
 	errUsecase := a.AUsecase.CreatetUser(ctx, user)
 	if errUsecase != nil {
+		a.cfg.LOGGER.ErrorLogger.Println(errUsecase)
 		responseErrorUsecase, _ := http_response.MapResponse(1, errUsecase.Error())
 		return c.JSON(getStatusCode(err), responseErrorUsecase)
 	}
 
+	a.cfg.LOGGER.InfoLogger.Println("Success AdminUserCreateController")
 	responseSuccess, _ := http_response.MapResponse(0, "success")
 	return c.JSON(http.StatusCreated, responseSuccess)
 }

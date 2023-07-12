@@ -22,10 +22,12 @@ func (a *UserHandler) AdminUserListController(c echo.Context) error {
 
 	datas, errUsecase := a.AUsecase.ListUser(ctx)
 	if errUsecase != nil {
+		a.cfg.LOGGER.ErrorLogger.Println(errUsecase)
 		responseErrorUsecase, _ := http_response.MapResponse(1, errUsecase.Error())
 		return c.JSON(getStatusCode(errUsecase), responseErrorUsecase)
 	}
 
+	a.cfg.LOGGER.InfoLogger.Println(datas)
 	responseSuccess, _ := http_response.MapResponseUserList(0, "success", datas)
 	return c.JSON(http.StatusOK, responseSuccess)
 }

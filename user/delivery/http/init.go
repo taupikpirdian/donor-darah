@@ -3,6 +3,7 @@ package http
 import (
 	"net/http"
 
+	"github.com/bxcodec/go-clean-arch/cfg"
 	"github.com/bxcodec/go-clean-arch/domain"
 	"github.com/golang-jwt/jwt/v4"
 	echojwt "github.com/labstack/echo-jwt/v4"
@@ -19,12 +20,14 @@ type ResponseError struct {
 // UserHandler  represent the httphandler for user
 type UserHandler struct {
 	AUsecase domain.UserUsecase
+	cfg      cfg.Config
 }
 
 // NewUserHandler will initialize the users/ resources endpoint
-func NewUserHandler(e *echo.Echo, us domain.UserUsecase) {
+func NewUserHandler(e *echo.Echo, us domain.UserUsecase, cfg cfg.Config) {
 	handler := &UserHandler{
 		AUsecase: us,
+		cfg:      cfg,
 	}
 	jwtKey := viper.GetString(`jwt.key`)
 

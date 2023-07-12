@@ -27,10 +27,12 @@ func (a *UserHandler) ChangePasswordController(c echo.Context) (err error) {
 
 	err = a.AUsecase.ChangePassword(ctx, &user, userId)
 	if err != nil {
+		a.cfg.LOGGER.ErrorLogger.Println(err)
 		responseErrorUsecase, _ := http_response.MapResponse(1, domain.ErrBadBody.Error())
 		return c.JSON(getStatusCode(err), responseErrorUsecase)
 	}
 
+	a.cfg.LOGGER.InfoLogger.Println("Success ChangePasswordController")
 	responseSuccess, _ := http_response.MapResponse(0, "success")
 	return c.JSON(http.StatusCreated, responseSuccess)
 }

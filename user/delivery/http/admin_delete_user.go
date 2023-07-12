@@ -24,10 +24,12 @@ func (a *UserHandler) AdminUserDeleteController(c echo.Context) (err error) {
 
 	errUsecase := a.AUsecase.DeleteUser(ctx, id)
 	if errUsecase != nil {
+		a.cfg.LOGGER.ErrorLogger.Println(errUsecase)
 		responseErrorUsecase, _ := http_response.MapResponse(1, errUsecase.Error())
 		return c.JSON(getStatusCode(err), responseErrorUsecase)
 	}
 
+	a.cfg.LOGGER.InfoLogger.Println("Success AdminUserDeleteController")
 	responseSuccess, _ := http_response.MapResponse(0, "success")
 	return c.JSON(http.StatusCreated, responseSuccess)
 }
