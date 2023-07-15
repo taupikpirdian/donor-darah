@@ -18,10 +18,12 @@ type ResponseAgendaSingle struct {
 }
 
 type ResponseUnit struct {
+	Id   int64  `json:"id"`
 	Name string `json:"name"`
 }
 
 type ResponseUser struct {
+	Id   string `json:"id"`
 	Name string `json:"name"`
 }
 
@@ -39,9 +41,11 @@ func MapResponseSingleAgenda(code int, message string, data *domain.DonorRegiste
 		TimeStart: data.DonorSchedulle.TimeStart,
 		TimeEnd:   data.DonorSchedulle.TimeEnd,
 		User: ResponseUser{
+			Id:   data.User.Id,
 			Name: data.User.Name,
 		},
 		Unit: ResponseUnit{
+			Id:   data.Unit.Id,
 			Name: data.Unit.Name,
 		},
 	}

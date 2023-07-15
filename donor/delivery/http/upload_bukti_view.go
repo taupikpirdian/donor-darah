@@ -24,6 +24,8 @@ func (d *DonorHandler) UploadBuktiView(c echo.Context) (err error) {
 		return c.JSON(getStatusCode(err), responseError3)
 	}
 
+	data.DonorProof = d.cfg.DOMAIN + data.DonorProof
+
 	responseSuccess, _ := http_response.MapResponseBuktiDonorView(0, "success", data)
 	return c.JSON(http.StatusOK, responseSuccess)
 }

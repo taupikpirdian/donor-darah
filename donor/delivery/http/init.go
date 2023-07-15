@@ -3,6 +3,7 @@ package http
 import (
 	"net/http"
 
+	"github.com/bxcodec/go-clean-arch/cfg"
 	"github.com/bxcodec/go-clean-arch/domain"
 	"github.com/go-playground/validator"
 	"github.com/golang-jwt/jwt/v4"
@@ -21,6 +22,7 @@ type ResponseError struct {
 // UserHandler  represent the httphandler for user
 type DonorHandler struct {
 	AUsecase domain.DonorUsecase
+	cfg      cfg.Config
 }
 
 func isRequestValid_Register(m *domain.RequestRegisterDonor) (bool, error) {
@@ -33,9 +35,10 @@ func isRequestValid_Register(m *domain.RequestRegisterDonor) (bool, error) {
 }
 
 // NewUserHandler will initialize the users/ resources endpoint
-func NewDonorHandler(e *echo.Echo, us domain.DonorUsecase) {
+func NewDonorHandler(e *echo.Echo, us domain.DonorUsecase, cfg cfg.Config) {
 	handler := &DonorHandler{
 		AUsecase: us,
+		cfg:      cfg,
 	}
 	jwtKey := viper.GetString(`jwt.key`)
 

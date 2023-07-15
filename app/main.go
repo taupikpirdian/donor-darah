@@ -92,6 +92,7 @@ func main() {
 	CONFIG_SENDER_NAME := goDotEnvVariable("CONFIG_SENDER_NAME")
 	CONFIG_AUTH_EMAIL := goDotEnvVariable("CONFIG_AUTH_EMAIL")
 	CONFIG_AUTH_PASSWORD := goDotEnvVariable("CONFIG_AUTH_PASSWORD")
+	DOMAIN := goDotEnvVariable("DOMAIN")
 	ADDRESS := goDotEnvVariable("ADDRESS")
 	contextTimeOut := 5
 
@@ -114,6 +115,7 @@ func main() {
 		CONFIG_AUTH_EMAIL:    CONFIG_AUTH_EMAIL,
 		CONFIG_AUTH_PASSWORD: CONFIG_AUTH_PASSWORD,
 		LOGGER:               loggerCustom,
+		DOMAIN:               DOMAIN,
 	}
 
 	DB_HOST := goDotEnvVariable("DB_HOST")
@@ -179,7 +181,7 @@ func main() {
 	*/
 	repoDonor := _donorRepo.NewMysqlDonorRepository(dbConn)
 	uCaseDonor := _donorUcase.NewDonorUsecase(repoDonor, timeoutContext, cfg)
-	_donorHttpDelivery.NewDonorHandler(e, uCaseDonor)
+	_donorHttpDelivery.NewDonorHandler(e, uCaseDonor, cfg)
 
 	/*
 		service users

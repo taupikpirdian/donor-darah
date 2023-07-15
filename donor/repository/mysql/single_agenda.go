@@ -32,7 +32,9 @@ func (m *mysqlDonorRepository) fetchSingle(ctx context.Context, query string, ar
 			&t.DonorSchedulle.Date,
 			&t.DonorSchedulle.TimeStart,
 			&t.DonorSchedulle.TimeEnd,
+			&t.User.Id,
 			&t.User.Name,
+			&t.Unit.Id,
 			&t.Unit.Name,
 		)
 
@@ -47,7 +49,7 @@ func (m *mysqlDonorRepository) fetchSingle(ctx context.Context, query string, ar
 }
 
 func (m *mysqlDonorRepository) SingleAgenda(ctx context.Context, id int64) (res *domain.DonorRegisterDTO, err error) {
-	query := `SELECT donor_registers.id, donor_registers.code, donor_schedulle.placeName, donor_schedulle.address, donor_schedulle.date, donor_schedulle.timeStart, donor_schedulle.timeEnd, users.name, units.name as unitName
+	query := `SELECT donor_registers.id, donor_registers.code, donor_schedulle.placeName, donor_schedulle.address, donor_schedulle.date, donor_schedulle.timeStart, donor_schedulle.timeEnd, users.id as idUser, users.name, units.id as idUnit, units.name as unitName
 	FROM donor_registers
 	JOIN donor_schedulle ON donor_schedulle.id = donor_registers.donorSchedulleId
 	JOIN users ON users.id = donor_registers.userId 

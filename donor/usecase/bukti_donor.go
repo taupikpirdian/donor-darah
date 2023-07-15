@@ -28,6 +28,7 @@ func (dus *donorUsecase) UploadBukti(c context.Context, id int64, file *multipar
 	filename := strings.ReplaceAll(strings.ToLower(originalFileName), " ", "-") + "-" + fmt.Sprintf("%v", now.Unix()) + fileExt
 
 	path := dus.cfg.PATH_UPLOAD + filename
+	pathMeta := dus.cfg.PATH_UPLOAD_META + filename
 	dst, err := os.Create(path)
 	if err != nil {
 		return err
@@ -38,7 +39,7 @@ func (dus *donorUsecase) UploadBukti(c context.Context, id int64, file *multipar
 		return err
 	}
 
-	errR := dus.donorRepo.UploadBukti(ctx, id, path)
+	errR := dus.donorRepo.UploadBukti(ctx, id, pathMeta)
 	if errR != nil {
 		return errR
 	}

@@ -9,4 +9,5 @@ type Config struct {
 	CONFIG_AUTH_EMAIL    string
 	CONFIG_AUTH_PASSWORD string
 	LOGGER               Logger
+	DOMAIN               string
 }
