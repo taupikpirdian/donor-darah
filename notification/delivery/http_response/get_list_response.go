@@ -10,6 +10,13 @@ type CustomReponseSingle struct {
 }
 
 func MapResponseNotificationList(code int, message string, data []*domain.NotificationData) (*CustomReponseSingle, error) {
+	for _, v := range data {
+		if v.Status == "UNREAD" {
+			v.IsRead = false
+		} else {
+			v.IsRead = true
+		}
+	}
 	httpResponse := &CustomReponseSingle{
 		Status: &Status{
 			Code:    code,

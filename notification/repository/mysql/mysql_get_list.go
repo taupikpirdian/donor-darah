@@ -29,6 +29,7 @@ func (m *mysqlNotificationRepository) fetch(ctx context.Context, query string, a
 			&t.UserId,
 			&t.Title,
 			&t.Message,
+			&t.Status,
 			&t.CreatedAt,
 			&t.UpdatedAt,
 		)
@@ -44,7 +45,7 @@ func (m *mysqlNotificationRepository) fetch(ctx context.Context, query string, a
 }
 
 func (m *mysqlNotificationRepository) GetListNotification(ctx context.Context, userId int64) ([]*domain.NotificationData, error) {
-	query := `SELECT id,userId,title,message,createdAt,updatedAt FROM notifications Where userId = ? ORDER BY createdAt `
+	query := `SELECT id,userId,title,message,status,createdAt,updatedAt FROM notifications Where userId = ? ORDER BY createdAt `
 
 	res, err := m.fetch(ctx, query, userId)
 	if err != nil {

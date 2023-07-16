@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/bxcodec/go-clean-arch/domain"
 )
@@ -15,6 +16,7 @@ func (dus *donorUsecase) Reschedule(c context.Context, id int64, dto *domain.Don
 		find data
 	*/
 	data, errR := dus.donorRepo.FindSchedule(ctx, dto)
+	fmt.Println(errR)
 	if errR != nil {
 		return errR
 	}

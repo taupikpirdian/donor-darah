@@ -19,9 +19,12 @@ type CustomReponseListRiwayat struct {
 	Data   []*ResponseRiwayat
 }
 
-func MapResponseListRiwayat(code int, message string, datas []*domain.DonorRegisterDTO) (*CustomReponseListRiwayat, error) {
+func MapResponseListRiwayat(code int, message string, datas []*domain.DonorRegisterDTO, domain string) (*CustomReponseListRiwayat, error) {
 	res := []*ResponseRiwayat{}
 	for _, data := range datas {
+		if data.DonorProof != "" {
+			data.DonorProof = domain + data.DonorProof
+		}
 		add := &ResponseRiwayat{
 			Id:            data.Id,
 			Name:          data.DonorSchedulle.PlaceName,

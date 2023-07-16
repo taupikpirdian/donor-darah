@@ -10,7 +10,7 @@ import (
 )
 
 func (d *DonorHandler) CancelDonor(c echo.Context) (err error) {
-	idP, err := strconv.Atoi(c.Param("scheduleId"))
+	idP, err := strconv.Atoi(c.Param("donorRegisterId"))
 	if err != nil {
 		responseErrorConv, _ := http_response.MapResponseBuktiDonor(1, err.Error(), nil)
 		return c.JSON(getStatusCode(err), responseErrorConv)

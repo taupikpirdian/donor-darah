@@ -12,4 +12,6 @@ var (
 	// ErrBadParamInput will throw if the given request-body or params is not valid
 	ErrBadParamInput = errors.New("given Param is not valid")
 	ErrBadBody       = errors.New("given Body is not valid")
+
+	ErrNotFoundSchedule = errors.New("Schedule not found")
 )

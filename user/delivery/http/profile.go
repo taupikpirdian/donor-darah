@@ -27,7 +27,9 @@ func (a *UserHandler) ProfileController(c echo.Context) (err error) {
 	}
 
 	a.cfg.LOGGER.InfoLogger.Println(data)
-	data.UrlImage = a.cfg.DOMAIN + data.UrlImage
+	if data.UrlImage != "" {
+		data.UrlImage = a.cfg.DOMAIN + data.UrlImage
+	}
 	responseSuccess, _ := http_response.MapResponseProfile(0, "success", data)
 	return c.JSON(http.StatusOK, responseSuccess)
 }

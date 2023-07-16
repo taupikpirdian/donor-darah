@@ -12,8 +12,8 @@ import (
 )
 
 type RequestRegisterDonor struct {
-	IdSchedulle int64                `json:"idSchedulle" validate:"required"`
-	ListAnswer  []*RequestListAnswer `json:"listAnswer" validate:"required"`
+	IdSchedule int64                `json:"idSchedule" validate:"required"`
+	ListAnswer []*RequestListAnswer `json:"listAnswer" validate:"required"`
 }
 
 type RequestListAnswer struct {
@@ -46,17 +46,17 @@ type DonorRegisterQuestionerDTO struct {
 }
 
 type DonorRegister struct {
-	id               int64
-	code             string
-	userId           int64
-	donorSchedulleId int64
-	isApprove        bool
-	donorProof       string
-	status           string
-	Questioner       []*DonorRegisterQuestioner
-	DonorSchedulle   *DonorSchedulle
-	updatedAt        time.Time
-	createdAt        time.Time
+	id              int64
+	code            string
+	userId          int64
+	donorScheduleId int64
+	isApprove       bool
+	donorProof      string
+	status          string
+	Questioner      []*DonorRegisterQuestioner
+	DonorSchedulle  *DonorSchedulle
+	updatedAt       time.Time
+	createdAt       time.Time
 }
 
 type DonorRegisterQuestioner struct {
@@ -70,11 +70,11 @@ type DonorRegisterQuestioner struct {
 }
 
 type DonorStock struct {
-	Id               int64
-	Title            string
-	DonorDetailStock DonorDetailStock
-	UpdatedAt        time.Time
-	CreatedAt        time.Time
+	Id               int64            `json:"id"`
+	Title            string           `json:"title"`
+	DonorDetailStock DonorDetailStock `json:"-"`
+	UpdatedAt        time.Time        `json:"updatedAt"`
+	CreatedAt        time.Time        `json:"createdAt"`
 }
 
 type DonorDetailStock struct {
@@ -143,7 +143,7 @@ type DonorRepository interface {
 }
 
 func NewDonorRegister(userId int64, req RequestRegisterDonor) (*DonorRegister, error) {
-	if req.IdSchedulle == 0 {
+	if req.IdSchedule == 0 {
 		return nil, errors.New("ID SCHEDULLE NOT SET")
 	}
 
@@ -164,15 +164,15 @@ func NewDonorRegister(userId int64, req RequestRegisterDonor) (*DonorRegister, e
 	randCode := timeNow + strconv.Itoa(randString)
 
 	donorRegister := &DonorRegister{
-		code:             randCode,
-		userId:           userId,
-		donorSchedulleId: req.IdSchedulle,
-		isApprove:        true,
-		donorProof:       "",
-		status:           "OPEN",
-		Questioner:       questioner,
-		updatedAt:        time.Now(),
-		createdAt:        time.Now(),
+		code:            randCode,
+		userId:          userId,
+		donorScheduleId: req.IdSchedule,
+		isApprove:       true,
+		donorProof:      "",
+		status:          "OPEN",
+		Questioner:      questioner,
+		updatedAt:       time.Now(),
+		createdAt:       time.Now(),
 	}
 
 	return donorRegister, nil
@@ -191,7 +191,7 @@ func (dr *DonorRegister) GetUserId_DonorRegister() int64 {
 }
 
 func (dr *DonorRegister) GetDonorSchedulleId_DonorRegister() int64 {
-	return dr.donorSchedulleId
+	return dr.donorScheduleId
 }
 
 func (dr *DonorRegister) GetIsApprove_DonorRegister() bool {

@@ -7,9 +7,11 @@ import (
 
 type NotificationData struct {
 	Id        int64     `json:"id"`
-	UserId    int64     `json:"userId"`
+	UserId    int64     `json:"-"`
 	Title     string    `json:"title"`
-	Message   string    `json:"message"`
+	Message   string    `json:"desc"`
+	Status    string    `json:"-"`
+	IsRead    bool      `json:"isRead"`
 	UpdatedAt time.Time `json:"updatedAt"`
 	CreatedAt time.Time `json:"createdAt"`
 }

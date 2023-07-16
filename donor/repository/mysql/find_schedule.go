@@ -56,7 +56,7 @@ func (m *mysqlDonorRepository) FindSchedule(ctx context.Context, dto *domain.Don
 	if len(list) > 0 {
 		res = list[0]
 	} else {
-		return res, domain.ErrNotFound
+		return res, domain.ErrNotFoundSchedule
 	}
 
 	return

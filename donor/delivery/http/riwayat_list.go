@@ -18,10 +18,10 @@ func (d *DonorHandler) ListRiwayat(c echo.Context) (err error) {
 
 	datas, errUc := d.AUsecase.ListRiwayat(ctx, userId)
 	if errUc != nil {
-		responseError3, _ := http_response.MapResponseListRiwayat(1, domain.ErrBadBody.Error(), nil)
+		responseError3, _ := http_response.MapResponseListRiwayat(1, domain.ErrBadBody.Error(), nil, "")
 		return c.JSON(getStatusCode(err), responseError3)
 	}
 
-	responseSuccess, _ := http_response.MapResponseListRiwayat(0, "success", datas)
+	responseSuccess, _ := http_response.MapResponseListRiwayat(0, "success", datas, d.cfg.DOMAIN)
 	return c.JSON(http.StatusOK, responseSuccess)
 }

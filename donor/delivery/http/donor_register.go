@@ -1,6 +1,7 @@
 package http
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/bxcodec/go-clean-arch/domain"
@@ -19,6 +20,8 @@ func (d *DonorHandler) DonorRegister(c echo.Context) (err error) {
 
 	var ok bool
 	if ok, err = isRequestValid_Register(&req); !ok {
+		fmt.Println("masuk")
+
 		responseError2, _ := http_response.MapResponseDonorRegister(1, err.Error())
 		return c.JSON(http.StatusBadRequest, responseError2)
 	}

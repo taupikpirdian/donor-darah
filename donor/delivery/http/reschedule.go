@@ -26,13 +26,15 @@ func (d *DonorHandler) RescheduleDonor(c echo.Context) (err error) {
 		return c.JSON(http.StatusUnprocessableEntity, responseError)
 	}
 
-	idP, errAToi := strconv.Atoi(c.Param("scheduleId"))
+	idP, errAToi := strconv.Atoi(c.Param("donorRegisterId"))
+
 	if errAToi != nil {
 		logger.Print(errAToi)
 		fmt.Print(&buf)
 		responseErrorConv, _ := http_response.MapResponseBuktiDonor(1, err.Error(), nil)
 		return c.JSON(getStatusCode(errAToi), responseErrorConv)
 	}
+
 	id := int64(idP)
 	ctx := c.Request().Context()
 
