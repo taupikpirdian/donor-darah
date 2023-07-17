@@ -1,27 +1,26 @@
 package http
 
 import (
-	"bytes"
-	"fmt"
-	"log"
 	"net/http"
 	"strconv"
 
+	"github.com/bxcodec/go-clean-arch/cfg"
 	"github.com/bxcodec/go-clean-arch/domain"
 	"github.com/bxcodec/go-clean-arch/donor/delivery/http_response"
+	"github.com/bxcodec/go-clean-arch/helper"
 	"github.com/labstack/echo/v4"
 )
 
 func (d *DonorHandler) RescheduleDonor(c echo.Context) (err error) {
-	var (
-		buf    bytes.Buffer
-		logger = log.New(&buf, "logger: ", log.Lshortfile)
-	)
+	loggerFile := cfg.NewLoger(d.cfg.PATH_LOGS)
+	contentLog := cfg.ContentLogger{
+		Url: "/api/v1/donor/reschedule/:donorRegisterId",
+	}
+
 	var schedule domain.DonorSchedulleDTO
 	err = c.Bind(&schedule)
 	if err != nil {
-		logger.Print(err)
-		fmt.Print(&buf)
+		loggerFile.ErrorLogger.Println(err)
 		responseError, _ := http_response.MapResponseBuktiDonor(1, err.Error(), nil)
 		return c.JSON(http.StatusUnprocessableEntity, responseError)
 	}
@@ -29,8 +28,7 @@ func (d *DonorHandler) RescheduleDonor(c echo.Context) (err error) {
 	idP, errAToi := strconv.Atoi(c.Param("donorRegisterId"))
 
 	if errAToi != nil {
-		logger.Print(errAToi)
-		fmt.Print(&buf)
+		loggerFile.ErrorLogger.Println(errAToi)
 		responseErrorConv, _ := http_response.MapResponseBuktiDonor(1, err.Error(), nil)
 		return c.JSON(getStatusCode(errAToi), responseErrorConv)
 	}
@@ -40,11 +38,14 @@ func (d *DonorHandler) RescheduleDonor(c echo.Context) (err error) {
 
 	errUc := d.AUsecase.Reschedule(ctx, id, &schedule)
 	if errUc != nil {
-		logger.Print(errUc)
-		fmt.Print(&buf)
+		loggerFile.ErrorLogger.Println(errUc)
 		responseError3, _ := http_response.MapResponseBuktiDonor(1, errUc.Error(), nil)
 		return c.JSON(getStatusCode(err), responseError3)
 	}
+
+	contentLog.Payload = helper.StructToString(schedule)
+	contentLog.Response = helper.StructToString("")
+	loggerFile.InfoLogger.Println(contentLog)
 
 	responseSuccess, _ := http_response.MapResponseBuktiDonor(0, "success", nil)
 	return c.JSON(http.StatusOK, responseSuccess)
