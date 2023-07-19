@@ -41,9 +41,9 @@ func (m *mysqlRegionRepository) fetch(ctx context.Context, query string, args ..
 }
 
 func (m *mysqlRegionRepository) GetDistrict(ctx context.Context) ([]*domain.DistrictData, error) {
-	query := `SELECT id,code,name FROM sub_districts ORDER BY name `
+	query := `SELECT id,code,name FROM sub_districts WHERE regency_id = ? ORDER BY name `
 
-	res, err := m.fetch(ctx, query)
+	res, err := m.fetch(ctx, query, 6106) // id KABUPATEN KETAPANG
 	if err != nil {
 		return nil, err
 	}
