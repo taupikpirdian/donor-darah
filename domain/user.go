@@ -21,13 +21,13 @@ type User struct {
 	Phone                string    `json:"phone" validate:"required"`
 	Password             string    `json:"password" validate:"required"`
 	PasswordConfirmation string    `json:"passwordConfirmation" validate:"required"`
-	JobId                int64     `json:"jobId"`
-	UnitId               int64     `json:"unitId"`
+	JobId                string    `json:"jobId"`
+	UnitId               string    `json:"unitId"`
 	PlaceOfBirth         string    `json:"placeOfBirth"`
 	DateOfBirth          string    `json:"dateOfBirth"`
 	Gender               string    `json:"gender"`
-	SubDistrictId        int64     `json:"subDistrictId"`
-	VillageId            int64     `json:"villageId"`
+	SubDistrictId        string    `json:"subDistrictId"`
+	VillageId            string    `json:"villageId"`
 	Address              string    `json:"address"`
 	PostalCode           string    `json:"postalCode"`
 	Role                 string    `json:"role"`
@@ -51,13 +51,13 @@ type ProfileData struct {
 	id            int64
 	code          string
 	userId        int64
-	jobId         int64
-	unitId        int64
+	jobId         string
+	unitId        string
 	placeOfBirth  string
 	dateOfBirth   time.Time
 	gender        string
-	subDistrictId int64
-	villageId     int64
+	subDistrictId string
+	villageId     string
 	address       string
 	postalCode    string
 	updatedAt     time.Time
@@ -355,11 +355,11 @@ func (cu *UserData) GetGenderOnProfile() string {
 	return cu.profileData.gender
 }
 
-func (cu *UserData) GetJobIdOnProfile() int64 {
+func (cu *UserData) GetJobIdOnProfile() string {
 	return cu.profileData.jobId
 }
 
-func (cu *UserData) GetUnitIdOnProfile() int64 {
+func (cu *UserData) GetUnitIdOnProfile() string {
 	return cu.profileData.unitId
 }
 
@@ -375,12 +375,12 @@ func (cu *UserData) GetAddressOnProfile() string {
 	return cu.profileData.address
 }
 
-func (cu *UserData) GetSubDistrictIdOnProfile() int64 {
+func (cu *UserData) GetSubDistrictIdOnProfile() string {
 	return cu.profileData.subDistrictId
 }
 
-func (cu *UserData) GetVillageIdOnProfile() int64 {
-	return cu.profileData.subDistrictId
+func (cu *UserData) GetVillageIdOnProfile() string {
+	return cu.profileData.villageId
 }
 
 func (cu *UserData) GetPostalCodeOnProfile() string {
@@ -429,11 +429,11 @@ func (cu *UserData) SetPhone(phone string) {
 	cu.phone = phone
 }
 
-func (cu *UserData) SetJobId(jobId int64) {
+func (cu *UserData) SetJobId(jobId string) {
 	cu.profileData.jobId = jobId
 }
 
-func (cu *UserData) SetUnitId(unitId int64) {
+func (cu *UserData) SetUnitId(unitId string) {
 	cu.profileData.unitId = unitId
 }
 
@@ -450,11 +450,11 @@ func (cu *UserData) SetGender(gender string) {
 	cu.profileData.gender = gender
 }
 
-func (cu *UserData) SetSubDistrictId(subDistrictId int64) {
+func (cu *UserData) SetSubDistrictId(subDistrictId string) {
 	cu.profileData.subDistrictId = subDistrictId
 }
 
-func (cu *UserData) SetVillageId(villageId int64) {
+func (cu *UserData) SetVillageId(villageId string) {
 	cu.profileData.villageId = villageId
 }
 
