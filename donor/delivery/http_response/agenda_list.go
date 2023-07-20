@@ -13,6 +13,7 @@ type ResponseAgenda struct {
 	TimeStart string    `json:"timeStart"`
 	TimeEnd   string    `json:"timeEnd"`
 	Address   string    `json:"address"`
+	Status    string    `json:"status"`
 }
 
 type CustomReponseSingleListAgenda struct {
@@ -30,6 +31,7 @@ func MapResponseListAgenda(code int, message string, datas []*domain.DonorRegist
 			TimeStart: data.DonorSchedulle.TimeStart,
 			TimeEnd:   data.DonorSchedulle.TimeEnd,
 			Address:   data.DonorSchedulle.Address,
+			Status:    data.Status,
 		}
 		res = append(res, add)
 	}

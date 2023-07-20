@@ -6,13 +6,13 @@ import (
 )
 
 func (m *mysqlDonorRepository) CancelDonor(ctx context.Context, id int64) (err error) {
-	query := `UPDATE donor_registers set isApprove=? WHERE ID = ?`
+	query := `UPDATE donor_registers set isApprove=?, status=? WHERE ID = ?`
 
 	stmt, err := m.Conn.PrepareContext(ctx, query)
 	if err != nil {
 		return
 	}
-	res, err := stmt.ExecContext(ctx, "2", id)
+	res, err := stmt.ExecContext(ctx, "2", "CANCEL", id)
 	if err != nil {
 		return
 	}

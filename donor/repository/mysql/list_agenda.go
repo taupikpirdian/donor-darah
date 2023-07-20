@@ -27,6 +27,7 @@ func (m *mysqlDonorRepository) fetch(ctx context.Context, query string, args ...
 		err = rows.Scan(
 			&t.Id,
 			&t.Code,
+			&t.Status,
 			&t.DonorSchedulle.PlaceName,
 			&t.DonorSchedulle.Address,
 			&t.DonorSchedulle.Date,
@@ -45,7 +46,7 @@ func (m *mysqlDonorRepository) fetch(ctx context.Context, query string, args ...
 }
 
 func (m *mysqlDonorRepository) ListAgenda(ctx context.Context, userId int64) ([]*domain.DonorRegisterDTO, error) {
-	query := `SELECT donor_registers.id, donor_registers.code, donor_schedulle.placeName, donor_schedulle.address, donor_schedulle.date, donor_schedulle.timeStart, donor_schedulle.timeEnd FROM donor_registers
+	query := `SELECT donor_registers.id, donor_registers.code, donor_registers.status, donor_schedulle.placeName, donor_schedulle.address, donor_schedulle.date, donor_schedulle.timeStart, donor_schedulle.timeEnd FROM donor_registers
 	JOIN donor_schedulle ON donor_schedulle.id = donor_registers.donorSchedulleId where userId = ? ORDER BY donor_registers.createdAt`
 
 	res, err := m.fetch(ctx, query, userId)
