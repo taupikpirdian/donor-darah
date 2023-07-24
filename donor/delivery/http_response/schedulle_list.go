@@ -17,7 +17,7 @@ type ResponseSchedulleList struct {
 
 type ResponseGroupSchedulleList struct {
 	Date      time.Time             `json:"date"`
-	Schedulle ResponseSchedulleList `json:"schedulle"`
+	Schedulle ResponseSchedulleList `json:"schedule"`
 }
 
 type CustomReponseSchedulleList struct {
@@ -27,7 +27,7 @@ type CustomReponseSchedulleList struct {
 
 type ResponseGroupSchedulleMulti struct {
 	Date      time.Time                `json:"date"`
-	Schedulle []*ResponseSchedulleList `json:"schedulle"`
+	Schedulle []*ResponseSchedulleList `json:"schedule"`
 }
 
 type MyStruct struct {
