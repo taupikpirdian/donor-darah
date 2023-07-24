@@ -54,7 +54,14 @@ func (us *userUsecase) Login(c context.Context, dtoUser *domain.DtoRequestLogin)
 		return nil, errSign
 	}
 
-	t, err = domain.SetToken(sign, dataUserDb)
+	/*
+		get profile
+	*/
+	dataProfile, err := us.userRepo.GetProfileFull(c, idConv)
+	if err != nil {
+		return nil, err
+	}
+	t, err = domain.SetToken(sign, dataProfile)
 	if err != nil {
 		return nil, err
 	}

@@ -22,6 +22,11 @@ func (us *userUsecase) GetProfile(c context.Context, userId int64) (*domain.Prof
 		return nil, err
 	}
 
+	profile, err := us.userRepo.GetProfileFull(ctx, userId)
+	if err != nil {
+		return nil, err
+	}
+
 	dataDonorRegis, errDr := us.donorRepo.ListRiwayatByStatus(ctx, userId, "DONE")
 	if errDr != nil {
 		return nil, errDr
@@ -44,6 +49,6 @@ func (us *userUsecase) GetProfile(c context.Context, userId int64) (*domain.Prof
 	if dataLastsRegis != nil {
 		lastDateDonor = dataLastsRegis.DonorSchedulle.Date
 	}
-	result := domain.NewProfileV2(data, len(dataDonorRegis), nextDateDonor, lastDateDonor)
+	result := domain.NewProfileV2(data, profile, len(dataDonorRegis), nextDateDonor, lastDateDonor)
 	return result, nil
 }

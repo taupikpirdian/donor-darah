@@ -45,7 +45,7 @@ func (a *UserHandler) LoginController(c echo.Context) (err error) {
 	token, errUc := a.AUsecase.Login(ctx, &dto)
 	if errUc != nil {
 		loggerFile.ErrorLogger.Println(errUc)
-		responseErrorUsecase, _ := http_response.MapResponse(1, domain.ErrBadBody.Error())
+		responseErrorUsecase, _ := http_response.MapResponse(1, errUc.Error())
 		return c.JSON(getStatusCode(errUc), responseErrorUsecase)
 	}
 

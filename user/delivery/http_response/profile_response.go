@@ -5,13 +5,14 @@ import (
 )
 
 type ResponseProfileJson struct {
-	Id         int64  `json:"id"`
-	MemberCode string `json:"memberCode"`
-	Name       string `json:"name"`
-	UrlImage   string `json:"urlImage"`
-	TotalDonor int    `json:"totalDonor"`
-	LastDonor  string `json:"lastDonor"`
-	NextDonor  string `json:"nextDonor"`
+	Id         int64       `json:"id"`
+	MemberCode string      `json:"memberCode"`
+	Name       string      `json:"name"`
+	UrlImage   string      `json:"urlImage"`
+	TotalDonor int         `json:"totalDonor"`
+	LastDonor  string      `json:"lastDonor"`
+	NextDonor  string      `json:"nextDonor"`
+	User       domain.User `json:"user"`
 }
 
 type CustomReponseProfile struct {
@@ -41,6 +42,7 @@ func MapResponseProfile(code int, message string, data *domain.Profile) (*Custom
 			TotalDonor: int(data.TotalDonor),
 			LastDonor:  lastDonor,
 			NextDonor:  nextDonor,
+			User:       *data.User,
 		},
 	}
 

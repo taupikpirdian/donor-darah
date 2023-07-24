@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 	"math/rand"
 	"strconv"
 	"time"
@@ -15,23 +16,24 @@ import (
 
 // User is representing the User data struct
 type User struct {
-	Id                   string    `json:"id"`
-	Name                 string    `json:"name" validate:"required"`
-	Email                string    `json:"email" validate:"required"`
-	Phone                string    `json:"phone" validate:"required"`
-	Password             string    `json:"password" validate:"required"`
-	PasswordConfirmation string    `json:"passwordConfirmation" validate:"required"`
-	JobId                string    `json:"jobId"`
-	UnitId               string    `json:"unitId"`
-	PlaceOfBirth         string    `json:"placeOfBirth"`
-	DateOfBirth          string    `json:"dateOfBirth"`
-	Gender               string    `json:"gender"`
-	SubDistrictId        string    `json:"subDistrictId"`
-	VillageId            string    `json:"villageId"`
-	Address              string    `json:"address"`
-	PostalCode           string    `json:"postalCode"`
-	Role                 string    `json:"role"`
-	CreatedAt            time.Time `json:"created_at"`
+	Id                   string         `json:"id"`
+	Name                 string         `json:"name" validate:"required"`
+	Email                string         `json:"email" validate:"required"`
+	Phone                string         `json:"phone" validate:"required"`
+	Password             string         `json:"-" validate:"required"`
+	PasswordConfirmation string         `json:"-" validate:"required"`
+	JobId                string         `json:"jobId"`
+	UnitId               string         `json:"unitId"`
+	PlaceOfBirth         string         `json:"placeOfBirth"`
+	DateOfBirth          string         `json:"dateOfBirth"`
+	Gender               string         `json:"gender"`
+	SubDistrictId        string         `json:"subDistrictId"`
+	VillageId            string         `json:"villageId"`
+	Address              string         `json:"address"`
+	PostalCode           string         `json:"postalCode"`
+	Role                 string         `json:"role"`
+	CreatedAt            time.Time      `json:"-"`
+	MemberCode           sql.NullString `json:"memberCode"`
 }
 
 type UserData struct {
@@ -72,6 +74,7 @@ type Profile struct {
 	TotalDonor     int64          `json:"totalDonor"`
 	LastDonor      time.Time      `json:"lastDonor"`
 	NextDonor      time.Time      `json:"nextDonor"`
+	User           *User          `json:"user"`
 }
 
 type Job struct {
@@ -136,6 +139,7 @@ type UserRepository interface {
 	GetProfile(ctx context.Context, userId int64) (*Profile, error)
 	UpdateProfile(ctx context.Context, userId int64, req *http_request.BodyUpdateProfile) error
 	UpdateUser(ctx context.Context, userId int64, req *http_request.BodyUpdateProfile) error
+	GetProfileFull(ctx context.Context, userId int64) (*User, error)
 }
 
 func NewUser(u *User) (*UserData, error) {
@@ -219,28 +223,26 @@ func NewProfile(u *Profile) (*UserData, error) {
 	}, nil
 }
 
-func NewProfileV2(u *Profile, len int, nextDonor time.Time, latsDonor time.Time) *Profile {
+func NewProfileV2(u *Profile, p *User, len int, nextDonor time.Time, latsDonor time.Time) *Profile {
+	if p.DateOfBirth != "" {
+		layout := "2006-01-02T15:04:05-07:00"
+		// Parse the date string into a time.Time object
+		t, err := time.Parse(layout, p.DateOfBirth)
+		if err == nil {
+			formattedDate := t.Format("2006-01-02")
+			p.DateOfBirth = formattedDate
+		}
+	}
 	var profile = &Profile{}
-	if u != nil {
-		profile = &Profile{
-			Id:         u.Id,
-			MemberCode: u.MemberCode,
-			Name:       u.Name,
-			UrlImage:   u.UrlImageFromDB.String,
-			TotalDonor: int64(len),
-			LastDonor:  latsDonor,
-			NextDonor:  nextDonor,
-		}
-	} else {
-		profile = &Profile{
-			Id:         u.Id,
-			MemberCode: sql.NullString{},
-			Name:       u.Name,
-			UrlImage:   "",
-			TotalDonor: int64(len),
-			LastDonor:  latsDonor,
-			NextDonor:  nextDonor,
-		}
+	profile = &Profile{
+		Id:         u.Id,
+		MemberCode: u.MemberCode,
+		Name:       u.Name,
+		UrlImage:   u.UrlImageFromDB.String,
+		TotalDonor: int64(len),
+		LastDonor:  latsDonor,
+		NextDonor:  nextDonor,
+		User:       p,
 	}
 
 	return profile
@@ -294,14 +296,26 @@ func SetToken(token string, dataUserDb *User) (*Auth, error) {
 		return nil, errors.New("TOKEN IS REQUIRED")
 	}
 
+	fmt.Println(dataUserDb)
+
 	return &Auth{
 		Token: token,
 		User: User{
-			Id:    dataUserDb.Id,
-			Name:  dataUserDb.Name,
-			Email: dataUserDb.Email,
-			Phone: dataUserDb.Phone,
-			Role:  dataUserDb.Role,
+			Id:            dataUserDb.Id,
+			Name:          dataUserDb.Name,
+			Email:         dataUserDb.Email,
+			Phone:         dataUserDb.Phone,
+			Role:          dataUserDb.Role,
+			JobId:         dataUserDb.JobId,
+			UnitId:        dataUserDb.UnitId,
+			PlaceOfBirth:  dataUserDb.PlaceOfBirth,
+			DateOfBirth:   dataUserDb.DateOfBirth,
+			Gender:        dataUserDb.Gender,
+			SubDistrictId: dataUserDb.SubDistrictId,
+			VillageId:     dataUserDb.VillageId,
+			Address:       dataUserDb.Address,
+			PostalCode:    dataUserDb.PostalCode,
+			MemberCode:    dataUserDb.MemberCode,
 		},
 	}, nil
 }
