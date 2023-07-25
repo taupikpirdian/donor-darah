@@ -121,6 +121,7 @@ type UserUsecase interface {
 	DeleteUser(ctx context.Context, id string) error
 	GetProfile(ctx context.Context, userId int64) (*Profile, error)
 	UpdateProfile(ctx context.Context, userId int64, req *http_request.BodyUpdateProfile) error
+	DetailUser(ctx context.Context, id string) (*Profile, error)
 }
 
 // UserRepository represent the user's repository contract

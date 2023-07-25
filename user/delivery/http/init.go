@@ -56,6 +56,7 @@ func NewUserHandler(e *echo.Echo, us domain.UserUsecase, cfg cfg.Config) {
 	g.GET("user/list", handler.AdminUserListController)
 	g.POST("user/create", handler.AdminUserCreateController)
 	g.DELETE("user/delete/:id", handler.AdminUserDeleteController)
+	g.GET("user/detail/:id", handler.AdminUserDetailController)
 }
 
 func getStatusCode(err error) int {
