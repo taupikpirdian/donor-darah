@@ -20,10 +20,10 @@ type User struct {
 	Name                 string         `json:"name" validate:"required"`
 	Email                string         `json:"email" validate:"required"`
 	Phone                string         `json:"phone" validate:"required"`
-	Password             string         `json:"-" validate:"required"`
-	PasswordConfirmation string         `json:"-" validate:"required"`
-	JobId                string         `json:"jobId"`
-	UnitId               string         `json:"unitId"`
+	Password             string         `json:"password" validate:"required"`
+	PasswordConfirmation string         `json:"passwordConfirmation" validate:"required"`
+	JobId                sql.NullString `json:"jobId"`
+	UnitId               sql.NullString `json:"unitId"`
 	PlaceOfBirth         string         `json:"placeOfBirth"`
 	DateOfBirth          string         `json:"dateOfBirth"`
 	Gender               string         `json:"gender"`
@@ -53,8 +53,8 @@ type ProfileData struct {
 	id            int64
 	code          string
 	userId        int64
-	jobId         string
-	unitId        string
+	jobId         sql.NullString
+	unitId        sql.NullString
 	placeOfBirth  string
 	dateOfBirth   time.Time
 	gender        string
@@ -158,13 +158,16 @@ func NewUser(u *User) (*UserData, error) {
 	}
 
 	currentTime := time.Now()
-	codeTime := "DN-" + currentTime.Format("20060102150405") + generateCodeString()
+	codeTime := ""
+	if u.Role == "member" {
+		codeTime = "DN-" + currentTime.Format("20060102150405") + generateCodeString()
+	}
 	date, err := time.Parse("2006-01-02", u.DateOfBirth)
 	if err != nil {
 		return nil, errors.New("FORMAT DATE INCORRECT")
 	}
 
-	return &UserData{
+	data := &UserData{
 		name:      u.Name,
 		role:      u.Role,
 		email:     u.Email,
@@ -184,7 +187,9 @@ func NewUser(u *User) (*UserData, error) {
 			address:       u.Address,
 			postalCode:    u.PostalCode,
 		},
-	}, nil
+	}
+
+	return data, nil
 }
 
 func NewProfile(u *Profile) (*UserData, error) {
@@ -370,11 +375,11 @@ func (cu *UserData) GetGenderOnProfile() string {
 }
 
 func (cu *UserData) GetJobIdOnProfile() string {
-	return cu.profileData.jobId
+	return cu.profileData.jobId.String
 }
 
 func (cu *UserData) GetUnitIdOnProfile() string {
-	return cu.profileData.unitId
+	return cu.profileData.unitId.String
 }
 
 func (cu *UserData) GetPhoneOnUser() string {
@@ -444,11 +449,11 @@ func (cu *UserData) SetPhone(phone string) {
 }
 
 func (cu *UserData) SetJobId(jobId string) {
-	cu.profileData.jobId = jobId
+	cu.profileData.jobId = sql.NullString{String: string(jobId), Valid: true}
 }
 
 func (cu *UserData) SetUnitId(unitId string) {
-	cu.profileData.unitId = unitId
+	cu.profileData.unitId = sql.NullString{String: string(unitId), Valid: true}
 }
 
 func (cu *UserData) SetPlaceOfBirth(place string) {

@@ -14,6 +14,20 @@ type NotificationRepository struct {
 	mock.Mock
 }
 
+// CreateNotification provides a mock function with given fields: ctx, title, msg, userId
+func (_m *NotificationRepository) CreateNotification(ctx context.Context, title string, msg string, userId int64) error {
+	ret := _m.Called(ctx, title, msg, userId)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, string, string, int64) error); ok {
+		r0 = rf(ctx, title, msg, userId)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // GetListNotification provides a mock function with given fields: ctx, userId
 func (_m *NotificationRepository) GetListNotification(ctx context.Context, userId int64) ([]*domain.NotificationData, error) {
 	ret := _m.Called(ctx, userId)

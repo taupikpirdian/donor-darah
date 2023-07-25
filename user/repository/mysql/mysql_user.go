@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"context"
+	"database/sql"
 
 	"github.com/bxcodec/go-clean-arch/domain"
 )
@@ -41,10 +42,20 @@ func (m *mysqlUserRepository) StoreProfile(ctx context.Context, u *domain.UserDa
 		return err
 	}
 
-	_, errProses := stmt.ExecContext(ctx, u.GetCodeOnProfile(), u.GetIdOnUser(), u.GetJobIdOnProfile(), u.GetUnitIdOnProfile(), u.GetPlaceOfBirthOnProfile(), u.GetDateOfBirthOnProfile(), u.GetGenderOnProfile(), u.GetSubDistrictIdOnProfile(), u.GetVillageIdOnProfile(), u.GetAddressOnProfile(), u.GetPostalCodeOnProfile(), u.GetUpdateAtOnUser(), u.GetCreatedAtOnUser())
+	_, errProses := stmt.ExecContext(ctx, NewNullString(u.GetCodeOnProfile()), u.GetIdOnUser(), NewNullString(u.GetJobIdOnProfile()), NewNullString(u.GetUnitIdOnProfile()), u.GetPlaceOfBirthOnProfile(), u.GetDateOfBirthOnProfile(), u.GetGenderOnProfile(), u.GetSubDistrictIdOnProfile(), u.GetVillageIdOnProfile(), u.GetAddressOnProfile(), u.GetPostalCodeOnProfile(), u.GetUpdateAtOnUser(), u.GetCreatedAtOnUser())
 	if errProses != nil {
 		return errProses
 	}
 
 	return nil
+}
+
+func NewNullString(s string) sql.NullString {
+	if len(s) == 0 {
+		return sql.NullString{}
+	}
+	return sql.NullString{
+		String: s,
+		Valid:  true,
+	}
 }

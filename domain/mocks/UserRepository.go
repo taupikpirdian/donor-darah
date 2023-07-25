@@ -214,6 +214,32 @@ func (_m *UserRepository) GetProfile(ctx context.Context, userId int64) (*domain
 	return r0, r1
 }
 
+// GetProfileFull provides a mock function with given fields: ctx, userId
+func (_m *UserRepository) GetProfileFull(ctx context.Context, userId int64) (*domain.User, error) {
+	ret := _m.Called(ctx, userId)
+
+	var r0 *domain.User
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, int64) (*domain.User, error)); ok {
+		return rf(ctx, userId)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, int64) *domain.User); ok {
+		r0 = rf(ctx, userId)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*domain.User)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, int64) error); ok {
+		r1 = rf(ctx, userId)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // GetUnit provides a mock function with given fields: ctx
 func (_m *UserRepository) GetUnit(ctx context.Context) ([]*domain.UnitDTO, error) {
 	ret := _m.Called(ctx)

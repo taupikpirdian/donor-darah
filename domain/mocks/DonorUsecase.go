@@ -6,6 +6,8 @@ import (
 	context "context"
 
 	domain "github.com/bxcodec/go-clean-arch/domain"
+	http_request "github.com/bxcodec/go-clean-arch/donor/delivery/http_request"
+
 	mock "github.com/stretchr/testify/mock"
 
 	multipart "mime/multipart"
@@ -96,6 +98,58 @@ func (_m *DonorUsecase) ListAgenda(ctx context.Context, userId int64) ([]*domain
 	return r0, r1
 }
 
+// ListDetailStock provides a mock function with given fields: ctx, stockId
+func (_m *DonorUsecase) ListDetailStock(ctx context.Context, stockId int64) ([]*domain.DonorDetailStock, error) {
+	ret := _m.Called(ctx, stockId)
+
+	var r0 []*domain.DonorDetailStock
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, int64) ([]*domain.DonorDetailStock, error)); ok {
+		return rf(ctx, stockId)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, int64) []*domain.DonorDetailStock); ok {
+		r0 = rf(ctx, stockId)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]*domain.DonorDetailStock)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, int64) error); ok {
+		r1 = rf(ctx, stockId)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// ListDonorRegister provides a mock function with given fields: ctx
+func (_m *DonorUsecase) ListDonorRegister(ctx context.Context) ([]*domain.DonorRegisterDTO, error) {
+	ret := _m.Called(ctx)
+
+	var r0 []*domain.DonorRegisterDTO
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context) ([]*domain.DonorRegisterDTO, error)); ok {
+		return rf(ctx)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context) []*domain.DonorRegisterDTO); ok {
+		r0 = rf(ctx)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]*domain.DonorRegisterDTO)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context) error); ok {
+		r1 = rf(ctx)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // ListRiwayat provides a mock function with given fields: ctx, userId
 func (_m *DonorUsecase) ListRiwayat(ctx context.Context, userId int64) ([]*domain.DonorRegisterDTO, error) {
 	ret := _m.Called(ctx, userId)
@@ -148,6 +202,32 @@ func (_m *DonorUsecase) ListSchedulle(ctx context.Context, unitId int64) ([]*dom
 	return r0, r1
 }
 
+// ListStock provides a mock function with given fields: ctx, unitId
+func (_m *DonorUsecase) ListStock(ctx context.Context, unitId int64) ([]*domain.DonorStock, error) {
+	ret := _m.Called(ctx, unitId)
+
+	var r0 []*domain.DonorStock
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, int64) ([]*domain.DonorStock, error)); ok {
+		return rf(ctx, unitId)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, int64) []*domain.DonorStock); ok {
+		r0 = rf(ctx, unitId)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]*domain.DonorStock)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, int64) error); ok {
+		r1 = rf(ctx, unitId)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // Reschedule provides a mock function with given fields: ctx, id, dto
 func (_m *DonorUsecase) Reschedule(ctx context.Context, id int64, dto *domain.DonorSchedulleDTO) error {
 	ret := _m.Called(ctx, id, dto)
@@ -155,6 +235,34 @@ func (_m *DonorUsecase) Reschedule(ctx context.Context, id int64, dto *domain.Do
 	var r0 error
 	if rf, ok := ret.Get(0).(func(context.Context, int64, *domain.DonorSchedulleDTO) error); ok {
 		r0 = rf(ctx, id, dto)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// SchedulleDelete provides a mock function with given fields: ctx, id
+func (_m *DonorUsecase) SchedulleDelete(ctx context.Context, id int64) error {
+	ret := _m.Called(ctx, id)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, int64) error); ok {
+		r0 = rf(ctx, id)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// SchedulleStore provides a mock function with given fields: ctx, req
+func (_m *DonorUsecase) SchedulleStore(ctx context.Context, req *http_request.SchedulleStore) error {
+	ret := _m.Called(ctx, req)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, *http_request.SchedulleStore) error); ok {
+		r0 = rf(ctx, req)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -186,6 +294,48 @@ func (_m *DonorUsecase) SingleAgenda(ctx context.Context, id int64) (*domain.Don
 	}
 
 	return r0, r1
+}
+
+// StockDelete provides a mock function with given fields: ctx, id
+func (_m *DonorUsecase) StockDelete(ctx context.Context, id int64) error {
+	ret := _m.Called(ctx, id)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, int64) error); ok {
+		r0 = rf(ctx, id)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// StockUpdateDonor provides a mock function with given fields: ctx, req
+func (_m *DonorUsecase) StockUpdateDonor(ctx context.Context, req *http_request.BodyBloodStock) error {
+	ret := _m.Called(ctx, req)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, *http_request.BodyBloodStock) error); ok {
+		r0 = rf(ctx, req)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// StoreStock provides a mock function with given fields: ctx, unitId, req
+func (_m *DonorUsecase) StoreStock(ctx context.Context, unitId int64, req *http_request.BodyBloodStock) error {
+	ret := _m.Called(ctx, unitId, req)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, int64, *http_request.BodyBloodStock) error); ok {
+		r0 = rf(ctx, unitId, req)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
 }
 
 // UploadBukti provides a mock function with given fields: ctx, id, file
