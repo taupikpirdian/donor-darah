@@ -73,6 +73,7 @@ func NewDonorHandler(e *echo.Echo, us domain.DonorUsecase, cfg cfg.Config) {
 	g.POST("schedulle", handler.SchedulleStore)
 	g.DELETE("schedulle/:id", handler.SchedulleDelete)
 	g.GET("register", handler.DonorRegisterList)
+	g.GET("register/:userId", handler.DonorRegisterListByUserId)
 }
 
 func getStatusCode(err error) int {
