@@ -11,6 +11,7 @@ type RegisterByUserId struct {
 	Status                 string                 `json:"status"`
 	DonorProof             string                 `json:"file_donor"`
 	DonorSchedulleByUserId DonorSchedulleByUserId `json:"schedule"`
+	UserByUserId           UserByUserId           `json:"user"`
 }
 
 type DonorSchedulleByUserId struct {
@@ -28,6 +29,12 @@ type UnitByUserId struct {
 	Name string `json:"name"`
 }
 
+type UserByUserId struct {
+	Id         string `json:"id"`
+	MemberCode string `json:"member_code"`
+	Name       string `json:"name"`
+}
+
 type CustomReponseSingleListAgendaByUserId struct {
 	Status *Status
 	Data   []*RegisterByUserId
@@ -36,6 +43,11 @@ type CustomReponseSingleListAgendaByUserId struct {
 func MapResponseListAgendaByUserId(code int, message string, datas []*domain.DonorRegisterDTO) (*CustomReponseSingleListAgendaByUserId, error) {
 	res := []*RegisterByUserId{}
 	for _, data := range datas {
+		user := UserByUserId{
+			Id:         data.User.Id,
+			MemberCode: data.User.MemberCode.String,
+			Name:       data.User.Name,
+		}
 		unit := UnitByUserId{
 			Id:   data.Unit.Id,
 			Name: data.Unit.Name,
@@ -56,6 +68,7 @@ func MapResponseListAgendaByUserId(code int, message string, datas []*domain.Don
 			Status:                 data.Status,
 			DonorProof:             data.DonorProof,
 			DonorSchedulleByUserId: schedule,
+			UserByUserId:           user,
 		}
 		res = append(res, add)
 	}

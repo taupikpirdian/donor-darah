@@ -40,6 +40,7 @@ func (m *mysqlDonorRepository) fetchAgendaByUserId(ctx context.Context, query st
 			&t.User.Name,
 			&t.Unit.Id,
 			&t.Unit.Name,
+			&t.User.MemberCode,
 		)
 
 		if err != nil {
@@ -53,11 +54,12 @@ func (m *mysqlDonorRepository) fetchAgendaByUserId(ctx context.Context, query st
 }
 
 func (m *mysqlDonorRepository) AgendaByUserId(ctx context.Context, id int64) (res []*domain.DonorRegisterDTO, err error) {
-	query := `SELECT donor_registers.id, donor_registers.code, donor_registers.isApprove, donor_registers.donorProof, donor_registers.status, donor_schedulle.id as donor_schedulle_id, donor_schedulle.placeName, donor_schedulle.address, donor_schedulle.date, donor_schedulle.timeStart, donor_schedulle.timeEnd, users.id as idUser, users.name, units.id as idUnit, units.name as unitName
+	query := `SELECT donor_registers.id, donor_registers.code, donor_registers.isApprove, donor_registers.donorProof, donor_registers.status, donor_schedulle.id as donor_schedulle_id, donor_schedulle.placeName, donor_schedulle.address, donor_schedulle.date, donor_schedulle.timeStart, donor_schedulle.timeEnd, users.id as idUser, users.name, units.id as idUnit, units.name as unitName, profiles.code as member_code
 	FROM donor_registers
 	JOIN donor_schedulle ON donor_schedulle.id = donor_registers.donorSchedulleId
 	JOIN users ON users.id = donor_registers.userId 
 	JOIN units ON units.id = donor_schedulle.unitId 
+	LEFT JOIN profiles ON donor_registers.userId = profiles.userId 
 	where donor_registers.userId = ?`
 
 	list, err := m.fetchAgendaByUserId(ctx, query, id)
