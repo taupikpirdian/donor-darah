@@ -35,8 +35,8 @@ func MapResponseProfile(code int, message string, data *domain.Profile) (*Custom
 		Name:          data.User.Name,
 		Email:         data.User.Email,
 		Phone:         data.User.Phone,
-		JobId:         data.User.JobId.String,
-		UnitId:        data.User.UnitId.String,
+		JobId:         data.User.JobId,
+		UnitId:        data.User.UnitId,
 		PlaceOfBirth:  data.User.PlaceOfBirth,
 		DateOfBirth:   data.User.DateOfBirth,
 		Gender:        data.User.Gender,
@@ -45,7 +45,7 @@ func MapResponseProfile(code int, message string, data *domain.Profile) (*Custom
 		Address:       data.User.Address,
 		PostalCode:    data.User.PostalCode,
 		Role:          data.User.Role,
-		MemberCode:    data.User.MemberCode.String,
+		MemberCode:    data.User.MemberCode,
 	}
 
 	httpResponse := &CustomReponseProfile{

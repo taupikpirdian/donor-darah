@@ -45,7 +45,7 @@ func MapResponseListAgendaByUserId(code int, message string, datas []*domain.Don
 	for _, data := range datas {
 		user := UserByUserId{
 			Id:         data.User.Id,
-			MemberCode: data.User.MemberCode.String,
+			MemberCode: data.User.MemberCode,
 			Name:       data.User.Name,
 		}
 		unit := UnitByUserId{

@@ -16,6 +16,32 @@ type DonorRepository struct {
 	mock.Mock
 }
 
+// AgendaByUserId provides a mock function with given fields: ctx, id
+func (_m *DonorRepository) AgendaByUserId(ctx context.Context, id int64) ([]*domain.DonorRegisterDTO, error) {
+	ret := _m.Called(ctx, id)
+
+	var r0 []*domain.DonorRegisterDTO
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, int64) ([]*domain.DonorRegisterDTO, error)); ok {
+		return rf(ctx, id)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, int64) []*domain.DonorRegisterDTO); ok {
+		r0 = rf(ctx, id)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]*domain.DonorRegisterDTO)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, int64) error); ok {
+		r1 = rf(ctx, id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // CancelDonor provides a mock function with given fields: ctx, id
 func (_m *DonorRepository) CancelDonor(ctx context.Context, id int64) error {
 	ret := _m.Called(ctx, id)

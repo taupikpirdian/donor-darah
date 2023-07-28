@@ -39,8 +39,8 @@ func MapResponseLogin(code int, message string, data *domain.Auth) (*CustomRepon
 		Name:          data.User.Name,
 		Email:         data.User.Email,
 		Phone:         data.User.Phone,
-		JobId:         data.User.JobId.String,
-		UnitId:        data.User.UnitId.String,
+		JobId:         data.User.JobId,
+		UnitId:        data.User.UnitId,
 		PlaceOfBirth:  data.User.PlaceOfBirth,
 		DateOfBirth:   helper.DateStringFormat(data.User.DateOfBirth),
 		Gender:        data.User.Gender,
@@ -49,7 +49,7 @@ func MapResponseLogin(code int, message string, data *domain.Auth) (*CustomRepon
 		Address:       data.User.Address,
 		PostalCode:    data.User.PostalCode,
 		Role:          data.User.Role,
-		MemberCode:    data.User.MemberCode.String,
+		MemberCode:    data.User.MemberCode,
 	}
 	token := &Auth{
 		Token: data.Token,

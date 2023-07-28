@@ -58,6 +58,32 @@ func (_m *UserUsecase) DeleteUser(ctx context.Context, id string) error {
 	return r0
 }
 
+// DetailUser provides a mock function with given fields: ctx, id
+func (_m *UserUsecase) DetailUser(ctx context.Context, id string) (*domain.Profile, error) {
+	ret := _m.Called(ctx, id)
+
+	var r0 *domain.Profile
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, string) (*domain.Profile, error)); ok {
+		return rf(ctx, id)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, string) *domain.Profile); ok {
+		r0 = rf(ctx, id)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*domain.Profile)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, string) error); ok {
+		r1 = rf(ctx, id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // ForgotPassword provides a mock function with given fields: ctx, us
 func (_m *UserUsecase) ForgotPassword(ctx context.Context, us *domain.User) error {
 	ret := _m.Called(ctx, us)

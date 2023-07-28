@@ -6,14 +6,16 @@ require (
 	github.com/BurntSushi/toml v0.3.1 // indirect
 	github.com/bxcodec/faker v1.4.2
 	github.com/bxcodec/faker/v3 v3.8.1
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/go-playground/locales v0.12.1 // indirect
 	github.com/go-playground/universal-translator v0.16.0 // indirect
 	github.com/go-playground/validator v9.31.0+incompatible
 	github.com/go-sql-driver/mysql v1.3.0
 	github.com/golang-jwt/jwt/v4 v4.4.3
 	github.com/hashicorp/hcl v0.0.0-20180404174102-ef8a98b0bbce // indirect
-	github.com/joho/godotenv v1.5.1 // indirect
+	github.com/joho/godotenv v1.5.1
 	github.com/kr/pretty v0.3.1 // indirect
+	github.com/labstack/echo v3.3.10+incompatible
 	github.com/labstack/echo-jwt/v4 v4.1.0
 	github.com/labstack/echo/v4 v4.9.0
 	github.com/leodido/go-urn v1.2.1 // indirect
@@ -22,7 +24,7 @@ require (
 	github.com/onsi/ginkgo v1.8.0 // indirect
 	github.com/onsi/gomega v1.5.0 // indirect
 	github.com/pelletier/go-toml v1.1.0 // indirect
-	github.com/robfig/cron/v3 v3.0.0 // indirect
+	github.com/robfig/cron/v3 v3.0.0
 	github.com/sirupsen/logrus v1.0.5
 	github.com/spf13/afero v1.1.0 // indirect
 	github.com/spf13/cast v1.2.0 // indirect

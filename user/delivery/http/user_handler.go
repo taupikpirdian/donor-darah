@@ -1,6 +1,7 @@
 package http
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/bxcodec/go-clean-arch/cfg"
@@ -28,7 +29,9 @@ func (a *UserHandler) Register(c echo.Context) (err error) {
 	}
 
 	var user domain.User
+	fmt.Println("masuk")
 	err = c.Bind(&user)
+
 	if err != nil {
 		loggerFile.ErrorLogger.Println(err)
 		responseError, _ := http_response.MapResponse(1, err.Error())

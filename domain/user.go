@@ -10,30 +10,31 @@ import (
 	"time"
 
 	"github.com/bxcodec/go-clean-arch/user/delivery/http_request"
+	"github.com/bxcodec/go-clean-arch/user/repository/model"
 	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
 )
 
 // User is representing the User data struct
 type User struct {
-	Id                   string         `json:"id"`
-	Name                 string         `json:"name" validate:"required"`
-	Email                string         `json:"email" validate:"required"`
-	Phone                string         `json:"phone" validate:"required"`
-	Password             string         `json:"password" validate:"required"`
-	PasswordConfirmation string         `json:"passwordConfirmation" validate:"required"`
-	JobId                sql.NullString `json:"jobId"`
-	UnitId               sql.NullString `json:"unitId"`
-	PlaceOfBirth         string         `json:"placeOfBirth"`
-	DateOfBirth          string         `json:"dateOfBirth"`
-	Gender               string         `json:"gender"`
-	SubDistrictId        string         `json:"subDistrictId"`
-	VillageId            string         `json:"villageId"`
-	Address              string         `json:"address"`
-	PostalCode           string         `json:"postalCode"`
-	Role                 string         `json:"role"`
-	CreatedAt            time.Time      `json:"-"`
-	MemberCode           sql.NullString `json:"memberCode"`
+	Id                   string    `json:"id"`
+	Name                 string    `json:"name" validate:"required"`
+	Email                string    `json:"email" validate:"required"`
+	Phone                string    `json:"phone" validate:"required"`
+	Password             string    `json:"password" validate:"required"`
+	PasswordConfirmation string    `json:"passwordConfirmation" validate:"required"`
+	JobId                string    `json:"jobId"`
+	UnitId               string    `json:"unitId"`
+	PlaceOfBirth         string    `json:"placeOfBirth"`
+	DateOfBirth          string    `json:"dateOfBirth"`
+	Gender               string    `json:"gender"`
+	SubDistrictId        string    `json:"subDistrictId"`
+	VillageId            string    `json:"villageId"`
+	Address              string    `json:"address"`
+	PostalCode           string    `json:"postalCode"`
+	Role                 string    `json:"role"`
+	CreatedAt            time.Time `json:"-"`
+	MemberCode           string    `json:"memberCode"`
 }
 
 type UserData struct {
@@ -53,8 +54,8 @@ type ProfileData struct {
 	id            int64
 	code          string
 	userId        int64
-	jobId         sql.NullString
-	unitId        sql.NullString
+	jobId         string
+	unitId        string
 	placeOfBirth  string
 	dateOfBirth   time.Time
 	gender        string
@@ -140,7 +141,7 @@ type UserRepository interface {
 	GetProfile(ctx context.Context, userId int64) (*Profile, error)
 	UpdateProfile(ctx context.Context, userId int64, req *http_request.BodyUpdateProfile) error
 	UpdateUser(ctx context.Context, userId int64, req *http_request.BodyUpdateProfile) error
-	GetProfileFull(ctx context.Context, userId int64) (*User, error)
+	GetProfileFull(ctx context.Context, userId int64) (*model.UserModel, error)
 }
 
 func NewUser(u *User) (*UserData, error) {
@@ -229,7 +230,7 @@ func NewProfile(u *Profile) (*UserData, error) {
 	}, nil
 }
 
-func NewProfileV2(u *Profile, p *User, len int, nextDonor time.Time, latsDonor time.Time) *Profile {
+func NewProfileV2(u *Profile, p *model.UserModel, len int, nextDonor time.Time, latsDonor time.Time) *Profile {
 	if p.DateOfBirth != "" {
 		layout := "2006-01-02T15:04:05-07:00"
 		// Parse the date string into a time.Time object
@@ -240,6 +241,28 @@ func NewProfileV2(u *Profile, p *User, len int, nextDonor time.Time, latsDonor t
 		}
 	}
 	var profile = &Profile{}
+
+	/*
+		model to entity
+	*/
+	var user = &User{
+		Id:            p.Id,
+		Name:          p.Name,
+		Email:         p.Email,
+		Phone:         p.Password,
+		JobId:         p.JobId.String,
+		UnitId:        p.UnitId.String,
+		PlaceOfBirth:  p.PlaceOfBirth,
+		DateOfBirth:   p.DateOfBirth,
+		Gender:        p.Gender,
+		SubDistrictId: p.SubDistrictId,
+		VillageId:     p.VillageId,
+		Address:       p.Address,
+		PostalCode:    p.PostalCode,
+		Role:          p.Role,
+		MemberCode:    p.MemberCode.String,
+	}
+
 	profile = &Profile{
 		Id:         u.Id,
 		MemberCode: u.MemberCode,
@@ -248,7 +271,7 @@ func NewProfileV2(u *Profile, p *User, len int, nextDonor time.Time, latsDonor t
 		TotalDonor: int64(len),
 		LastDonor:  latsDonor,
 		NextDonor:  nextDonor,
-		User:       p,
+		User:       user,
 	}
 
 	return profile
@@ -297,7 +320,7 @@ func NewUser3(u *User) (*UserData, error) {
 	}, nil
 }
 
-func SetToken(token string, dataUserDb *User) (*Auth, error) {
+func SetToken(token string, dataUserDb *model.UserModel) (*Auth, error) {
 	if token == "" {
 		return nil, errors.New("TOKEN IS REQUIRED")
 	}
@@ -312,8 +335,8 @@ func SetToken(token string, dataUserDb *User) (*Auth, error) {
 			Email:         dataUserDb.Email,
 			Phone:         dataUserDb.Phone,
 			Role:          dataUserDb.Role,
-			JobId:         dataUserDb.JobId,
-			UnitId:        dataUserDb.UnitId,
+			JobId:         dataUserDb.JobId.String,
+			UnitId:        dataUserDb.UnitId.String,
 			PlaceOfBirth:  dataUserDb.PlaceOfBirth,
 			DateOfBirth:   dataUserDb.DateOfBirth,
 			Gender:        dataUserDb.Gender,
@@ -321,7 +344,7 @@ func SetToken(token string, dataUserDb *User) (*Auth, error) {
 			VillageId:     dataUserDb.VillageId,
 			Address:       dataUserDb.Address,
 			PostalCode:    dataUserDb.PostalCode,
-			MemberCode:    dataUserDb.MemberCode,
+			MemberCode:    dataUserDb.MemberCode.String,
 		},
 	}, nil
 }
@@ -376,11 +399,11 @@ func (cu *UserData) GetGenderOnProfile() string {
 }
 
 func (cu *UserData) GetJobIdOnProfile() string {
-	return cu.profileData.jobId.String
+	return cu.profileData.jobId
 }
 
 func (cu *UserData) GetUnitIdOnProfile() string {
-	return cu.profileData.unitId.String
+	return cu.profileData.unitId
 }
 
 func (cu *UserData) GetPhoneOnUser() string {
@@ -450,11 +473,11 @@ func (cu *UserData) SetPhone(phone string) {
 }
 
 func (cu *UserData) SetJobId(jobId string) {
-	cu.profileData.jobId = sql.NullString{String: string(jobId), Valid: true}
+	cu.profileData.jobId = jobId
 }
 
 func (cu *UserData) SetUnitId(unitId string) {
-	cu.profileData.unitId = sql.NullString{String: string(unitId), Valid: true}
+	cu.profileData.unitId = unitId
 }
 
 func (cu *UserData) SetPlaceOfBirth(place string) {

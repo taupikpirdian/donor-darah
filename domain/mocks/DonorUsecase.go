@@ -228,6 +228,32 @@ func (_m *DonorUsecase) ListStock(ctx context.Context, unitId int64) ([]*domain.
 	return r0, r1
 }
 
+// RegisterByUserId provides a mock function with given fields: ctx, userid
+func (_m *DonorUsecase) RegisterByUserId(ctx context.Context, userid int64) ([]*domain.DonorRegisterDTO, error) {
+	ret := _m.Called(ctx, userid)
+
+	var r0 []*domain.DonorRegisterDTO
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, int64) ([]*domain.DonorRegisterDTO, error)); ok {
+		return rf(ctx, userid)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, int64) []*domain.DonorRegisterDTO); ok {
+		r0 = rf(ctx, userid)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]*domain.DonorRegisterDTO)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, int64) error); ok {
+		r1 = rf(ctx, userid)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // Reschedule provides a mock function with given fields: ctx, id, dto
 func (_m *DonorUsecase) Reschedule(ctx context.Context, id int64, dto *domain.DonorSchedulleDTO) error {
 	ret := _m.Called(ctx, id, dto)

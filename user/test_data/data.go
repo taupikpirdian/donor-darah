@@ -1,7 +1,6 @@
 package testdata
 
 import (
-	"database/sql"
 	"time"
 
 	"github.com/bxcodec/faker/v3"
@@ -17,8 +16,8 @@ func DataUserBody() *domain.User {
 		Phone:                faker.Phonenumber(),
 		Password:             password,
 		PasswordConfirmation: password,
-		JobId:                sql.NullString{String: string("1"), Valid: true},
-		UnitId:               sql.NullString{String: string("1"), Valid: true},
+		JobId:                "1",
+		UnitId:               "1",
 		PlaceOfBirth:         faker.Word(),
 		DateOfBirth:          "1995-02-10",
 		Gender:               "1",
@@ -37,8 +36,8 @@ func DataUserBodyError() *domain.User {
 		Phone:                faker.Phonenumber(),
 		Password:             faker.Password(),
 		PasswordConfirmation: faker.Password(),
-		JobId:                sql.NullString{String: string("1"), Valid: true},
-		UnitId:               sql.NullString{String: string("1"), Valid: true},
+		JobId:                "1",
+		UnitId:               "1",
 		PlaceOfBirth:         faker.Word(),
 		DateOfBirth:          "1995-02-10",
 		Gender:               "1",
@@ -70,8 +69,8 @@ func DataUser() *domain.User {
 		Phone:                "085846132417",
 		Password:             "aaa123",
 		PasswordConfirmation: "aaa123",
-		JobId:                sql.NullString{String: string("1"), Valid: true},
-		UnitId:               sql.NullString{String: string("1"), Valid: true},
+		JobId:                "1",
+		UnitId:               "1",
 		PlaceOfBirth:         "Bandung",
 		DateOfBirth:          "1995-02-10",
 		Gender:               "1",

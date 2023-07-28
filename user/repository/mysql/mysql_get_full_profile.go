@@ -3,11 +3,11 @@ package mysql
 import (
 	"context"
 
-	"github.com/bxcodec/go-clean-arch/domain"
+	"github.com/bxcodec/go-clean-arch/user/repository/model"
 	"github.com/sirupsen/logrus"
 )
 
-func (m *mysqlUserRepository) fetchProfileFull(ctx context.Context, query string, args ...interface{}) (result []*domain.User, err error) {
+func (m *mysqlUserRepository) fetchProfileFull(ctx context.Context, query string, args ...interface{}) (result []*model.UserModel, err error) {
 	rows, err := m.Conn.QueryContext(ctx, query, args...)
 	if err != nil {
 		logrus.Error(err)
@@ -21,9 +21,9 @@ func (m *mysqlUserRepository) fetchProfileFull(ctx context.Context, query string
 		}
 	}()
 
-	result = make([]*domain.User, 0)
+	result = make([]*model.UserModel, 0)
 	for rows.Next() {
-		t := &domain.User{}
+		t := &model.UserModel{}
 		err = rows.Scan(
 			&t.Id,
 			&t.Role,
@@ -52,7 +52,7 @@ func (m *mysqlUserRepository) fetchProfileFull(ctx context.Context, query string
 	return result, nil
 }
 
-func (m *mysqlUserRepository) GetProfileFull(ctx context.Context, userId int64) (res *domain.User, err error) {
+func (m *mysqlUserRepository) GetProfileFull(ctx context.Context, userId int64) (res *model.UserModel, err error) {
 	query := `SELECT u.id, u.role, u.name, u.email, u.phone, p.code, p.jobId, p.unitId, p.placeOfBirth, p.dateOfBirth, p.gender, p.subDistrictId, p.villageId, p.address, p.postalCode
 	FROM users u
 	LEFT JOIN profiles p ON u.id = p.userId 
