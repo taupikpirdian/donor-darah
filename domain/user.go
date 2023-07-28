@@ -161,7 +161,7 @@ func NewUser(u *User) (*UserData, error) {
 
 	currentTime := time.Now()
 	codeTime := ""
-	if u.Role == "member" {
+	if u.Role != "admin" {
 		codeTime = "DN-" + currentTime.Format("20060102150405") + generateCodeString()
 	}
 	date, err := time.Parse("2006-01-02", u.DateOfBirth)
