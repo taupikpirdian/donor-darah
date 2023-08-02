@@ -27,7 +27,7 @@ func (a *UserHandler) ProfileController(c echo.Context) (err error) {
 	data, err := a.AUsecase.GetProfile(ctx, userId)
 	if err != nil {
 		loggerFile.ErrorLogger.Println(err)
-		responseErrorUsecase, _ := http_response.MapResponseProfile(1, domain.ErrBadBody.Error(), nil)
+		responseErrorUsecase, _ := http_response.MapResponseProfileError(1, err.Error())
 		return c.JSON(getStatusCode(err), responseErrorUsecase)
 	}
 

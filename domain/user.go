@@ -17,24 +17,28 @@ import (
 
 // User is representing the User data struct
 type User struct {
-	Id                   string    `json:"id"`
-	Name                 string    `json:"name" validate:"required"`
-	Email                string    `json:"email" validate:"required"`
-	Phone                string    `json:"phone" validate:"required"`
-	Password             string    `json:"password" validate:"required"`
-	PasswordConfirmation string    `json:"passwordConfirmation" validate:"required"`
-	JobId                string    `json:"jobId"`
-	UnitId               string    `json:"unitId"`
-	PlaceOfBirth         string    `json:"placeOfBirth"`
-	DateOfBirth          string    `json:"dateOfBirth"`
-	Gender               string    `json:"gender"`
-	SubDistrictId        string    `json:"subDistrictId"`
-	VillageId            string    `json:"villageId"`
-	Address              string    `json:"address"`
-	PostalCode           string    `json:"postalCode"`
-	Role                 string    `json:"role"`
-	CreatedAt            time.Time `json:"-"`
-	MemberCode           string    `json:"memberCode"`
+	Id                   string       `json:"id"`
+	Name                 string       `json:"name" validate:"required"`
+	Email                string       `json:"email" validate:"required"`
+	Phone                string       `json:"phone" validate:"required"`
+	Password             string       `json:"password" validate:"required"`
+	PasswordConfirmation string       `json:"passwordConfirmation" validate:"required"`
+	JobId                string       `json:"jobId"`
+	UnitId               string       `json:"unitId"`
+	PlaceOfBirth         string       `json:"placeOfBirth"`
+	DateOfBirth          string       `json:"dateOfBirth"`
+	Gender               string       `json:"gender"`
+	SubDistrictId        string       `json:"subDistrictId"`
+	VillageId            string       `json:"villageId"`
+	Address              string       `json:"address"`
+	PostalCode           string       `json:"postalCode"`
+	Role                 string       `json:"role"`
+	CreatedAt            time.Time    `json:"-"`
+	MemberCode           string       `json:"memberCode"`
+	Job                  Job          `json:"job"`
+	Unit                 UnitDTO      `json:"unit"`
+	SubDistrict          DistrictData `json:"sub_district"`
+	Village              VillageData  `json:"village"`
 }
 
 type UserData struct {
@@ -142,6 +146,10 @@ type UserRepository interface {
 	UpdateProfile(ctx context.Context, userId int64, req *http_request.BodyUpdateProfile) error
 	UpdateUser(ctx context.Context, userId int64, req *http_request.BodyUpdateProfile) error
 	GetProfileFull(ctx context.Context, userId int64) (*model.UserModel, error)
+	GetJobById(ctx context.Context, id string) (*model.JobModel, error)
+	GetUnitById(ctx context.Context, id string) (*model.UnitModel, error)
+	GetSubDistrictById(ctx context.Context, id string) (*model.SubDistrictModel, error)
+	GetVillageById(ctx context.Context, id string) (*model.VillageModel, error)
 }
 
 func NewUser(u *User) (*UserData, error) {
@@ -274,6 +282,75 @@ func NewProfileV2(u *Profile, p *model.UserModel, len int, nextDonor time.Time, 
 		User:       user,
 	}
 
+	return profile
+}
+
+func NewProfileV3(u *Profile, p *model.UserModel, len int, nextDonor time.Time, latsDonor time.Time, job *model.JobModel, unit *model.UnitModel, sub_district *model.SubDistrictModel, village *model.VillageModel) *Profile {
+	if p.DateOfBirth != "" {
+		layout := "2006-01-02T15:04:05-07:00"
+		// Parse the date string into a time.Time object
+		t, err := time.Parse(layout, p.DateOfBirth)
+		if err == nil {
+			formattedDate := t.Format("2006-01-02")
+			p.DateOfBirth = formattedDate
+		}
+	}
+	var profile = &Profile{}
+	unit64, _ := strconv.ParseInt(unit.Id, 10, 64)
+	job64, _ := strconv.ParseInt(job.Id, 10, 64)
+	subDistrict64, _ := strconv.ParseInt(sub_district.Id, 10, 64)
+	village64, _ := strconv.ParseInt(village.Id, 10, 64)
+	villageSubDistrictId64, _ := strconv.ParseInt(village.SubDistrictId, 10, 64)
+	/*
+		model to entity
+	*/
+	var user = &User{
+		Id:            p.Id,
+		Name:          p.Name,
+		Email:         p.Email,
+		Phone:         p.Password,
+		JobId:         p.JobId.String,
+		UnitId:        p.UnitId.String,
+		PlaceOfBirth:  p.PlaceOfBirth,
+		DateOfBirth:   p.DateOfBirth,
+		Gender:        p.Gender,
+		SubDistrictId: p.SubDistrictId,
+		VillageId:     p.VillageId,
+		Address:       p.Address,
+		PostalCode:    p.PostalCode,
+		Role:          p.Role,
+		MemberCode:    p.MemberCode.String,
+		Unit: UnitDTO{
+			Id:   unit64,
+			Name: unit.Name,
+		},
+		Job: Job{
+			Id:   job64,
+			Name: job.Name,
+		},
+		SubDistrict: DistrictData{
+			Id:   subDistrict64,
+			Code: sub_district.Code,
+			Name: sub_district.Name,
+		},
+		Village: VillageData{
+			Id:            village64,
+			SubDistrictId: villageSubDistrictId64,
+			Code:          village.Code,
+			Name:          village.Name,
+		},
+	}
+
+	profile = &Profile{
+		Id:         u.Id,
+		MemberCode: u.MemberCode,
+		Name:       u.Name,
+		UrlImage:   u.UrlImageFromDB.String,
+		TotalDonor: int64(len),
+		LastDonor:  latsDonor,
+		NextDonor:  nextDonor,
+		User:       user,
+	}
 	return profile
 }
 

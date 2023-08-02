@@ -27,6 +27,29 @@ func (us *userUsecase) GetProfile(c context.Context, userId int64) (*domain.Prof
 		return nil, err
 	}
 
+	/*
+		jobId repo
+		unitId repo
+		subDistrictId repo
+		villageId repo
+	*/
+	job, errJob := us.userRepo.GetJobById(ctx, profile.JobId.String)
+	if errJob != nil {
+		return nil, errJob
+	}
+	unit, errUnit := us.userRepo.GetUnitById(ctx, profile.UnitId.String)
+	if errUnit != nil {
+		return nil, errUnit
+	}
+	subDistrict, errsubDistrict := us.userRepo.GetSubDistrictById(ctx, profile.SubDistrictId)
+	if errsubDistrict != nil {
+		return nil, errsubDistrict
+	}
+	villages, errVillages := us.userRepo.GetVillageById(ctx, profile.VillageId)
+	if errVillages != nil {
+		return nil, errVillages
+	}
+
 	dataDonorRegis, errDr := us.donorRepo.ListRiwayatByStatus(ctx, userId, "DONE")
 	if errDr != nil {
 		return nil, errDr
@@ -49,6 +72,6 @@ func (us *userUsecase) GetProfile(c context.Context, userId int64) (*domain.Prof
 	if dataLastsRegis != nil {
 		lastDateDonor = dataLastsRegis.DonorSchedulle.Date
 	}
-	result := domain.NewProfileV2(data, profile, len(dataDonorRegis), nextDateDonor, lastDateDonor)
+	result := domain.NewProfileV3(data, profile, len(dataDonorRegis), nextDateDonor, lastDateDonor, job, unit, subDistrict, villages)
 	return result, nil
 }

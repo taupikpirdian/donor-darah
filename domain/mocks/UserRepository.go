@@ -164,6 +164,32 @@ func (_m *UserRepository) GetJob(ctx context.Context) ([]*domain.Job, error) {
 	return r0, r1
 }
 
+// GetJobById provides a mock function with given fields: ctx, id
+func (_m *UserRepository) GetJobById(ctx context.Context, id string) (*model.JobModel, error) {
+	ret := _m.Called(ctx, id)
+
+	var r0 *model.JobModel
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, string) (*model.JobModel, error)); ok {
+		return rf(ctx, id)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, string) *model.JobModel); ok {
+		r0 = rf(ctx, id)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*model.JobModel)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, string) error); ok {
+		r1 = rf(ctx, id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // GetListUser provides a mock function with given fields: ctx
 func (_m *UserRepository) GetListUser(ctx context.Context) ([]*domain.User, error) {
 	ret := _m.Called(ctx)
@@ -242,6 +268,32 @@ func (_m *UserRepository) GetProfileFull(ctx context.Context, userId int64) (*mo
 	return r0, r1
 }
 
+// GetSubDistrictById provides a mock function with given fields: ctx, id
+func (_m *UserRepository) GetSubDistrictById(ctx context.Context, id string) (*model.SubDistrictModel, error) {
+	ret := _m.Called(ctx, id)
+
+	var r0 *model.SubDistrictModel
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, string) (*model.SubDistrictModel, error)); ok {
+		return rf(ctx, id)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, string) *model.SubDistrictModel); ok {
+		r0 = rf(ctx, id)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*model.SubDistrictModel)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, string) error); ok {
+		r1 = rf(ctx, id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // GetUnit provides a mock function with given fields: ctx
 func (_m *UserRepository) GetUnit(ctx context.Context) ([]*domain.UnitDTO, error) {
 	ret := _m.Called(ctx)
@@ -261,6 +313,58 @@ func (_m *UserRepository) GetUnit(ctx context.Context) ([]*domain.UnitDTO, error
 
 	if rf, ok := ret.Get(1).(func(context.Context) error); ok {
 		r1 = rf(ctx)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// GetUnitById provides a mock function with given fields: ctx, id
+func (_m *UserRepository) GetUnitById(ctx context.Context, id string) (*model.UnitModel, error) {
+	ret := _m.Called(ctx, id)
+
+	var r0 *model.UnitModel
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, string) (*model.UnitModel, error)); ok {
+		return rf(ctx, id)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, string) *model.UnitModel); ok {
+		r0 = rf(ctx, id)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*model.UnitModel)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, string) error); ok {
+		r1 = rf(ctx, id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// GetVillageById provides a mock function with given fields: ctx, id
+func (_m *UserRepository) GetVillageById(ctx context.Context, id string) (*model.VillageModel, error) {
+	ret := _m.Called(ctx, id)
+
+	var r0 *model.VillageModel
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, string) (*model.VillageModel, error)); ok {
+		return rf(ctx, id)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, string) *model.VillageModel); ok {
+		r0 = rf(ctx, id)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*model.VillageModel)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, string) error); ok {
+		r1 = rf(ctx, id)
 	} else {
 		r1 = ret.Error(1)
 	}
