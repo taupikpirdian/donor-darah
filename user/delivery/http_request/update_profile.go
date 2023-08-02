@@ -39,7 +39,11 @@ func OrderFilterRequest(c echo.Context) (*BodyUpdateProfile, error) {
 
 	file, err := c.FormFile("file")
 	if err != nil {
-		return nil, err
+		if err.Error() == "http: no such file" {
+			file = nil
+		} else {
+			return nil, err
+		}
 	}
 
 	return &BodyUpdateProfile{
