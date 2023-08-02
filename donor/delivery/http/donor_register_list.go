@@ -28,6 +28,6 @@ func (d *DonorHandler) DonorRegisterList(c echo.Context) (err error) {
 	contentLog.Response = helper.StructToString(datas)
 	loggerFile.InfoLogger.Println(contentLog)
 
-	responseSuccess, _ := http_response.MapResponseListDonorRegister(0, "success", datas)
+	responseSuccess, _ := http_response.MapResponseListDonorRegister(0, "success", datas, d.cfg.DOMAIN)
 	return c.JSON(http.StatusOK, responseSuccess)
 }

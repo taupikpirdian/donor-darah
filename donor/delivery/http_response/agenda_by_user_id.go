@@ -40,9 +40,13 @@ type CustomReponseSingleListAgendaByUserId struct {
 	Data   []*RegisterByUserId
 }
 
-func MapResponseListAgendaByUserId(code int, message string, datas []*domain.DonorRegisterDTO) (*CustomReponseSingleListAgendaByUserId, error) {
+func MapResponseListAgendaByUserId(code int, message string, datas []*domain.DonorRegisterDTO, domain string) (*CustomReponseSingleListAgendaByUserId, error) {
 	res := []*RegisterByUserId{}
 	for _, data := range datas {
+		if data.DonorProof != "" {
+			data.DonorProof = domain + data.DonorProof
+		}
+
 		user := UserByUserId{
 			Id:         data.User.Id,
 			MemberCode: data.User.MemberCode,

@@ -4,10 +4,12 @@ import (
 	"context"
 
 	"github.com/bxcodec/go-clean-arch/domain"
+	"github.com/bxcodec/go-clean-arch/donor/repository/mapper"
+	"github.com/bxcodec/go-clean-arch/donor/repository/model"
 	"github.com/sirupsen/logrus"
 )
 
-func (m *mysqlDonorRepository) fetchAgendaByUserId(ctx context.Context, query string, args ...interface{}) (result []*domain.DonorRegisterDTO, err error) {
+func (m *mysqlDonorRepository) fetchAgendaByUserId(ctx context.Context, query string, args ...interface{}) (result []*model.DonorRegisterModel, err error) {
 	rows, err := m.Conn.QueryContext(ctx, query, args...)
 	if err != nil {
 		logrus.Error(err)
@@ -21,9 +23,9 @@ func (m *mysqlDonorRepository) fetchAgendaByUserId(ctx context.Context, query st
 		}
 	}()
 
-	result = make([]*domain.DonorRegisterDTO, 0)
+	result = make([]*model.DonorRegisterModel, 0)
 	for rows.Next() {
-		t := &domain.DonorRegisterDTO{}
+		t := &model.DonorRegisterModel{}
 		err = rows.Scan(
 			&t.Id,
 			&t.Code,
@@ -55,17 +57,19 @@ func (m *mysqlDonorRepository) fetchAgendaByUserId(ctx context.Context, query st
 
 func (m *mysqlDonorRepository) AgendaByUserId(ctx context.Context, id int64) (res []*domain.DonorRegisterDTO, err error) {
 	query := `SELECT donor_registers.id, donor_registers.code, donor_registers.isApprove, donor_registers.donorProof, donor_registers.status, donor_schedulle.id as donor_schedulle_id, donor_schedulle.placeName, donor_schedulle.address, donor_schedulle.date, donor_schedulle.timeStart, donor_schedulle.timeEnd, users.id as idUser, users.name, units.id as idUnit, units.name as unitName, profiles.code as member_code
-	FROM donor_registers
-	JOIN donor_schedulle ON donor_schedulle.id = donor_registers.donorSchedulleId
-	JOIN users ON users.id = donor_registers.userId 
-	JOIN units ON units.id = donor_schedulle.unitId 
-	LEFT JOIN profiles ON donor_registers.userId = profiles.userId 
-	where donor_registers.userId = ?`
+		FROM donor_registers
+		JOIN donor_schedulle ON donor_schedulle.id = donor_registers.donorSchedulleId
+		JOIN users ON users.id = donor_registers.userId 
+		JOIN units ON units.id = donor_schedulle.unitId 
+		LEFT JOIN profiles ON donor_registers.userId = profiles.userId 
+		where donor_registers.userId = ?`
 
 	list, err := m.fetchAgendaByUserId(ctx, query, id)
 	if err != nil {
 		return nil, err
 	}
 
-	return list, err
+	// mapping model to struct
+	listMapper := mapper.ModelToStructDonorRegister(list)
+	return listMapper, err
 }

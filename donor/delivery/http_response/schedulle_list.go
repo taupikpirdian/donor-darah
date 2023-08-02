@@ -1,6 +1,7 @@
 package http_response
 
 import (
+	"sort"
 	"time"
 
 	"github.com/bxcodec/go-clean-arch/domain"
@@ -73,6 +74,10 @@ func MapResponseSchedulleList(code int, message string, datas []*domain.DonorSch
 
 		res = append(res, &f_app)
 	}
+
+	sort.Slice(res, func(i, j int) bool {
+		return res[i].Date.Unix() > res[j].Date.Unix()
+	})
 
 	httpResponse := &CustomReponseSchedulleList{
 		Status: &Status{

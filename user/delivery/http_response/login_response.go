@@ -11,8 +11,26 @@ type CustomReponseAuth struct {
 }
 
 type Auth struct {
-	Token string `json:"token"`
-	User  User   `json:"user"`
+	Token string    `json:"token"`
+	User  UserLogin `json:"user"`
+}
+
+type UserLogin struct {
+	Id            string `json:"id"`
+	Name          string `json:"name" validate:"required"`
+	Email         string `json:"email" validate:"required"`
+	Phone         string `json:"phone" validate:"required"`
+	JobId         string `json:"jobId"`
+	UnitId        string `json:"unitId"`
+	PlaceOfBirth  string `json:"placeOfBirth"`
+	DateOfBirth   string `json:"dateOfBirth"`
+	Gender        string `json:"gender"`
+	SubDistrictId string `json:"subDistrictId"`
+	VillageId     string `json:"villageId"`
+	Address       string `json:"address"`
+	PostalCode    string `json:"postalCode"`
+	Role          string `json:"role"`
+	MemberCode    string `json:"memberCode"`
 }
 
 type User struct {
@@ -60,7 +78,7 @@ type Village struct {
 }
 
 func MapResponseLogin(code int, message string, data *domain.Auth) (*CustomReponseAuth, error) {
-	user := &User{
+	user := &UserLogin{
 		Id:            data.User.Id,
 		Name:          data.User.Name,
 		Email:         data.User.Email,

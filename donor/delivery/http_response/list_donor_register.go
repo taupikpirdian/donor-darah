@@ -23,9 +23,12 @@ type CustomReponseDonorRegisterList struct {
 	Data   []*ResponseDonorRegister
 }
 
-func MapResponseListDonorRegister(code int, message string, datas []*domain.DonorRegisterDTO) (*CustomReponseDonorRegisterList, error) {
+func MapResponseListDonorRegister(code int, message string, datas []*domain.DonorRegisterDTO, domain string) (*CustomReponseDonorRegisterList, error) {
 	res := []*ResponseDonorRegister{}
 	for _, data := range datas {
+		if data.DonorProof != "" {
+			data.DonorProof = domain + data.DonorProof
+		}
 		// loop answer
 		resAnswer := []*ResponseDonorRegisterQuestioner{}
 		for _, dataAnswer := range data.DonorRegisterQuestionerDTO {
