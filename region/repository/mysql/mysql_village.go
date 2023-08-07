@@ -26,8 +26,8 @@ func (m *mysqlRegionRepository) fetchVillage(ctx context.Context, query string, 
 		t := &domain.VillageData{}
 		err = rows.Scan(
 			&t.Id,
-			&t.SubDistrictId,
 			&t.Code,
+			&t.SubDistrictId,
 			&t.Name,
 		)
 
