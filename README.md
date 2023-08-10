@@ -60,6 +60,7 @@ example down:
 - `pip install pre-commit`
 - `pre-commit --version` should show you what version you're using
 - Add a pre-commit configuration, create a file named `.pre-commit-config.yaml`, choose one based on your own language
+- pre-commit install
 ##### Sample file config
 ```yaml
 repos:
