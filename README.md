@@ -52,3 +52,34 @@ example down:
 ## Setup Email SMTP Gmail for Sender
 ### Get Password Aplication
 - visiting https://myaccount.google.com/apppasswords should allow you to set up application specific passwords
+
+### Pre-commit Installation
+## On Our Local System
+- Install PIP on your local machine, you can follow [this link](https://pip.pypa.io/en/stable/installation).
+- Before you can run hooks, you need to have the pre-commit package manager installed.
+- `pip install pre-commit`
+- `pre-commit --version` should show you what version you're using
+- Add a pre-commit configuration, create a file named `.pre-commit-config.yaml`, choose one based on your own language
+##### Sample file config
+```yaml
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.3.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-added-large-files
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v2.3.0
+    hooks:
+      - id: conventional-pre-commit
+        stages: [ commit-msg ]
+  - repo: https://github.com/dnephin/pre-commit-golang
+    rev: v0.5.0
+    hooks:
+      - id: golangci-lint
+        stages: [ pre-commit ]
+      - id: go-unit-tests
+        stages: [ pre-commit ]
+
+```
