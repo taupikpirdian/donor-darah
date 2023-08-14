@@ -40,6 +40,7 @@ func (m *mysqlUserRepository) fetchProfileFull(ctx context.Context, query string
 			&t.VillageId,
 			&t.Address,
 			&t.PostalCode,
+			&t.UrlImage,
 		)
 
 		if err != nil {
@@ -53,9 +54,9 @@ func (m *mysqlUserRepository) fetchProfileFull(ctx context.Context, query string
 }
 
 func (m *mysqlUserRepository) GetProfileFull(ctx context.Context, userId int64) (res *model.UserModel, err error) {
-	query := `SELECT u.id, u.role, u.name, u.email, u.phone, p.code, p.jobId, p.unitId, p.placeOfBirth, p.dateOfBirth, p.gender, p.subDistrictId, p.villageId, p.address, p.postalCode
+	query := `SELECT u.id, u.role, u.name, u.email, u.phone, p.code, p.jobId, p.unitId, p.placeOfBirth, p.dateOfBirth, p.gender, p.subDistrictId, p.villageId, p.address, p.postalCode, p.urlImage
 	FROM users u
-	LEFT JOIN profiles p ON u.id = p.userId 
+	LEFT JOIN profiles p ON u.id = p.userId
 	where u.id = ?`
 
 	list, err := m.fetchProfileFull(ctx, query, userId)

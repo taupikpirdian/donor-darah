@@ -24,4 +24,5 @@ type UserModel struct {
 	Role                 string         `json:"role"`
 	CreatedAt            time.Time      `json:"-"`
 	MemberCode           sql.NullString `json:"memberCode"`
+	UrlImage             sql.NullString `json:"urlImage"`
 }

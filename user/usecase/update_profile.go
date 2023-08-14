@@ -43,6 +43,16 @@ func (us *userUsecase) UpdateProfile(c context.Context, userId int64, req *http_
 		}
 
 		req.Path = pathMeta
+	} else {
+		/*
+			get profile
+		*/
+		profile, err := us.userRepo.GetProfileFull(ctx, userId)
+		if err != nil {
+			return err
+		}
+
+		req.Path = profile.UrlImage.String
 	}
 
 	errUpdateProfile := us.userRepo.UpdateProfile(ctx, userId, req)
