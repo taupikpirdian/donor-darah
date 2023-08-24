@@ -56,7 +56,7 @@ func (m *mysqlUserRepository) FindUser(ctx context.Context, us *domain.UserData)
 	if len(list) > 0 {
 		res = list[0]
 	} else {
-		return res, domain.ErrNotFound
+		return res, domain.ErrNotUser
 	}
 
 	return

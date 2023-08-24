@@ -53,7 +53,7 @@ func (m *mysqlUserRepository) GetVillageById(ctx context.Context, code string) (
 	if len(list) > 0 {
 		res = list[0]
 	} else {
-		return res, domain.ErrNotFound
+		return res, domain.ErrNotFoundCity
 	}
 
 	return

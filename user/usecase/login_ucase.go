@@ -25,6 +25,7 @@ func (us *userUsecase) Login(c context.Context, dtoUser *domain.DtoRequestLogin)
 	if errUser != nil {
 		return nil, errUser
 	}
+
 	// compare the user-entered password with the stored hashed password
 	errCompare := bcrypt.CompareHashAndPassword([]byte(dataUserDb.Password), []byte(dtoUser.Password))
 	if errCompare != nil {
@@ -61,6 +62,7 @@ func (us *userUsecase) Login(c context.Context, dtoUser *domain.DtoRequestLogin)
 	if err != nil {
 		return nil, err
 	}
+
 	t, err = domain.SetToken(sign, dataProfile)
 	if err != nil {
 		return nil, err

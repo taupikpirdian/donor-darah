@@ -72,6 +72,7 @@ func (us *userUsecase) GetProfile(c context.Context, userId int64) (*domain.Prof
 	if dataLastsRegis != nil {
 		lastDateDonor = dataLastsRegis.DonorSchedulle.Date
 	}
+
 	result := domain.NewProfileV3(data, profile, len(dataDonorRegis), nextDateDonor, lastDateDonor, job, unit, subDistrict, villages)
 	return result, nil
 }

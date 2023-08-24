@@ -50,6 +50,7 @@ func NewUserHandler(e *echo.Echo, us domain.UserUsecase, cfg cfg.Config) {
 	r.POST("change-password", handler.ChangePasswordController)
 	r.GET("profile", handler.ProfileController)
 	r.POST("profile/update", handler.ProfileUpdateController)
+	r.POST("token/refresh", handler.TokenRefreshController)
 
 	g := e.Group("/api/v1/admin/")
 	g.Use(echojwt.WithConfig(config))

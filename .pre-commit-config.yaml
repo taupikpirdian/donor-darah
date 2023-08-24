@@ -10,3 +10,10 @@ repos:
     hooks:
       - id: conventional-pre-commit
         stages: [ commit-msg ]
+  # - repo: https://github.com/dnephin/pre-commit-golang
+  #   rev: v0.5.0
+  #   hooks:
+  #     - id: golangci-lint
+  #       stages: [ pre-commit ]
+  #     - id: go-unit-tests
+  #       stages: [ pre-commit ]

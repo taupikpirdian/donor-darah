@@ -14,7 +14,7 @@ type UserModel struct {
 	PasswordConfirmation string         `json:"passwordConfirmation" validate:"required"`
 	JobId                sql.NullString `json:"jobId"`
 	UnitId               sql.NullString `json:"unitId"`
-	PlaceOfBirth         string         `json:"placeOfBirth"`
+	PlaceOfBirth         sql.NullString `json:"placeOfBirth"`
 	DateOfBirth          string         `json:"dateOfBirth"`
 	Gender               string         `json:"gender"`
 	SubDistrictId        string         `json:"subDistrictId"`

@@ -34,7 +34,7 @@ func ModelToStructDonorRegister(datas []*model.DonorRegisterModel) []*domain.Don
 				Phone:         regis.User.Phone,
 				JobId:         regis.User.JobId.String,
 				UnitId:        regis.User.UnitId.String,
-				PlaceOfBirth:  regis.User.PlaceOfBirth,
+				PlaceOfBirth:  regis.User.PlaceOfBirth.String,
 				DateOfBirth:   regis.User.DateOfBirth,
 				Gender:        regis.User.Gender,
 				SubDistrictId: regis.User.SubDistrictId,

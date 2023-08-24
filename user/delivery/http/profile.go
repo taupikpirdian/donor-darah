@@ -12,6 +12,7 @@ import (
 )
 
 func (a *UserHandler) ProfileController(c echo.Context) (err error) {
+
 	loggerFile := cfg.NewLoger(a.cfg.PATH_LOGS)
 	contentLog := cfg.ContentLogger{
 		Url: "/api/v1/profile",

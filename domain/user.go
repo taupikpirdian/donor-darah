@@ -260,7 +260,7 @@ func NewProfileV2(u *Profile, p *model.UserModel, len int, nextDonor time.Time, 
 		Phone:         p.Password,
 		JobId:         p.JobId.String,
 		UnitId:        p.UnitId.String,
-		PlaceOfBirth:  p.PlaceOfBirth,
+		PlaceOfBirth:  p.PlaceOfBirth.String,
 		DateOfBirth:   p.DateOfBirth,
 		Gender:        p.Gender,
 		SubDistrictId: p.SubDistrictId,
@@ -311,7 +311,7 @@ func NewProfileV3(u *Profile, p *model.UserModel, len int, nextDonor time.Time, 
 		Phone:         p.Phone,
 		JobId:         p.JobId.String,
 		UnitId:        p.UnitId.String,
-		PlaceOfBirth:  p.PlaceOfBirth,
+		PlaceOfBirth:  p.PlaceOfBirth.String,
 		DateOfBirth:   p.DateOfBirth,
 		Gender:        p.Gender,
 		SubDistrictId: p.SubDistrictId,
@@ -352,6 +352,70 @@ func NewProfileV3(u *Profile, p *model.UserModel, len int, nextDonor time.Time, 
 		User:       user,
 	}
 	return profile
+}
+
+func (u *User) SetUserList(p *model.UserModel, job *model.JobModel, unit *model.UnitModel, sub_district *model.SubDistrictModel, village *model.VillageModel) {
+	if p.DateOfBirth != "" {
+		layout := "2006-01-02T15:04:05-07:00"
+		// Parse the date string into a time.Time object
+		t, err := time.Parse(layout, p.DateOfBirth)
+		if err == nil {
+			formattedDate := t.Format("2006-01-02")
+			p.DateOfBirth = formattedDate
+		}
+	}
+	unit64, _ := strconv.ParseInt(unit.Id, 10, 64)
+	job64, _ := strconv.ParseInt(job.Id, 10, 64)
+
+	districtData := DistrictData{}
+	if sub_district != nil {
+		subDistrict64, _ := strconv.ParseInt(sub_district.Id, 10, 64)
+		districtData = DistrictData{
+			Id:   subDistrict64,
+			Code: sub_district.Code,
+			Name: sub_district.Name,
+		}
+	}
+
+	villageData := VillageData{}
+	if village != nil {
+		village64, _ := strconv.ParseInt(village.Id, 10, 64)
+		villageSubDistrictId64, _ := strconv.ParseInt(village.SubDistrictId, 10, 64)
+		villageData = VillageData{
+			Id:            village64,
+			SubDistrictId: villageSubDistrictId64,
+			Code:          village.Code,
+			Name:          village.Name,
+		}
+	}
+	/*
+		set to entity
+	*/
+	u.Id = p.Id
+	u.Name = p.Name
+	u.Email = p.Email
+	u.Phone = p.Phone
+	u.JobId = p.JobId.String
+	u.UnitId = p.UnitId.String
+	u.PlaceOfBirth = p.PlaceOfBirth.String
+	u.DateOfBirth = p.DateOfBirth
+	u.Gender = p.Gender
+	u.SubDistrictId = p.SubDistrictId
+	u.VillageId = p.VillageId
+	u.Address = p.Address
+	u.PostalCode = p.PostalCode
+	u.Role = p.Role
+	u.MemberCode = p.MemberCode.String
+	u.Unit = UnitDTO{
+		Id:   unit64,
+		Name: unit.Name,
+	}
+	u.Job = Job{
+		Id:   job64,
+		Name: job.Name,
+	}
+	u.SubDistrict = districtData
+	u.Village = villageData
 }
 
 func NewUserLogin(u *DtoRequestLogin) (*UserData, error) {
@@ -414,7 +478,7 @@ func SetToken(token string, dataUserDb *model.UserModel) (*Auth, error) {
 			Role:          dataUserDb.Role,
 			JobId:         dataUserDb.JobId.String,
 			UnitId:        dataUserDb.UnitId.String,
-			PlaceOfBirth:  dataUserDb.PlaceOfBirth,
+			PlaceOfBirth:  dataUserDb.PlaceOfBirth.String,
 			DateOfBirth:   dataUserDb.DateOfBirth,
 			Gender:        dataUserDb.Gender,
 			SubDistrictId: dataUserDb.SubDistrictId,

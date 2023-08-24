@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/bxcodec/go-clean-arch/user/repository/model"
 	"github.com/sirupsen/logrus"
@@ -67,6 +68,8 @@ func (m *mysqlUserRepository) GetProfileFull(ctx context.Context, userId int64) 
 
 	if len(list) > 0 {
 		res = list[0]
+		fmt.Println(res)
+
 	} else {
 		return res, nil
 	}

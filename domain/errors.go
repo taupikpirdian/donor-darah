@@ -14,4 +14,7 @@ var (
 	ErrBadBody       = errors.New("given Body is not valid")
 
 	ErrNotFoundSchedule = errors.New("Schedule not found")
+	ErrNotFoundDistrict = errors.New("Data District Not Found")
+	ErrNotFoundCity     = errors.New("Data City Not Found")
+	ErrNotUser          = errors.New("User Not Found")
 )
