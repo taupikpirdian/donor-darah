@@ -41,14 +41,8 @@ func (us *userUsecase) GetProfile(c context.Context, userId int64) (*domain.Prof
 	if errUnit != nil {
 		return nil, errUnit
 	}
-	subDistrict, errsubDistrict := us.userRepo.GetSubDistrictById(ctx, profile.SubDistrictId)
-	if errsubDistrict != nil {
-		return nil, errsubDistrict
-	}
-	villages, errVillages := us.userRepo.GetVillageById(ctx, profile.VillageId)
-	if errVillages != nil {
-		return nil, errVillages
-	}
+	subDistrict, _ := us.userRepo.GetSubDistrictById(ctx, profile.SubDistrictId)
+	villages, _ := us.userRepo.GetVillageById(ctx, profile.VillageId)
 
 	dataDonorRegis, errDr := us.donorRepo.ListRiwayatByStatus(ctx, userId, "DONE")
 	if errDr != nil {

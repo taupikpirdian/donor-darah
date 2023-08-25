@@ -37,8 +37,9 @@ type User struct {
 	MemberCode           string       `json:"memberCode"`
 	Job                  Job          `json:"job"`
 	Unit                 UnitDTO      `json:"unit"`
-	SubDistrict          DistrictData `json:"sub_district"`
+	SubDistrict          DistrictData `json:"subDistrict"`
 	Village              VillageData  `json:"village"`
+	Histories            Histories    `json:"-"`
 }
 
 type UserData struct {
@@ -70,6 +71,27 @@ type ProfileData struct {
 	updatedAt     time.Time
 	createdAt     time.Time
 }
+
+type Histories struct {
+	TotalDonor           int64                  `json:"totalDonor"`
+	LastDonor            time.Time              `json:"lastDonor"`
+	NextDonor            time.Time              `json:"nextDonor"`
+	HistoryDonorRegister []HistoryDonorRegister `json:"donorRegister"`
+}
+
+type HistoryDonorRegister struct {
+	Id         int64     `json:"id"`
+	Code       string    `json:"code"`
+	PlaceName  string    `json:"placeName"`
+	Address    string    `json:"address"`
+	Date       time.Time `json:"schedule_date"`
+	TimeStart  string    `json:"timeStart"`
+	TimeEnd    string    `json:"timeEnd"`
+	Type       string    `json:"type"`
+	DonorProof string    `json:"donorProof"`
+	CreatedAt  time.Time `json:"createdAt"`
+}
+
 type Profile struct {
 	Id             int64          `json:"id"`
 	Name           string         `json:"name"`
@@ -298,9 +320,26 @@ func NewProfileV3(u *Profile, p *model.UserModel, len int, nextDonor time.Time, 
 	var profile = &Profile{}
 	unit64, _ := strconv.ParseInt(unit.Id, 10, 64)
 	job64, _ := strconv.ParseInt(job.Id, 10, 64)
-	subDistrict64, _ := strconv.ParseInt(sub_district.Id, 10, 64)
-	village64, _ := strconv.ParseInt(village.Id, 10, 64)
-	villageSubDistrictId64, _ := strconv.ParseInt(village.SubDistrictId, 10, 64)
+	dataSubDistrict := DistrictData{}
+	if sub_district != nil {
+		subDistrict64, _ := strconv.ParseInt(sub_district.Id, 10, 64)
+		dataSubDistrict = DistrictData{
+			Id:   subDistrict64,
+			Code: sub_district.Code,
+			Name: sub_district.Name,
+		}
+	}
+	dataVillage := VillageData{}
+	if village != nil {
+		village64, _ := strconv.ParseInt(village.Id, 10, 64)
+		villageSubDistrictId64, _ := strconv.ParseInt(village.SubDistrictId, 10, 64)
+		dataVillage = VillageData{
+			Id:            village64,
+			SubDistrictId: villageSubDistrictId64,
+			Code:          village.Code,
+			Name:          village.Name,
+		}
+	}
 	/*
 		model to entity
 	*/
@@ -328,17 +367,8 @@ func NewProfileV3(u *Profile, p *model.UserModel, len int, nextDonor time.Time, 
 			Id:   job64,
 			Name: job.Name,
 		},
-		SubDistrict: DistrictData{
-			Id:   subDistrict64,
-			Code: sub_district.Code,
-			Name: sub_district.Name,
-		},
-		Village: VillageData{
-			Id:            village64,
-			SubDistrictId: villageSubDistrictId64,
-			Code:          village.Code,
-			Name:          village.Name,
-		},
+		SubDistrict: dataSubDistrict,
+		Village:     dataVillage,
 	}
 
 	profile = &Profile{
@@ -354,7 +384,17 @@ func NewProfileV3(u *Profile, p *model.UserModel, len int, nextDonor time.Time, 
 	return profile
 }
 
-func (u *User) SetUserList(p *model.UserModel, job *model.JobModel, unit *model.UnitModel, sub_district *model.SubDistrictModel, village *model.VillageModel) {
+func (u *User) SetUserList(
+	p *model.UserModel,
+	job *model.JobModel,
+	unit *model.UnitModel,
+	sub_district *model.SubDistrictModel,
+	village *model.VillageModel,
+	len int,
+	nextDonor time.Time,
+	latsDonor time.Time,
+	histories []*DonorRegisterDTO,
+) {
 	if p.DateOfBirth != "" {
 		layout := "2006-01-02T15:04:05-07:00"
 		// Parse the date string into a time.Time object
@@ -388,6 +428,33 @@ func (u *User) SetUserList(p *model.UserModel, job *model.JobModel, unit *model.
 			Name:          village.Name,
 		}
 	}
+
+	/*
+		set history
+	*/
+	historyRegisters := make([]HistoryDonorRegister, 0)
+	for _, value := range histories {
+		historyRegister := HistoryDonorRegister{
+			Id:         value.Id,
+			Code:       value.Code,
+			PlaceName:  value.DonorSchedulle.PlaceName,
+			Address:    value.DonorSchedulle.Address,
+			Date:       value.DonorSchedulle.Date,
+			TimeStart:  value.DonorSchedulle.TimeStart,
+			TimeEnd:    value.DonorSchedulle.TimeEnd,
+			Type:       value.DonorSchedulle.TypeSchedulle,
+			DonorProof: value.DonorProof,
+			CreatedAt:  value.CreatedAt,
+		}
+		historyRegisters = append(historyRegisters, historyRegister)
+	}
+
+	history := Histories{
+		TotalDonor:           int64(len),
+		LastDonor:            latsDonor,
+		NextDonor:            nextDonor,
+		HistoryDonorRegister: historyRegisters,
+	}
 	/*
 		set to entity
 	*/
@@ -416,6 +483,7 @@ func (u *User) SetUserList(p *model.UserModel, job *model.JobModel, unit *model.
 	}
 	u.SubDistrict = districtData
 	u.Village = villageData
+	u.Histories = history
 }
 
 func NewUserLogin(u *DtoRequestLogin) (*UserData, error) {

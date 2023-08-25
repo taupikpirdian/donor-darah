@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"errors"
 
 	"github.com/bxcodec/go-clean-arch/domain"
 )
@@ -19,6 +20,18 @@ func (dus *donorUsecase) DonorRegister(c context.Context, userId int64, req *dom
 	}
 
 	/*
+		cek jadwal ada atau tidak
+	*/
+	schedulle, err := dus.donorRepo.FindSchedule(ctx, &domain.DonorSchedulleDTO{
+		Id: donorRegister.GetDonorSchedulleId_DonorRegister(),
+	})
+	if err != nil {
+		return err
+	}
+	if schedulle == nil {
+		return errors.New("Schedule Not Found")
+	}
+	/*
 		store to table donor_registers
 	*/
 	lastId, errR := dus.donorRepo.DonorRegister(ctx, donorRegister)
@@ -35,6 +48,5 @@ func (dus *donorUsecase) DonorRegister(c context.Context, userId int64, req *dom
 			return errQ
 		}
 	}
-
 	return nil
 }

@@ -38,6 +38,6 @@ func (a *UserHandler) AdminUserListController(c echo.Context) error {
 	contentLog.Payload = helper.StructToString("")
 	contentLog.Response = helper.StructToString(datas)
 	loggerFile.InfoLogger.Println(contentLog)
-	responseSuccess, _ := http_response.MapResponseUserList(0, "success", datas)
+	responseSuccess, _ := http_response.MapResponseUserList(0, "success", datas, a.cfg.DOMAIN)
 	return c.JSON(http.StatusOK, responseSuccess)
 }

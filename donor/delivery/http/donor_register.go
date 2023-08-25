@@ -41,7 +41,7 @@ func (d *DonorHandler) DonorRegister(c echo.Context) (err error) {
 	errUc := d.AUsecase.DonorRegister(ctx, userId, &req)
 	if errUc != nil {
 		loggerFile.ErrorLogger.Println(errUc)
-		responseError3, _ := http_response.MapResponseDonorRegister(1, domain.ErrBadBody.Error())
+		responseError3, _ := http_response.MapResponseDonorRegister(1, errUc.Error())
 		return c.JSON(getStatusCode(err), responseError3)
 	}
 
