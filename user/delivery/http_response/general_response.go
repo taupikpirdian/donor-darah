@@ -12,6 +12,11 @@ type CustomReponseSingle struct {
 	Data   []*domain.Job
 }
 
+type CustomReponseGeneral struct {
+	Status *Status
+	Data   interface{}
+}
+
 type ResponseItemJson struct {
 	Id    int    `json:"id"`
 	Name  string `json:"name" validate:"required"`
@@ -26,6 +31,18 @@ func MapResponse(code int, message string) (*CustomReponseSingle, error) {
 			Message: message,
 		},
 		Data: nil,
+	}
+
+	return httpResponse, nil
+}
+
+func MapResponseSuccess(code int, message string, data interface{}) (*CustomReponseGeneral, error) {
+	httpResponse := &CustomReponseGeneral{
+		Status: &Status{
+			Code:    code,
+			Message: message,
+		},
+		Data: data,
 	}
 
 	return httpResponse, nil

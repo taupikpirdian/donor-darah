@@ -7,7 +7,7 @@ import (
 )
 
 func (m *mysqlNotificationRepository) GetSingleNotification(ctx context.Context, id int64, userId int64) (res *domain.NotificationData, err error) {
-	query := `SELECT id,userId,title,message,status,createdAt,updatedAt FROM notifications WHERE id = ? AND userId = ? `
+	query := `SELECT id,userId,title,message,status,createdAt FROM notifications WHERE id = ? AND userId = ? `
 
 	list, err := m.fetch(ctx, query, id, userId)
 	if err != nil {

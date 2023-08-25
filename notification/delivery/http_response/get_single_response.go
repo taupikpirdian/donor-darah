@@ -8,6 +8,11 @@ type CustomReponseSingleData struct {
 }
 
 func MapResponseNotificationSingle(code int, message string, data *domain.NotificationData) (*CustomReponseSingleData, error) {
+	if data.Status == "1" {
+		data.Status = "READ"
+	} else {
+		data.Status = "NOT READ"
+	}
 	httpResponse := &CustomReponseSingleData{
 		Status: &Status{
 			Code:    code,

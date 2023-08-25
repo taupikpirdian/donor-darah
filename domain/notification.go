@@ -10,9 +10,8 @@ type NotificationData struct {
 	UserId    int64     `json:"-"`
 	Title     string    `json:"title"`
 	Message   string    `json:"desc"`
-	Status    string    `json:"-"`
-	IsRead    bool      `json:"isRead"`
-	UpdatedAt time.Time `json:"updatedAt"`
+	Status    string    `json:"status"`
+	UpdatedAt time.Time `json:"-"`
 	CreatedAt time.Time `json:"createdAt"`
 }
 

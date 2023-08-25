@@ -128,6 +128,10 @@ type Auth struct {
 	User  User   `json:"user"`
 }
 
+type Token struct {
+	Token string `json:"token"`
+}
+
 type Card struct {
 	Id          int64     `json:"id"`
 	Name        string    `json:"name"`
@@ -149,6 +153,7 @@ type UserUsecase interface {
 	GetProfile(ctx context.Context, userId int64) (*Profile, error)
 	UpdateProfile(ctx context.Context, userId int64, req *http_request.BodyUpdateProfile) error
 	DetailUser(ctx context.Context, id string) (*Profile, error)
+	RefreshToken(ctx context.Context, userId int64) (*Token, error)
 }
 
 // UserRepository represent the user's repository contract
@@ -529,6 +534,12 @@ func NewUser3(u *User) (*UserData, error) {
 	}, nil
 }
 
+func NewUser4(userId int64) *UserData {
+	return &UserData{
+		id: userId,
+	}
+}
+
 func SetToken(token string, dataUserDb *model.UserModel) (*Auth, error) {
 	if token == "" {
 		return nil, errors.New("TOKEN IS REQUIRED")
@@ -667,6 +678,10 @@ func GenerateCodeStringLen(n int) string {
 	}
 
 	return string(randomString)
+}
+
+func (cu *UserData) SetUserId(id int64) {
+	cu.id = id
 }
 
 func (cu *UserData) SetName(name string) {
