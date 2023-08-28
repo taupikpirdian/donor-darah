@@ -26,14 +26,9 @@ func (us *userUsecase) ListUser(c context.Context) ([]*domain.User, error) {
 		if err != nil {
 			return nil, err
 		}
-		job, errJob := us.userRepo.GetJobById(ctx, profile.JobId.String)
-		if errJob != nil {
-			return nil, errJob
-		}
-		unit, errUnit := us.userRepo.GetUnitById(ctx, profile.UnitId.String)
-		if errUnit != nil {
-			return nil, errUnit
-		}
+
+		job, _ := us.userRepo.GetJobById(ctx, profile.JobId.String)
+		unit, _ := us.userRepo.GetUnitById(ctx, profile.UnitId.String)
 		subDistrict, _ := us.userRepo.GetSubDistrictById(ctx, profile.SubDistrictId)
 		villages, _ := us.userRepo.GetVillageById(ctx, profile.VillageId)
 
