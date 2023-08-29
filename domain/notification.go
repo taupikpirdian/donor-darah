@@ -25,5 +25,6 @@ type NotificationUsecase interface {
 type NotificationRepository interface {
 	GetListNotification(ctx context.Context, userId int64) ([]*NotificationData, error)
 	GetSingleNotification(ctx context.Context, id int64, userId int64) (*NotificationData, error)
+	UpdateSingleNotification(ctx context.Context, id int64) error
 	CreateNotification(ctx context.Context, title string, msg string, userId int64) error
 }

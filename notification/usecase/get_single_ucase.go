@@ -10,6 +10,12 @@ func (not *notificationUsecase) GetSingleNotification(c context.Context, id int6
 	ctx, cancel := context.WithTimeout(c, not.contextTimeout)
 	defer cancel()
 
+	// update read
+	errUpdate := not.notificationRepo.UpdateSingleNotification(ctx, id)
+	if errUpdate != nil {
+		return nil, errUpdate
+	}
+
 	data, err := not.notificationRepo.GetSingleNotification(ctx, id, userId)
 	if err != nil {
 		return nil, err

@@ -11,7 +11,7 @@ type CustomReponseSingle struct {
 
 func MapResponseNotificationList(code int, message string, data []*domain.NotificationData) (*CustomReponseSingle, error) {
 	for _, v := range data {
-		if v.Status == "UNREAD" {
+		if v.Status == "0" {
 			v.Status = "UNREAD"
 		} else {
 			v.Status = "READ"

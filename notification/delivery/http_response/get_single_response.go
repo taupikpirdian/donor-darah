@@ -8,7 +8,7 @@ type CustomReponseSingleData struct {
 }
 
 func MapResponseNotificationSingle(code int, message string, data *domain.NotificationData) (*CustomReponseSingleData, error) {
-	if data.Status == "UNREAD" {
+	if data.Status == "0" {
 		data.Status = "UNREAD"
 	} else {
 		data.Status = "READ"
