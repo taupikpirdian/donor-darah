@@ -74,6 +74,7 @@ func NewDonorHandler(e *echo.Echo, us domain.DonorUsecase, cfg cfg.Config) {
 	g.DELETE("schedulle/:id", handler.SchedulleDelete)
 	g.GET("register", handler.DonorRegisterList)
 	g.GET("register/:userId", handler.DonorRegisterListByUserId)
+	g.GET("register/unit/:unitId", handler.ListRegisterUserByUnit)
 }
 
 func getStatusCode(err error) int {
