@@ -59,7 +59,7 @@ func (us *userUsecase) GetProfile(c context.Context, userId int64) (*domain.Prof
 		nextDateDonor = dataNextRegis.DonorSchedulle.Date
 	}
 	dataLastsRegis, errLr := us.donorRepo.LastDonorByStatus(ctx, userId, "DONE")
-	if errNr != nil {
+	if errLr != nil && errLr.Error() != "your requested Item is not found" {
 		return nil, errLr
 	}
 	var lastDateDonor time.Time

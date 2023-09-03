@@ -35,6 +35,8 @@ type DonorRegisterDTO struct {
 	User                       User
 	Unit                       UnitDTO
 	DonorRegisterQuestionerDTO []*DonorRegisterQuestionerDTO
+	LastDonor                  time.Time
+	TotalDonor                 int
 	UpdatedAt                  time.Time
 	CreatedAt                  time.Time
 }

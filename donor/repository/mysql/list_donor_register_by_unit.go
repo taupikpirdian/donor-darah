@@ -29,6 +29,7 @@ func (m *mysqlDonorRepository) fetchListDonorRegisterByUnit(ctx context.Context,
 			&t.Code,
 			&t.Status,
 			&t.StatusApprove,
+			&t.UserId,
 			&t.User.Name,
 			&t.User.Email,
 			&t.User.Phone,
@@ -48,7 +49,7 @@ func (m *mysqlDonorRepository) fetchListDonorRegisterByUnit(ctx context.Context,
 }
 
 func (m *mysqlDonorRepository) ListDonorRegisterByUnit(ctx context.Context, unitId int, date string) ([]*domain.DonorRegisterDTO, error) {
-	query := `SELECT donor_registers.id, donor_registers.code, donor_registers.status, donor_registers.isApprove, users.name, users.email, users.phone, profiles.placeOfBirth, profiles.dateOfBirth, profiles.gender 
+	query := `SELECT donor_registers.id, donor_registers.code, donor_registers.status, donor_registers.isApprove, users.id as userId, users.name, users.email, users.phone, profiles.placeOfBirth, profiles.dateOfBirth, profiles.gender 
 		FROM donor_registers
 		JOIN donor_schedulle ON donor_schedulle.id = donor_registers.donorSchedulleId 
 		JOIN users ON users.id = donor_registers.userId 
